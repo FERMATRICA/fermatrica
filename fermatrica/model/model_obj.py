@@ -202,7 +202,14 @@ def transform_lhs_generate(fn_src: pd.DataFrame | None):
     """
 
     if fn_src[fn_src['if_active'] == 1].shape[0] == 0:
-        return transform_lhs_empty, inspect.getsourcelines(transform_lhs_empty)[0]
+        # it is important to run it anyway for global optimizer
+
+        fn_src = inspect.getsourcelines(transform_lhs_empty)[0]
+        fn_src[0] = re.sub('transform_lhs_empty', 'transform_lhs_fn', fn_src[0])
+
+        fn_cl = fun_generate(fn_src=fn_src, fn_name='transform_lhs_fn')
+
+        return fn_cl, fn_src
 
     model_lhs = fn_src[fn_src['if_active'] == 1].copy()
 

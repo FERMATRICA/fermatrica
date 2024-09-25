@@ -358,7 +358,7 @@ def lag(ds: pd.DataFrame
     if 'cval' not in params_dict:
         params_dict['cval'] = 0
 
-    cols = [var, 'date', 'listed']
+    cols = [var, 'date']
     if type(index_vars) == str:
         index_vars_list = ast.literal_eval('[' + index_vars + ']')
         cols = index_vars_list + cols
@@ -1375,17 +1375,19 @@ def arl(ds: pd.DataFrame
 
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
 
+    ds['tmp'] = ds[var]
+
     # saturation
 
     if params_dict['steep'] != 0:
         if adb:
-            ds['tmp'] = ftr.adbudg(ds[var], params_dict)
+            ds['tmp'] = ftr.adbudg(ds['tmp'], params_dict)
         else:
-            ds['tmp'] = ftr.logistic(ds[var], params_dict)
+            ds['tmp'] = ftr.logistic(ds['tmp'], params_dict)
 
     # adstock
 
-    rtrn = adstock(ds, 'tmp', params_subset[params_subset['arg'] == 'a'], index_vars)
+    ds['tmp'] = adstock(ds, 'tmp', params_subset[params_subset['arg'] == 'a'], index_vars)
 
     # lag
 
@@ -1397,10 +1399,11 @@ def arl(ds: pd.DataFrame
                                       , axis=0)
         params_subset.loc[params_subset['arg'] == 'n_lag', 'arg'] = 'n'
 
-        rtrn = lag(ds, 'tmp', params_subset, index_vars)
+        ds['tmp'] = lag(ds, 'tmp', params_subset, index_vars)
 
     # finalize
 
+    rtrn = ds['tmp']
     del ds['tmp']  # much faster than .drop()
 
     return rtrn
