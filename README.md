@@ -65,7 +65,7 @@ To facilitate work, it is recommended to install all components of the FERMATRIC
        ```commandline
        pip install [path_to_fermatrica_part]
        ```
-5. If necessary, install third-party packages/libraries required for the functioning of FERMATRICA using conda install or pip install. To update versions of third-party packages, use conda update or pip install -U.
+5. If necessary, install third-party packages/libraries required for the functioning of FERMATRICA using `conda install` or `pip install`. To update versions of third-party packages, use `conda update` or `pip install -U`.
 
 > FERMATRICA actively uses the XLSX format for storing settings and parameters as it is the most user-friendly option. No complex XLSX formatting is provided, so theoretically, the core should work on operating systems other than Windows, both technically and in terms of user comfort, but functionality on operating systems other than Windows has not been tested.
 
