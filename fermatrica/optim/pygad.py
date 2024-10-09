@@ -102,6 +102,7 @@ class GA:
                  save_solutions=False,
                  suppress_warnings=False,
                  stop_criteria=None,
+                 ftol_abs=0.0,
                  parallel_processing=None,
                  random_seed=None):
 
@@ -1136,7 +1137,7 @@ class GA:
                         "The value following the stop word in the 'stop_criteria' parameter must be a number but the value '{stop_val}' of type {stop_val_type} found.".format(
                             stop_val=number, stop_val_type=type(number)))
 
-                self.stop_criteria.append([stop_word, number])
+                self.stop_criteria.append([stop_word, number, ftol_abs])
 
             else:
                 self.valid_parameters = False
@@ -1170,7 +1171,7 @@ class GA:
                                 "The value following the stop word in the 'stop_criteria' parameter must be a number but the value '{stop_val}' of type {stop_val_type} found.".format(
                                     stop_val=number, stop_val_type=type(number)))
 
-                        self.stop_criteria.append([stop_word, number])
+                        self.stop_criteria.append([stop_word, number, ftol_abs])
 
                     else:
                         self.valid_parameters = False
@@ -1786,8 +1787,8 @@ class GA:
                     elif criterion[0] == "saturate":
                         criterion[1] = int(criterion[1])
                         if (self.generations_completed >= criterion[1]):
-                            if (self.best_solutions_fitness[self.generations_completed - criterion[1]] -
-                                self.best_solutions_fitness[self.generations_completed - 1]) == 0:
+                            if (self.best_solutions_fitness[self.generations_completed - 1] -
+                                self.best_solutions_fitness[self.generations_completed - criterion[1]]) <= criterion[2]:
                                 stop_run = True
                                 break
 

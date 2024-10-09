@@ -311,6 +311,7 @@ def optimize_global_ga(ds: pd.DataFrame
                        , pop_size: int = 50
                        , pmutation: float = .1
                        , max_no_improvement: int = 20
+                       , ftol_abs: float = 0
                        , error_score: float = -1e+12
                        , cores: int = 4
                        , save_epoch: bool | str = True):
@@ -327,6 +328,8 @@ def optimize_global_ga(ds: pd.DataFrame
     :param pop_size: GA param: population size
     :param pmutation: GA param: permutations share
     :param max_no_improvement: maximum number of iterations as early stop threshold
+    :param ftol_abs: early stop threshold: minimum absolute score gain per `max_no_improvement` number of iteration,
+        defaults to 0
     :param error_score: extremely small value to be used as score if fit_predict returns None (error)
     :param cores: processor cores to be used in parallel computing
     :param save_epoch: if every epoch to be saved or path to the folder to save tuned models
@@ -392,6 +395,7 @@ def optimize_global_ga(ds: pd.DataFrame
                              , mutation_type="random"
                              , mutation_probability=pmutation
                              , stop_criteria='saturate_'+str(int(max_no_improvement))
+                             , ftol_abs=ftol_abs
                              , on_generation=callback_gen
                              , suppress_warnings=True
                              , parallel_processing=['process', cores]
