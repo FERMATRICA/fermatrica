@@ -869,13 +869,21 @@ def scale(ds: pd.DataFrame
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
     listed = ast.literal_eval('[' + params_dict['listed'] + ']')
 
-    index_vars_list = ast.literal_eval('[' + index_vars + ']')
+    if type(index_vars) == str:
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
-    ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
-    mask = ds_tmp['listed'].isin(listed)
+    if pd.isna(index_vars):
+        ds_tmp = select_eff(ds, [var, 'listed'])
+        mask = ds_tmp['listed'].isin(listed)
 
-    rtrn = groupby_eff(ds_tmp, index_vars_list, [var], None)[var]
-    rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
+        rtrn = ftr.scale_classic_median(ds_tmp[var], mask)
+
+    else:
+        ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
+        mask = ds_tmp['listed'].isin(listed)
+
+        rtrn = groupby_eff(ds_tmp, index_vars_list, [var], None)[var]
+        rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
 
     return rtrn
 
@@ -1028,15 +1036,26 @@ def expm1scaled(ds: pd.DataFrame
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
     listed = ast.literal_eval('[' + params_dict['listed'] + ']')
     product = params_dict['product']
-    index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
-    ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
+    if type(index_vars) == str:
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
-    ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
+    if pd.isna(index_vars):
+        ds_tmp = select_eff(ds, [var, 'listed'])
+        mask = ds_tmp['listed'].isin(listed)
 
-    rtrn = groupby_eff(ds_tmp, index_vars_list, ['tmp'], None)['tmp']
-    mask = ds_tmp['listed'].isin(listed)
-    rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
+        ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
+
+        rtrn = ftr.scale_classic_median(ds_tmp['tmp'], mask)
+
+    else:
+        ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
+        mask = ds_tmp['listed'].isin(listed)
+
+        ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
+
+        rtrn = groupby_eff(ds_tmp, index_vars_list, ['tmp'], None)['tmp']
+        rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
 
     return rtrn
 
@@ -1618,4 +1637,3 @@ def price(ds: pd.DataFrame
         del ds['tmp']
 
     pass
-
