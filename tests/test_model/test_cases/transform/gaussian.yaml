@@ -1,0 +1,104 @@
+- description: test_guassian_base function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, 14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.70955, 13.35494, 10.01037, 5.7736, 2.56232, 0.875, 0.22992, 0.04649, 0.00723, 0.00087, 8e-05, 1e-05, 0.0,
+           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassian_scale_True function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [True, 14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [11.74804, 11.39344, 8.04886, 3.8121, 0.60081, -1.0865, -1.73159, -1.91502, -1.95427, -1.96064, -1.96142,
+           -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615, -1.9615,
+           -1.9615, -1.9615]
+    name: 'var'
+
+- description: test_guassian_zero_amplitude function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, 0, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassian_zero_expvalue function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, 14, 0, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [14.0, 12.28068, 8.28908, 4.30506, 1.72044, 0.52904, 0.12518, 0.02279, 0.00319, 0.00034, 3e-05, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassian_zero_hwhm function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, 14, 0.4, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassian_neg_amplitude function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, -14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-13.70955, -13.35494, -10.01037, -5.7736, -2.56232, -0.875, -0.22992, -0.04649, -0.00723, -0.00087, -8e-05,
+           -1e-05, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0]
+    name: 'var'
+
+- description: test_guassian_neg_expvalue function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, 14, -0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.70955, 10.82912, 6.58192, 3.07823, 1.10774, 0.30674, 0.06536, 0.01071, 0.00135, 0.00013, 1e-05, 0.0, 0.0,
+           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassian_neg_hwhm function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['if_scale_mean', 'amplitude', 'expvalue', 'hwhm']
+    value: [False, 14, 0.4, -2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.70955, 13.35494, 10.01037, 5.7736, 2.56232, 0.875, 0.22992, 0.04649, 0.00723, 0.00087, 8e-05, 1e-05, 0.0,
+           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    name: 'var'

@@ -1,0 +1,121 @@
+- description: test_gaussian_series function testing case 0
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 3
+      expvalue: 1.6
+      hwhm: 2.4
+  exp_err: False
+  expected_result: !pd.Series
+    data: [2.2046, 1.32993, 2.94279, 2.36967, 0.06889, 0.7464, 0.29196, 0.00041, 0.0217, 0.00412, 0.0,
+                          7e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_array function testing case 1
+  params:
+    x: !np.array
+      object: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 3
+      expvalue: 1.6
+      hwhm: 2.4
+  exp_err: False
+  expected_result: !np.array
+    object: [2.2046, 1.32993, 2.94279, 2.36967, 0.06889, 0.7464, 0.29196, 0.00041, 0.0217, 0.00412, 0.0,
+                          7e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_zero_amplitude function testing case 2
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 0
+      expvalue: 1.6
+      hwhm: 2.4
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_zero_expvalue function testing case 3
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 3
+      expvalue: 0
+      hwhm: 2.4
+  exp_err: False
+  expected_result: !pd.Series
+    data: [3.0, 2.65986, 1.85384, 1.01569, 0.43745, 0.1481, 0.03942, 0.00825, 0.00136, 0.00018, 2e-05,
+                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_zero_hwhm function testing case 4
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 3
+      expvalue: 1.6
+      hwhm: 0
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_neg_amplitude function testing case 5
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: -3
+      expvalue: 1.6
+      hwhm: 2.4
+  exp_err: False
+  expected_result: !pd.Series
+    data: [-2.2046, -1.32993, -2.94279, -2.36967, -0.06889, -0.7464, -0.29196, -0.00041, -0.0217,
+                          -0.00412, -0.0, -7e-05, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0,
+                          -0.0, -0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_neg_expvalue function testing case 6
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 3
+      expvalue: -1.6
+      hwhm: 2.4
+  exp_err: False
+  expected_result: !pd.Series
+    data: [2.2046, 2.87281, 0.63067, 0.2351, 1.5, 0.01587, 0.00287, 0.08978, 5e-05, 0.0, 0.00062, 0.0,
+                          1e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+
+- description: test_gaussian_neg_hwhm function testing case 7
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      amplitude: 3
+      expvalue: 1.6
+      hwhm: -2.4
+  exp_err: False
+  expected_result: !pd.Series
+    data: [2.2046, 1.32993, 2.94279, 2.36967, 0.06889, 0.7464, 0.29196, 0.00041, 0.0217, 0.00412, 0.0,
+                          7e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    dtype: 'float64'
+

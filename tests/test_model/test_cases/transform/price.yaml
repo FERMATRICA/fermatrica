@@ -1,0 +1,651 @@
+- description: test_price_base function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_weighed_by function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, False, 0.9, null]
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.55469, 0.74843, null, 0.0, 0.0, 0.375, -0.07547, null, 0.0, 0.0, -0.92969,
+                           -0.67296, null, 0.0, 0.0, -0.1958, 0.41176, null, 0.0, 0.0, 0.1958, -0.41176]
+      var_rel_superbrand_positive: [null, 0.92969, 0.92969, 1.48438, 1.67812, null, 0.92969, 0.92969, 1.30469, 0.85422,
+                                    null, 0.92969, 0.92969, 0.0, 0.25673, null, 0.1958, 0.1958, 0.0, 0.60757, null,
+                                    0.1958, 0.1958, 0.39161, -0.21596]
+      var_rel_superbrand_negative: [null, -0.55469, -0.55469, 0.0, 0.19374, null, -0.55469, -0.55469, -0.17969,
+                                    -0.63016, null, -0.55469, -0.55469, -1.48438, -1.22764, null, -0.1958, -0.1958,
+                                    -0.39161, 0.21596, null, -0.1958, -0.1958, 0.0, -0.60757]
+
+- description: test_price_with_big_year function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2025, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, 0.0, 0.0, 0.0, 0.52263, 0.14863, 0.0, 0.0, 0.0, -0.47389,
+                           -0.32436, 0.0, 0.0, 0.0, -0.22506, 0.43864, 0.0, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, 0.47389, 0.47389, 0.47389, 0.99652,
+                                    0.62252, 0.47389, 0.47389, 0.47389, 0.0, 0.14953, 0.22506, 0.22506, 0.22506,
+                                    0.0, 0.6637, 0.22506, 0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, -0.65987, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, -0.65987, -0.65987, -0.65987, -1.13376, -0.98423, -0.17613, -0.17613,
+                                    -0.17613, -0.40119, 0.26251, -0.17613, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_with_zero_share function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0,
+            '"superbrand"', '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.78477, 0.7868, 0.65987, 0.80085, null, 0.32033, 0.25381, 0.52263, 0.14863, null,
+                           -0.24607, -0.27919, -0.47389, -0.32436, null, -0.21285, 0.45143, -0.22506, 0.43864, null,
+                           0.16217, -0.34883, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 1.25866, 1.2607, 1.13376, 1.27474, null, 0.79422, 0.7277, 0.99652, 0.62252,
+                                    null, 0.22783, 0.19471, 0.0, 0.14953, null, 0.13598, 0.80026, 0.12378, 0.78748,
+                                    null, 0.51101, 0.0, 0.52496, 0.00157]
+      var_rel_superbrand_negative: [null, -0.00203, 0.0, -0.12693, 0.01405, null, -0.46647, -0.53299, -0.26418,
+                                    -0.63818, null, -1.03287, -1.06599, -1.2607, -1.11116, null, -0.66428, 0.0,
+                                    -0.67649, -0.01279, null, -0.28926, -0.80026, -0.2753, -0.79869]
+
+- description: test_price_zero_inn function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, False, 0, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.70248, 0.6314, null, 0.0, 0.0, 0.20661, 0.17065, null, 0.0, 0.0, -0.28926,
+                           -0.2901, null, 0.0, 0.0, 0.13482, 0.12807, null, 0.0, 0.0, -0.10551, -0.10139]
+      var_rel_superbrand_positive: [null, 0.28926, 0.28926, 0.99174, 0.92066, null, 0.28926, 0.28926, 0.49587, 0.4599,
+                                    null, 0.28926, 0.28926, 0.0, -0.00085, null, 0.10551, 0.10551, 0.24033, 0.23358,
+                                    null, 0.10551, 0.10551, 0.0, 0.00412]
+      var_rel_superbrand_negative: [null, -0.70248, -0.70248, 0.0, -0.07108, null, -0.70248, -0.70248, -0.49587,
+                                    -0.53183, null, -0.70248, -0.70248, -0.99174, -0.99258, null, -0.13482, -0.13482,
+                                    0.0, -0.00675, null, -0.13482, -0.13482, -0.24033, -0.23621]
+
+- description: test_price_multiple_index function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand", "bs_key"', '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_thereshold_var function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: [null, 0.3,
+            '"superbrand"', '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: ValueError
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_share_therehold function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', null,
+            '"superbrand"', '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                           0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+      var_rel_superbrand_positive: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                                    0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+      var_rel_superbrand_negative: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                                    0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+
+- description: test_price_without_index_vars_dim function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            null, '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_index_vars_time function testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', null,
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: TypeError
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_year_start function testing case 10
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            null, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_if_clutter function testing case 11
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, null, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_without_inn_coef function testing case 12
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, False, null, '"wrk_index"']
+  index_vars:
+  exp_err: TypeError
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+
+- description: test_price_media_index_vars_dim function testing case 13
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"media"', '"date"',
+            2018, False, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_total: [null, 0.0, 0.0, 0.76047, 0.85984, null, 0.0, 0.0, 0.66382, 0.40081, null, 0.0, 0.0, -0.03795,
+                      0.06793, null, 0.0, 0.0, -0.43716, 0.33423, null, 0.0, 0.0, 0.03349, -0.59784]
+      var_rel_total_positive: [null, 0.43716, 0.0, 1.19763, 0.85984, null, 0.43716, 0.0, 1.10098, 0.40081, null,
+                               0.43716, 0.0, 0.39921, 0.06793, null, 0.43716, 0.0, 0.0, 0.33423, null, 0.43716, 0.0,
+                               0.47065, -0.59784]
+      var_rel_total_negative: [null, -0.76047, 0.0, 0.0, 0.85984, null, -0.76047, 0.0, -0.09665, 0.40081, null,
+                               -0.76047, 0.0, -0.79842, 0.06793, null, -0.76047, 0.0, -1.19763, 0.33423, null, -0.76047,
+                               0.0, -0.72698, -0.59784]
+
+- description: test_price_base_if_clutter function testing case 14
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [null, 1.30902, 1.30902, 0.50259, 0.15449, null, 1.30902, 1.30902, 0.54994, 0.45304, null,
+                               1.30902, 1.30902, 0.0, 0.25674, null, 0.33048, 0.33048, 0.0, -0.21382, null, 0.33048,
+                               0.33048, 0.0, -0.21382]
+
+- description: test_price_without_weighed_by_if_clutter function testing case 15
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, True, 0.9, null]
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.55469, 0.74843, null, 0.0, 0.0, 0.375, -0.07547, null, 0.0, 0.0, -0.92969,
+                           -0.67296, null, 0.0, 0.0, -0.1958, 0.41176, null, 0.0, 0.0, 0.1958, -0.41176]
+      var_rel_superbrand_positive: [null, 0.92969, 0.92969, 1.48438, 1.67812, null, 0.92969, 0.92969, 1.30469, 0.85422,
+                                    null, 0.92969, 0.92969, 0.0, 0.25673, null, 0.1958, 0.1958, 0.0, 0.60757, null,
+                                    0.1958, 0.1958, 0.39161, -0.21596]
+      var_rel_superbrand_negative: [null, -0.55469, -0.55469, 0.0, 0.19374, null, -0.55469, -0.55469, -0.17969,
+                                    -0.63016, null, -0.55469, -0.55469, -1.48438, -1.22764, null, -0.1958, -0.1958,
+                                    -0.39161, 0.21596, null, -0.1958, -0.1958, 0.0, -0.60757]
+      var_clutter_superbrand: [null, 1.5021, 1.5021, 0.56427, 0.1822, null, 1.5021, 1.5021, 0.60889, 0.49101, null,
+                               1.5021, 1.5021, 0.0, 0.29367, null, 0.32403, 0.32403, 0.0, -0.23709, null, 0.32403,
+                               0.32403, 0.0, -0.23709]
+
+- description: test_price_with_big_year_if_clutter function testing case 16
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2025, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, 0.0, 0.0, 0.0, 0.52263, 0.14863, 0.0, 0.0, 0.0, -0.47389,
+                           -0.32436, 0.0, 0.0, 0.0, -0.22506, 0.43864, 0.0, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, 0.47389, 0.47389, 0.47389, 0.99652,
+                                    0.62252, 0.47389, 0.47389, 0.47389, 0.0, 0.14953, 0.22506, 0.22506, 0.22506,
+                                    0.0, 0.6637, 0.22506, 0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, -0.65987, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, -0.65987, -0.65987, -0.65987, -1.13376, -0.98423, -0.17613, -0.17613,
+                                    -0.17613, -0.40119, 0.26251, -0.17613, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [null, 1.30902, 1.30902, 0.50259, 0.15449, 0.30902, 1.30902, 1.30902, 0.54994, 0.45304,
+                               0.30902, 1.30902, 1.30902, 0.0, 0.25674, 0.33048, 0.33048, 0.33048, 0.0, -0.21382,
+                               0.33048, 0.33048, 0.33048, 0.0, -0.21382]
+
+- description: test_price_with_zero_share_if_clutter function testing case 17
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0,
+            '"superbrand"', '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.78477, 0.7868, 0.65987, 0.80085, null, 0.32033, 0.25381, 0.52263, 0.14863, null,
+                           -0.24607, -0.27919, -0.47389, -0.32436, null, -0.21285, 0.45143, -0.22506, 0.43864, null,
+                           0.16217, -0.34883, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 1.25866, 1.2607, 1.13376, 1.27474, null, 0.79422, 0.7277, 0.99652, 0.62252,
+                                    null, 0.22783, 0.19471, 0.0, 0.14953, null, 0.13598, 0.80026, 0.12378, 0.78748,
+                                    null, 0.51101, 0.0, 0.52496, 0.00157]
+      var_rel_superbrand_negative: [null, -0.00203, 0.0, -0.12693, 0.01405, null, -0.46647, -0.53299, -0.26418,
+                                    -0.63818, null, -1.03287, -1.06599, -1.2607, -1.11116, null, -0.66428, 0.0,
+                                    -0.67649, -0.01279, null, -0.28926, -0.80026, -0.2753, -0.79869]
+      var_clutter_superbrand: [null, 0.29421, 0.24025, 0.50259, 0.15449, null, 0.50507, 0.48271, 0.54994, 0.45304, null,
+                               0.23329, 0.24025, 0.0, 0.25674, null, 0.23806, 0.0, 0.22031, 0.0065, null, 0.23806, 0.0,
+                               0.22031, 0.0065]
+
+- description: test_price_zero_inn_if_clutter function testing case 18
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, True, 0, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.70248, 0.6314, null, 0.0, 0.0, 0.20661, 0.17065, null, 0.0, 0.0, -0.28926,
+                           -0.2901, null, 0.0, 0.0, 0.13482, 0.12807, null, 0.0, 0.0, -0.10551, -0.10139]
+      var_rel_superbrand_positive: [null, 0.28926, 0.28926, 0.99174, 0.92066, null, 0.28926, 0.28926, 0.49587, 0.4599,
+                                    null, 0.28926, 0.28926, 0.0, -0.00085, null, 0.10551, 0.10551, 0.24033, 0.23358,
+                                    null, 0.10551, 0.10551, 0.0, 0.00412]
+      var_rel_superbrand_negative: [null, -0.70248, -0.70248, 0.0, -0.07108, null, -0.70248, -0.70248, -0.49587,
+                                    -0.53183, null, -0.70248, -0.70248, -0.99174, -0.99258, null, -0.13482, -0.13482,
+                                    0.0, -0.00675, null, -0.13482, -0.13482, -0.24033, -0.23621]
+      var_clutter_superbrand: [null, 1.02003, 1.02003, 0.0, 0.04876, null, 1.02003, 1.02003, 0.23811, 0.28165, null,
+                               1.02003, 1.02003, 0.0, 0.04876, null, 0.21363, 0.21363, 0.0, 0.0086, null, 0.21363,
+                               0.21363, 0.0, 0.0086]
+
+- description: test_price_multiple_index_if_clutter function testing case 19
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand", "bs_key"', '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [ null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                                -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726 ]
+
+- description: test_price_without_thereshold_var_if_clutter function testing case 20
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: [null, 0.3,
+            '"superbrand"', '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: ValueError
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [ null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                                -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726 ]
+
+- description: test_price_without_share_therehold_if_clutter function testing case 21
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', null,
+            '"superbrand"', '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                           0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+      var_rel_superbrand_positive: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                                    0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+      var_rel_superbrand_negative: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                                    0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+      var_clutter_superbrand: [null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0, null, 0.0, 0.0,
+                                    0.0, 0.0, null, 0.0, 0.0, 0.0, 0.0]
+
+- description: test_price_without_index_vars_dim_if_clutter function testing case 22
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            null, '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [ null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                                -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726 ]
+
+- description: test_price_without_index_vars_time_if_clutter function testing_if_clutter case 23
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', null,
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: TypeError
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [null, 1.30902, 1.30902, 0.50259, 0.15449, null, 1.30902, 1.30902, 0.54994, 0.45304, null,
+                               1.30902, 1.30902, 0.0, 0.25674, null, 0.33048, 0.33048, 0.0, -0.21382, null, 0.33048,
+                               0.33048, 0.0, -0.21382]
+
+- description: test_price_without_year_start_if_clutter function testing case 24
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            null, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [null, 1.30902, 1.30902, 0.50259, 0.15449, null, 1.30902, 1.30902, 0.54994, 0.45304, null,
+                               1.30902, 1.30902, 0.0, 0.25674, null, 0.33048, 0.33048, 0.0, -0.21382, null, 0.33048,
+                               0.33048, 0.0, -0.21382]
+
+- description: test_price_without_inn_coef_if_clutter function testing case 25
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"superbrand"', '"date"',
+            2018, True, null, '"wrk_index"']
+  index_vars:
+  exp_err: TypeError
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_superbrand: [null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                           -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726]
+      var_rel_superbrand_positive: [null, 0.47389, 0.47389, 1.13376, 1.27474, null, 0.47389, 0.47389, 0.99652, 0.62252,
+                                    null, 0.47389, 0.47389, 0.0, 0.14953, null, 0.22506, 0.22506, 0.0, 0.6637, null,
+                                    0.22506, 0.22506, 0.40119, -0.1222]
+      var_rel_superbrand_negative: [null, -0.65987, -0.65987, 0.0, 0.14098, null, -0.65987, -0.65987, -0.13725,
+                                    -0.51124, null, -0.65987, -0.65987, -1.13376, -0.98423, null, -0.17613, -0.17613,
+                                    -0.40119, 0.26251, null, -0.17613, -0.17613, 0.0, -0.52339]
+      var_clutter_superbrand: [ null, 0.0, 0.0, 0.65987, 0.80085, null, 0.0, 0.0, 0.52263, 0.14863, null, 0.0, 0.0, -0.47389,
+                                -0.32436, null, 0.0, 0.0, -0.22506, 0.43864, null, 0.0, 0.0, 0.17613, -0.34726 ]
+
+- description: test_price_media_index_vars_dim function testing case 26
+  data: sample_data
+  params_subset:
+    arg: ['threshold_var', 'share_threshold',
+          'index_vars_dim', 'index_vars_time',
+          'year_start', 'if_clutter', 'inn_coef', 'weighted_by']
+    value: ['"kpi_coef"', 0.3,
+            '"media"', '"date"',
+            2018, True, 0.9, '"wrk_index"']
+  index_vars:
+  exp_err: False
+  expected_type: dataframe
+  expected_result:
+    data:
+      var_rel_total: [null, 0.0, 0.0, 0.76047, 0.85984, null, 0.0, 0.0, 0.66382, 0.40081, null, 0.0, 0.0, -0.03795,
+                      0.06793, null, 0.0, 0.0, -0.43716, 0.33423, null, 0.0, 0.0, 0.03349, -0.59784]
+      var_rel_total_positive: [null, 0.43716, 0.0, 1.19763, 0.85984, null, 0.43716, 0.0, 1.10098, 0.40081, null,
+                               0.43716, 0.0, 0.39921, 0.06793, null, 0.43716, 0.0, 0.0, 0.33423, null, 0.43716, 0.0,
+                               0.47065, -0.59784]
+      var_rel_total_negative: [null, -0.76047, 0.0, 0.0, 0.85984, null, -0.76047, 0.0, -0.09665, 0.40081, null,
+                               -0.76047, 0.0, -0.79842, 0.06793, null, -0.76047, 0.0, -1.19763, 0.33423, null, -0.76047,
+                               0.0, -0.72698, -0.59784]
+      var_clutter_total: [ null, 0.0, 0.0, 0.76047, 0.85984, null, 0.0, 0.0, 0.66382, 0.40081, null, 0.0, 0.0, -0.03795,
+                       0.06793, null, 0.0, 0.0, -0.43716, 0.33423, null, 0.0, 0.0, 0.03349, -0.59784 ]

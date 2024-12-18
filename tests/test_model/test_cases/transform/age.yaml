@@ -1,0 +1,117 @@
+- description: test_age_basic function testing case 0
+  data: duppl_data
+  params_subset:
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.,  0.5,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9.,
+                                     10., 11., 12., 13., 14., 15., 16., 17., 18., 19., 20.,
+                                     21., 22., 23.]
+    name: 'var_tmp'
+
+- description: test_age_with_index_vars function testing case 1
+  data: duppl_data
+  params_subset:
+  index_vars: '"bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 2, 0, 1, 0, 1, 2, 0, 1, 0, 1, 0, 1, 2, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1]
+    name: 'var_tmp'
+
+- description: test_age_with_superbrand_max function testing case 2
+  data: duppl_data
+  params_subset:
+    index_aggr: ['max']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 0, 2, 3, 0, 1, 0, 2, 3, 0, 1, 0, 2, 3, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_age_with_superbrand_mfreq function testing case 3
+  data: duppl_data
+  params_subset:
+    index_aggr: ['mfreq']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 2, 0, 1, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_age_with_superbrand_index_vars_sum_kpi_coef function testing case 4
+  data: sample_data
+  params_subset:
+    index_aggr: ['sum_kpi_coef']
+  index_vars: '"superbrand"'
+  exp_err: KeyError
+  expected_type: series
+  expected_result:
+    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_age_with_superbrand_index_vars_sum_kpi_coef_master function testing case 5
+  data: sample_data
+  params_subset:
+    index_aggr: ['sum_kpi_coef_master']
+  index_vars: '"superbrand"'
+  exp_err: KeyError
+  expected_type: series
+  expected_result:
+    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_age_with_superbrand_sum function testing case 6
+  data: duppl_data
+  params_subset:
+    index_aggr: ['sum']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_age_with_multiple_index_vars function testing case 7
+  data: duppl_data
+  params_subset:
+    index_aggr: ['sum']
+  index_vars: '"superbrand", "bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 2, 0, 1, 0, 1, 2, 0, 1, 0, 1, 0, 1, 2, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'

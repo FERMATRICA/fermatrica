@@ -1,0 +1,8 @@
+- description: test_check_type function testing case 1
+  data: sample_data
+  params_subset:
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]

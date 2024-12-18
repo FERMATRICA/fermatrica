@@ -183,9 +183,8 @@ def _var_aggregate(ds: pd.DataFrame
         cols.append(var)
 
         tmp = select_eff(ds, cols).copy(deep=False)
-
-        tmp = tmp.value_counts(cols).pipe(lambda x: x[~x.droplevel(var).index.duplicated()]).reset_index(name='_tmp')
-        del tmp['_tmp']
+        tmp = tmp.groupby(index_vars_list)[var].agg(pd.Series.mode)
+        tmp = tmp.reset_index(name=var)
         tmp.fillna(0, inplace=True)
 
     else:
@@ -364,32 +363,33 @@ def lag(ds: pd.DataFrame
         cols = index_vars_list + cols
     cols = list(set(cols))
 
-    ds_tmp = select_eff(ds, cols + ['wrk_index'])
-
     if pd.isna(index_vars):
-        rtrn = ds_tmp[var].shift(n, fill_value=params_dict['cval'])
+        rtrn = ds[var].shift(n, fill_value=params_dict['cval'])
 
     elif index_vars == '"bs_key"':
+        ds_tmp = select_eff(ds, cols + ['wrk_index'])  # important to keep it here
         rtrn = ds_tmp.groupby(index_vars_list)[var].shift(n, fill_value=params_dict['cval'])
 
     elif index_vars == '"date"':
-        tmp = _var_aggregate(ds_tmp, var, params_subset, index_vars)
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
 
         tmp[var] = tmp[var].shift(n, fill_value=params_dict['cval'])
 
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
         rtrn = \
-            pd.merge(ds_tmp[index_vars_list + ['wrk_index']], tmp, how='left', on=index_vars_list, sort=False).set_index(
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index(
                 'wrk_index')[
                 var]
     else:
-        tmp = _var_aggregate(ds_tmp, var, params_subset, index_vars)
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
 
         tmp[var] = tmp.groupby(index_vars_list)[var].shift(n, fill_value=params_dict['cval'])
 
         index_vars_list = ast.literal_eval('[' + index_vars + ',"date"' + ']')
 
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
         rtrn = \
-            pd.merge(ds_tmp[index_vars_list + ['wrk_index']], tmp, how='left', on=index_vars_list, sort=False).set_index(
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index(
                 'wrk_index')[
                 var]
 
@@ -869,13 +869,21 @@ def scale(ds: pd.DataFrame
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
     listed = ast.literal_eval('[' + params_dict['listed'] + ']')
 
-    index_vars_list = ast.literal_eval('[' + index_vars + ']')
+    if type(index_vars) == str:
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
-    ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
-    mask = ds_tmp['listed'].isin(listed)
+    if pd.isna(index_vars):
+        ds_tmp = select_eff(ds, [var, 'listed'])
+        mask = ds_tmp['listed'].isin(listed)
 
-    rtrn = groupby_eff(ds_tmp, index_vars_list, [var], None)[var]
-    rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
+        rtrn = ftr.scale_classic_median(ds_tmp[var], mask)
+
+    else:
+        ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
+        mask = ds_tmp['listed'].isin(listed)
+
+        rtrn = groupby_eff(ds_tmp, index_vars_list, [var], None)[var]
+        rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
 
     return rtrn
 
@@ -1028,15 +1036,26 @@ def expm1scaled(ds: pd.DataFrame
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
     listed = ast.literal_eval('[' + params_dict['listed'] + ']')
     product = params_dict['product']
-    index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
-    ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
+    if type(index_vars) == str:
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
-    ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
+    if pd.isna(index_vars):
+        ds_tmp = select_eff(ds, [var, 'listed'])
+        mask = ds_tmp['listed'].isin(listed)
 
-    rtrn = groupby_eff(ds_tmp, index_vars_list, ['tmp'], None)['tmp']
-    mask = ds_tmp['listed'].isin(listed)
-    rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
+        ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
+
+        rtrn = ftr.scale_classic_median(ds_tmp['tmp'], mask)
+
+    else:
+        ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
+        mask = ds_tmp['listed'].isin(listed)
+
+        ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
+
+        rtrn = groupby_eff(ds_tmp, index_vars_list, ['tmp'], None)['tmp']
+        rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
 
     return rtrn
 
@@ -1618,4 +1637,3 @@ def price(ds: pd.DataFrame
         del ds['tmp']
 
     pass
-

@@ -1,0 +1,54 @@
+- description: test_expm1_basic function testing case 1
+  data: duppl_data
+  params_subset:
+    arg: ['product']
+    value: [2]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 53.59815,
+           53.59815, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906,
+           6.38906, 53.59815, 53.59815]
+    name: 'var'
+
+- description: test_expm1_zero function testing case 2
+  data: duppl_data
+  params_subset:
+    arg: ['product']
+    value: [0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_expm1_negative function testing case 3
+  data: duppl_data
+  params_subset:
+    arg: ['product']
+    value: [-2]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-0.86466, -0.86466, -0.86466, -0.98168, -0.98168, -0.86466, -0.86466, -0.86466, -0.98168, -0.98168, -0.98168,
+           -0.98168, -0.86466, -0.86466, -0.86466, -0.86466, -0.86466, -0.86466, -0.98168, -0.98168, -0.86466, -0.86466,
+           -0.86466, -0.98168, -0.98168]
+    name: 'var'
+
+- description: test_expm1_with_index_vars function testing case 4
+  data: duppl_data
+  params_subset:
+    arg: ['product']
+    value: [2]
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 53.59815,
+           53.59815, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906,
+           6.38906, 53.59815, 53.59815]
+    name: 'var'

@@ -1,0 +1,64 @@
+- description: test_expm1scaled_basic function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['product', 'listed']
+    value: [2, '2,3']
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-05,
+           0.00018, 0.0013, 0.00962, 0.07107, 0.52511, 3.88009, 28.67023]
+    name: 'tmp'
+
+- description: test_expm1scaled_zero function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['product', 'listed']
+    value: [0, '2,3']
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'tmp'
+
+- description: test_expm1scaled_negative function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['product', 'listed']
+    value: [-2, '2,3']
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [28.67023, 3.88009, 0.52511, 0.07107, 0.00962, 0.0013, 0.00018, 2e-05, 0.0, 0.0, 0.0, 0.0, 0.0, -0.0, -0.0,
+           -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0]
+    name: 'tmp'
+
+- description: test_expm1scaled_with_index_vars function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['product', 'listed']
+    value: [2, '2,3']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-2e-05, -2e-05, -2e-05, -2e-05, -2e-05, -2e-05, -2e-05, 0.0, 0.00012, 0.001, 0.00749, 0.0555, 0.41019,
+           3.03105, 22.39673, -0.023, -0.023, -0.02298, -0.02288, -0.02216, -0.01679, 0.02288, 0.31602, 2.482, 18.48655]
+    name: 'tmp'
+
+- description: test_expm1scaled_empty_listed function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['product', 'listed']
+    value: [2, '']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'tmp'

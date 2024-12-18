@@ -1,0 +1,94 @@
+- description: test_logistic_basic function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0.09972, 0.19957, 0.29951, 0.3995 , 0.49949, 0.59946,
+                  0.69935, 0.79912, 0.89875, 0.99817, 1.09737, 1.19628, 1.29489,
+                  1.39314, 1.49101, 1.58845, 1.68542, 1.78189, 1.87783, 1.9732 ,
+                  2.06797, 2.1621 , 2.25556, 2.34833]
+
+- description: test_logistic_zero_level function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [0, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [null,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
+                   0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]
+
+- description: test_logistic_zero_steep function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                  0., 0., 0., 0., 0., 0., 0., 0.]
+
+- description: test_logistic_zero_ec50 function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0.4, 0]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0.     , 0.09999, 0.19995, 0.29982, 0.39957, 0.49915, 0.59853,
+                  0.69768, 0.79654, 0.89507, 0.99325, 1.09103, 1.18838, 1.28526,
+                  1.38163, 1.47745, 1.57271, 1.66735, 1.76135, 1.85468, 1.9473 ,
+                  2.03919, 2.13032, 2.22066, 2.31018]
+
+- description: test_logistic_neg_level function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [-14, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0.     , 0.09955, 0.19889, 0.29797, 0.39677, 0.49524, 0.59334,
+                  0.69104, 0.7883 , 0.88508, 0.98134, 1.07706, 1.17219, 1.2667 ,
+                  1.36057, 1.45376, 1.54624, 1.63798, 1.72895, 1.81913, 1.90849,
+                  1.997  , 2.08465, 2.1714 , 2.25724]
+
+- description: test_logistic_neg_steep function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, -0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [ 0.     , -0.09972, -0.19957, -0.29951, -0.3995 , -0.49949,
+       -0.59946, -0.69935, -0.79912, -0.89875, -0.99817, -1.09737,
+       -1.19628, -1.29489, -1.39314, -1.49101, -1.58845, -1.68542,
+       -1.78189, -1.87783, -1.9732 , -2.06797, -2.1621 , -2.25556,
+       -2.34833]
+
+- description: test_logistic_neg_ec50 function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0.4, -0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0.     , 0.09955, 0.19889, 0.29797, 0.39677, 0.49524, 0.59334,
+                  0.69104, 0.7883 , 0.88508, 0.98134, 1.07706, 1.17219, 1.2667 ,
+                  1.36057, 1.45376, 1.54624, 1.63798, 1.72895, 1.81913, 1.90849,
+                  1.997  , 2.08465, 2.1714 , 2.25724]

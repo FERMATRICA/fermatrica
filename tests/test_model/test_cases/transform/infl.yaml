@@ -1,0 +1,36 @@
+- description: test_infl_basic function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['infl', 'year_start']
+    value: [1.17, 2022]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.,  1.17,  2.34,  3.51,  4.68,  5.85,  7.02,  8.19,  9.36, 10.53, 11.7, 12.87, 14.04, 15.21, 16.38, 17.55,
+           18.72, 19.89, 21.06, 22.23, 23.4, 24.57, 25.74, 26.91, 28.08]
+
+- description: test_infl_zero function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['infl', 'year_start']
+    value: [0, 2022]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                                     0., 0., 0., 0., 0., 0., 0., 0.]
+
+- description: test_infl_negative function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['infl', 'year_start']
+    value: [-1.17, 2024]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-0.,  -0.8547,  -1.7094,  -2.5641,  -3.4188,  -4.2735, -5.12821,  -5.98291,  -6.83761,  -7.69231,  -8.54701,
+           -9.40171, -10.25641, -11.11111, -11.96581, -12.82051, -13.67521, -14.52991, -15.38462, -16.23932, -17.09402,
+           -17.94872, -18.80342, -19.65812, -20.51282]

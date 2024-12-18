@@ -1,0 +1,186 @@
+- description: test_tv_clipl_affinity_base function testing case 0
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_nat']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_nat']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 33454.23705, 6284.12024, 24182.08842, 8772.04925, 80228.83813, 24028.47671, 19565.89004, 40834.3338,
+            2101.81514, 0.0]
+    dtype: 'float64'
+
+- description: test_tv_clipl_affinity_two_channels function testing case 1
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_m45_55_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m45_55_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m45_55_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_m45_55_rolik_nat']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean', 'bp_potreblenie_m45_55_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_m45_55_rolik_nat']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 66908.47409, 12568.24048, 48364.17683, 17544.0985, 160457.67626, 48056.95343, 39131.78008, 81668.66761,
+            4203.63028, 0.0]
+    dtype: 'float64'
+
+- description: test_tv_clipl_affinity_one_bad_channel function testing case 2
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_m45_55_rolik_local: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m45_55_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m45_55_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_m45_55_rolik_local']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean', 'bp_potreblenie_m45_55_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_m45_55_rolik_nat']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 33454.23705, 6284.12024, 24182.08842, 8772.04925, 80228.83813, 24028.47671, 19565.89004, 40834.3338,
+            2101.81514, 0.0]
+    dtype: 'float64'
+
+- description: test_tv_clipl_affinity_all_bad_channels function testing case 3
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_local: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_local: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_m45_55_rolik_local: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m45_55_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m45_55_rolik_local: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_local', 'brnd_ots_m45_55_rolik_local']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean', 'bp_potreblenie_m45_55_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_local', 'brnd_clipl_m45_55_rolik_local']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    dtype: 'int64'
+
+- description: test_tv_clipl_affinity_without_s_pattern_affinity function testing case 4
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_m45_55_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m35_55_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m45_55_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_m45_55_rolik_nat']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean', 'bp_potreblenie_m35_55_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_m45_55_rolik_nat']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 33454.23705, 6284.12024, 24182.08842, 8772.04925, 80228.83813, 24028.47671, 19565.89004, 40834.3338,
+            2101.81514, 0.0]
+    dtype: 'float64'
+
+- description: test_tv_clipl_affinity_without_s_patter_clipl function testing case 5
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_m45_55_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m45_55_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m35_55_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_m45_55_rolik_nat']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean', 'bp_potreblenie_m45_55_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_m35_55_rolik_nat']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 33454.23705, 6284.12024, 24182.08842, 8772.04925, 80228.83813, 24028.47671, 19565.89004, 40834.3338,
+            2101.81514, 0.0]
+    dtype: 'float64'
+
+- description: test_tv_clipl_affinity_without_tv_pattern_clipl function testing case 6
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_all_25_45_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_all_25_45_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_all_25_45_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_m45_55_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m45_55_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m45_55_rolik_local: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_m45_55_rolik_nat']
+    cln_aff: ['bp_potreblenie_all_25_45_affinity_mean', 'bp_potreblenie_m45_55_affinity_mean']
+    cln_clipl: ['brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_m45_55_rolik_local']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 33454.23705, 6284.12024, 24182.08842, 8772.04925, 80228.83813, 24028.47671, 19565.89004, 40834.3338,
+            2101.81514, 0.0]
+    dtype: 'float64'
+
+- description: test_tv_clipl_affinity_different_s_pattern_aff_pattern function testing case 7
+  params:
+    ds: !pd.DataFrame
+      data:
+        brnd_ots_m55plus_rolik_nat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        bp_potreblenie_m55_64_affinity_mean: [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        brnd_clipl_m55plus_rolik_nat: [10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0]
+        brnd_ots_f55plus_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_f55_64_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_f55plus_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+        brnd_ots_m14_24_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_m18_24_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_m14_24_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+        brnd_ots_f14_24_rolik_nat: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        bp_potreblenie_f18_24_affinity_mean: [ 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 ]
+        brnd_clipl_f14_24_rolik_nat: [ 10, 20, 5, 10, 5, 20, 10, 10, 20, 5, 0 ]
+    params_dict:
+      power_coef: 1.25
+      clipl_curve: 1.6
+    cln_tv: ['brnd_ots_m55plus_rolik_nat', 'brnd_ots_f55plus_rolik_nat', 'brnd_ots_m14_24_rolik_nat', 'brnd_ots_f14_24_rolik_nat']
+    cln_aff: ['bp_potreblenie_m55_64_affinity_mean', 'bp_potreblenie_f55_64_affinity_mean', 'bp_potreblenie_m18_24_affinity_mean', 'bp_potreblenie_f18_24_affinity_mean']
+    cln_clipl: ['brnd_clipl_m55plus_rolik_nat', 'brnd_clipl_f55plus_rolik_nat', 'brnd_clipl_m14_24_rolik_nat', 'brnd_clipl_f14_24_rolik_nat']
+    tv_pattern: 'rolik_nat'
+  exp_err: False
+  expected_result: !pd.Series
+    data:  [0.0, 133816.94819, 25136.48097, 96728.35367, 35088.19699, 320915.35252, 96113.90685, 78263.56015,
+            163337.33521, 8407.26057, 0.0]
+    dtype: 'float64'
+

@@ -1,0 +1,85 @@
+- description: test_softmaxfull_basic function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [14, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. ,
+                  0. , 0.5, 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ]
+
+- description: test_softmaxfull_zero_avg function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [0, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0.5, 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ,
+       1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ]
+
+- description: test_softmaxfull_zero_lambda function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [14, 0, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
+        0., null,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.]
+
+- description: test_softmaxfull_zero_std function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [14, 0.4, 0]
+  index_vars:
+  exp_err: Exception
+  expected_type: series
+  expected_result:
+    data: [6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 53.59815,
+           53.59815, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906,
+           6.38906, 53.59815, 53.59815]
+    name: 'var'
+
+- description: test_softmaxfull_negative_avg function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [-14, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                  1., 1., 1., 1., 1., 1., 1., 1.]
+
+- description: test_softmaxfull_negative_lambda function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [14, -0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ,
+                  1. , 0.5, 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. ]
+
+- description: test_softmaxfull_negative_std function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'lambda', 'std']
+    value: [14, 0.4, -0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ,
+                  1. , 0.5, 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. ]

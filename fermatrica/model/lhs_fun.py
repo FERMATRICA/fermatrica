@@ -13,38 +13,9 @@ from fermatrica_utils import DotDict, select_eff
 
 
 @profile
-def market_resize(ds: pd.DataFrame
-                  , y: pd.Series | np.ndarray) -> pd.Series:
-    """
-    Resize main model by additional category model. Useful for simulating competition
-
-    1. Calculate category prediction
-    2. Calculate main (per SKU, brand, region etc.) prediction
-    3. If sum of the (2) predictions by period diverges from (1) prediction, proportionally
-        weight (2) predictions to make sum of them equal to (1)
-
-    :param ds: dataset
-    :param y: predicted Y (target variable)
-    :return: predicted Y (target variable)
-    """
-
-    ds = select_eff(ds, ['bs_key', 'date', 'listed', 'market', 'pred_mrk'])
-    ds['y'] = y
-
-    tmp = ds.loc[ds['listed'] >= 1].groupby(['date', 'market', 'pred_mrk'], as_index=False)['y'].sum()
-    tmp = tmp.set_index(['date', 'market'])
-    tmp['resize'] = tmp['y'] / tmp['pred_mrk']
-
-    ds = ds.join(select_eff(tmp, ['resize']), on=['date', 'market'], how='left', sort=False)
-    y_series = ds['y'] / ds['resize']
-
-    return y_series
-
-
-@profile
 def market_resize_flex(ds: pd.DataFrame
                        , y: pd.Series | np.ndarray
-                       , wght: int | float) -> pd.Series:
+                       , wght: int | float = 1) -> pd.Series:
     """
     Resize main model by additional category model with some discount.
     Use it to simulate competition. More flexible than `market_resize`

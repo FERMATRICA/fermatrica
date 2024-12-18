@@ -1,0 +1,53 @@
+- description: test_scale_basic function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['listed']
+    value: ['2,3']
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-1.62869, -1.49297, -1.35724, -1.22152, -1.08579, -0.95007, -0.81435, -0.67862, -0.5429, -0.40717, -0.27145,
+           -0.13572, 0.0, 0.13572, 0.27145, 0.40717, 0.5429, 0.67862, 0.81435, 0.95007, 1.08579, 1.22152, 1.35724,
+           1.49297, 1.62869]
+    name: 'var'
+
+- description: test_scale_with_index_vars function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['listed']
+    value: ['2,3']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-1.58519, -1.35873, -1.13228, -0.90582, -0.67937, -0.45291, -0.22646, 0.0, 0.22646, 0.45291, 0.67937,
+           0.90582, 1.13228, 1.35873, 1.58519, -1.56197, -1.21487, -0.86776, -0.52066, -0.17355, 0.17355, 0.52066,
+           0.86776, 1.21487, 1.56197]
+    name: 'var'
+
+- description: test_scale_with_multiple_index_vars function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['listed']
+    value: ['2,3']
+  index_vars: '"superbrand", "bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-2.0, -1.0, 0.0, 1.0, 2.0, -2.0, -1.0, 0.0, 1.0, 2.0, -2.0, -1.0, 0.0, 1.0, 2.0, -2.0, -1.0, 0.0, 1.0, 2.0,
+           -2.0, -1.0, 0.0, 1.0, 2.0]
+    name: 'var'
+
+- description: test_scale_with_empty_listed function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['listed']
+    value: ['']
+  index_vars: '"superbrand", "bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'var'

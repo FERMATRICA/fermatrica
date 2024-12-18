@@ -1,0 +1,198 @@
+- description: test_gompertz_basic function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.98744, 1.15225, 1.32497, 1.50346, 1.68561, 1.86936, 2.05283,
+                  2.23432, 2.41232, 2.58558, 2.75305, 2.91391, 3.06754, 3.21353,
+                  3.3516 , 3.48164, 3.60364, 3.71772, 3.82405, 3.92288, 4.0145 ,
+                  4.09925, 4.17747, 4.24954, 4.31581]
+    name: 'var'
+
+- description: test_gompertz_without_std function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, 14, null]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [2.44313, 2.51548, 2.58689, 2.6573 , 2.72664, 2.79485, 2.86188,
+                  2.9277 , 2.99225, 3.05551, 3.11745, 3.17804, 3.23728, 3.29513,
+                  3.3516 , 3.40668, 3.46036, 3.51265, 3.56355, 3.61307, 3.66122,
+                  3.70802, 3.75346, 3.79758, 3.84038]
+    name: 'var'
+
+- description: test_gompertz_without_avg function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, null, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.32497, 1.50346, 1.68561, 1.86936, 2.05283, 2.23432, 2.41232,
+                  2.58558, 2.75305, 2.91391, 3.06754, 3.21353, 3.3516 , 3.48164,
+                  3.60364, 3.71772, 3.82405, 3.92288, 4.0145 , 4.09925, 4.17747,
+                  4.24954, 4.31581, 4.37668, 4.43248]
+    name: 'var'
+
+- description: test_gompertz_without_std_avg function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, null, null]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [2.58689, 2.6573 , 2.72664, 2.79485, 2.86188, 2.9277 , 2.99225,
+                  3.05551, 3.11745, 3.17804, 3.23728, 3.29513, 3.3516 , 3.40668,
+                  3.46036, 3.51265, 3.56355, 3.61307, 3.66122, 3.70802, 3.75346,
+                  3.79758, 3.84038, 3.8819 , 3.92215]
+    name: 'var'
+
+- description: test_gompertz_zero_a function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [0, 0.4, 0.3, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                  0., 0., 0., 0., 0., 0., 0., 0.]
+    name: 'var'
+
+- description: test_gompertz_zero_b function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0, 0.3, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+                  5., 5., 5., 5., 5., 5., 5., 5.]
+    name: 'var'
+
+- description: test_gompertz_zero_c function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516,
+                  3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516,
+                  3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516, 3.3516,
+                  3.3516]
+    name: 'var'
+
+- description: test_gompertz_zero_avg function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, 0, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [3.3516 , 3.48164, 3.60364, 3.71772, 3.82405, 3.92288, 4.0145 ,
+                  4.09925, 4.17747, 4.24954, 4.31581, 4.37668, 4.43248, 4.4836 ,
+                  4.53035, 4.57308, 4.61208, 4.64766, 4.68009, 4.70964, 4.73653,
+                  4.76099, 4.78323, 4.80345, 4.82182]
+    name: 'var'
+
+- description: test_gompertz_zero_std function testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, 14, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
+                   0., null,  5.,  5.,  5.,  5.,  5.,  5.,  5.,  5.,  5.,  5.]
+    name: 'var'
+
+- description: test_gompertz_neg_a function testing case 10
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [-5, 0.4, 0.3, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-0.98744, -1.15225, -1.32497, -1.50346, -1.68561, -1.86936, -2.05283, -2.23432, -2.41232, -2.58558, -2.75305,
+           -2.91391, -3.06754, -3.21353, -3.3516, -3.48164, -3.60364, -3.71772, -3.82405, -3.92288, -4.0145, -4.09925,
+           -4.17747, -4.24954, -4.31581]
+    name: 'var'
+
+- description: test_gompertz_neg_b function testing case 11
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, -0.4, 0.3, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [25.31806, 21.69662, 18.86833, 16.62827, 14.83146, 13.37355, 12.17828, 11.18909, 10.36345, 9.66901, 9.08085,
+           8.57955, 8.14985, 7.77961, 7.45912, 7.18053, 6.93742, 6.72455, 6.53757, 6.37287, 6.22742, 6.09868, 5.98448,
+           5.88299, 5.79265]
+    name: 'var'
+
+- description: test_gompertz_neg_c function testing case 12
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, -0.3, 14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [4.53035, 4.4836, 4.43248, 4.37668, 4.31581, 4.24954, 4.17747, 4.09925, 4.0145, 3.92288, 3.82405, 3.71772,
+           3.60364, 3.48164, 3.3516, 3.21353, 3.06754, 2.91391, 2.75305, 2.58558, 2.41232, 2.23432, 2.05283, 1.86936,
+           1.68561]
+    name: 'var'
+
+- description: test_gompertz_neg_avg function testing case 13
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, -14, 3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [4.53035, 4.57308, 4.61208, 4.64766, 4.68009, 4.70964, 4.73653, 4.76099, 4.78323, 4.80345, 4.82182, 4.8385,
+           4.85364, 4.86738, 4.87985, 4.89116, 4.90141, 4.91071, 4.91914, 4.92678, 4.9337, 4.93997, 4.94565, 4.9508,
+           4.95546]
+    name: 'var'
+
+- description: test_gompertz_neg_std function testing case 14
+  data: sample_data
+  params_subset:
+    arg: ['a', 'b', 'c', 'avg', 'std']
+    value: [5, 0.4, 0.3, 14, -3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [4.53035, 4.4836, 4.43248, 4.37668, 4.31581, 4.24954, 4.17747, 4.09925, 4.0145, 3.92288, 3.82405, 3.71772,
+           3.60364, 3.48164, 3.3516, 3.21353, 3.06754, 2.91391, 2.75305, 2.58558, 2.41232, 2.23432, 2.05283, 1.86936,
+           1.68561]
+    name: 'var'

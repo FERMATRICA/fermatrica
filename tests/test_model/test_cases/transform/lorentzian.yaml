@@ -1,0 +1,95 @@
+- description: test_lorentzian_base function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.58899, 13.10796, 9.43439, 6.14606, 4.05808, 2.8, 2.02074, 1.51607, 1.17462, 0.93451, 0.75998, 0.62949,
+           0.52957, 0.45145, 0.38928, 0.33902, 0.29785, 0.2637, 0.23507, 0.21085, 0.19017, 0.17237, 0.15696, 0.14351,
+           0.13172]
+    name: 'var'
+
+- description: test_lorentzian_zero_amplitude function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [0, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_lorentzian_zero_expvalue function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [14.0, 11.77424, 7.97201, 5.18265, 3.47863, 2.44503, 1.79365, 1.36416, 1.06884, 0.85827, 0.70339, 0.58643,
+           0.49608, 0.42492, 0.36793, 0.32159, 0.28344, 0.25166, 0.22491, 0.20219, 0.18273, 0.16595, 0.15136, 0.13861,
+           0.12741]
+    name: 'var'
+
+- description: test_lorentzian_zero_hwhm function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_lorentzian_neg_amplitude function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [-14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-13.58899, -13.10796, -9.43439, -6.14606, -4.05808, -2.8, -2.02074, -1.51607, -1.17462, -0.93451, -0.75998,
+           -0.62949, -0.52957, -0.45145, -0.38928, -0.33902, -0.29785, -0.2637, -0.23507, -0.21085, -0.19017, -0.17237,
+           -0.15696, -0.14351, -0.13172]
+    name: 'var'
+
+- description: test_lorentzian_neg_expvalue function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, -0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.58899, 10.21517, 6.70226, 4.39525, 3.00446, 2.14978, 1.6013, 1.23331, 0.9764, 0.79082, 0.6528, 0.54758,
+           0.46564, 0.40065, 0.34827, 0.30547, 0.27005, 0.24042, 0.21538, 0.19405, 0.17573, 0.15987, 0.14606, 0.13396,
+           0.1233]
+    name: 'var'
+
+- description: test_lorentzian_neg_hwhm function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, -2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.58899, 13.10796, 9.43439, 6.14606, 4.05808, 2.8, 2.02074, 1.51607, 1.17462, 0.93451, 0.75998, 0.62949,
+           0.52957, 0.45145, 0.38928, 0.33902, 0.29785, 0.2637, 0.23507, 0.21085, 0.19017, 0.17237, 0.15696, 0.14351,
+           0.13172]
+    name: 'var'

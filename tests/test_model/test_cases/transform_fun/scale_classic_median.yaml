@@ -1,0 +1,65 @@
+- description: test_scale_classic_median_series function testing case 0
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    mask: !pd.Series
+      data: [True, False, False, True, True, True, False, False, True, True, True, False, False, True,
+                            True, True, False, False, True, True, True, False, False, True, True]
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, -0.06787, 0.13573, 0.2036, -0.27146, 0.33933, 0.40719, -0.47506, 0.54292, 0.61079,
+                          -0.67865, 0.74652, -0.81438, -0.88225, 0.95011, -1.01798, 1.08584, 1.15371, -1.22157, 1.28944,
+                          -1.3573, 1.42517, -1.49303, 1.5609, -1.62876]
+
+- description: test_scale_classic_median_array function testing case 1
+  params:
+    x: !np.array
+      object: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    mask: !pd.Series
+      data: [True, False, False, True, True, True, False, False, True, True, True, False, False, True,
+                            True, True, False, False, True, True, True, False, False, True, True]
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, -0.06787, 0.13573, 0.2036, -0.27146, 0.33933, 0.40719, -0.47506, 0.54292, 0.61079,
+                          -0.67865, 0.74652, -0.81438, -0.88225, 0.95011, -1.01798, 1.08584, 1.15371, -1.22157, 1.28944,
+                          -1.3573, 1.42517, -1.49303, 1.5609, -1.62876]
+
+- description: test_scale_classic_median_bad_mask function testing case 2
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    mask: !pd.Series
+      data: [True, False, False, False, False, False, False, False, False, False, False, False, False,
+                            False, False, False, False, False, False, False, False, False, False, False, False]
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+- description: test_scale_classic_median_very_bad_mask function testing case 3
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    mask: !pd.Series
+      data: [False, False, False, False, False, False, False, False, False, False, False, False, False,
+                            False, False, False, False, False, False, False, False, False, False, False, False]
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+- description: test_scale_classic_median_constant function testing case 4
+  params:
+    x: !pd.Series
+      data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    mask: !pd.Series
+      data: [True, False, False, True, True, True, False, False, True, True, True, False, False, True,
+                            True, True, False, False, True, True, True, False, False, True, True]
+  exp_err: False
+  expected_result: !pd.Series
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

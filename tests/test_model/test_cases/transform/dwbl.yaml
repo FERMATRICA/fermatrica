@@ -1,0 +1,168 @@
+- description: test_dwbl_basic function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0.00123, 0.00257, 0.00392, 0.00527, 0.00662, 0.00797, 0.00932, 0.01067, 0.01202, 0.01337, 0.01472,
+             0.01607, 0.01742, 0.01877, 0.02012, 0.02147, 0.02282, 0.02417, 0.02552, 0.02687, 0.02822, 0.02957, 0.03092,
+             0.03227]
+
+- description: test_dwbl_with_index_vars function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+  index_vars: '"bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0., 0.03679, 0.07724, 0.11773, 0.15822, 0.05255, 0.0683, 0.07991, 0.09148, 0.10304, 0.06131, 0.07355,
+             0.08035, 0.0871, 0.09385, 0.06492, 0.07571, 0.08054, 0.0853, 0.09006, 0.06689, 0.07689, 0.08064, 0.08432,
+             0.088]
+    name: 'var'
+
+- description: test_dwbl_with_superbrand_max function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+    index_aggr: ['max', 'max', 'max']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.06131, 0.07355, 0.08035, 0.0871, 0.09385, 0.06131, 0.07355, 0.08035, 0.0871, 0.09385, 0.06131, 0.07355,
+           0.08035, 0.0871, 0.09385, 0.06689, 0.07689, 0.08064, 0.08432, 0.088, 0.06689, 0.07689, 0.08064, 0.08432,
+           0.088]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_dwbl_with_superbrand_mfreq function testing case 3
+  data: duppl_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+    index_aggr: ['mfreq', 'mfreq', 'mfreq']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.05255, 0.05779, 0.05784, 0.11039, 0.11563, 0.05255, 0.05779, 0.05784, 0.11039, 0.11563, 0.05255,
+           0.05779, 0.05784, 0.11039, 0.11563, 0.05255, 0.05779, 0.05784, 0.11039, 0.11563, 0.05255, 0.05779,
+           0.05784, 0.11039, 0.11563]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_dwbl_with_superbrand_sum_kpi_coef function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+    index_aggr: ['sum_kpi_coef', 'sum_kpi_coef', 'sum_kpi_coef']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.01599, 0.03998, 0.07102, 0.10909, 0.15421, 0.01599, 0.03998, 0.07102, 0.10909, 0.15421, 0.01599, 0.03998,
+           0.07102, 0.10909, 0.15421, 0.02128, 0.04712, 0.07565, 0.10685, 0.14074, 0.02128, 0.04712, 0.07565, 0.10685,
+           0.14074]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_dwbl_with_superbrand_sum_kpi_coef_master function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+    index_aggr: ['sum_kpi_coef_master', 'sum_kpi_coef_master', 'sum_kpi_coef_master']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.09681, 0.10258, 0.09067, 0.07015, 0.0411, 0.09681, 0.10258, 0.09067, 0.07015, 0.0411, 0.09681, 0.10258,
+           0.09067, 0.07015, 0.0411, 0.11394, 0.10771, 0.08589, 0.06107, 0.03339, 0.11394, 0.10771, 0.08589, 0.06107,
+           0.03339]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_dwbl_with_superbrand_sum function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+    index_aggr: ['sum', 'sum', 'sum']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.05255, 0.0683, 0.07991, 0.09148, 0.10304, 0.05255, 0.0683, 0.07991, 0.09148, 0.10304, 0.05255, 0.0683,
+           0.07991, 0.09148, 0.10304, 0.06603, 0.07638, 0.08059, 0.08475, 0.0889, 0.06603, 0.07638, 0.08059, 0.08475,
+           0.0889]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_dwbl_with_multiple_index_vars function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [2.0, 1.0, 10]
+    index_aggr: ['max', 'max', 'max']
+  index_vars: '"superbrand", "bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0., 0.03679, 0.07724, 0.11773, 0.15822, 0.05255, 0.0683, 0.07991, 0.09148, 0.10304, 0.06131, 0.07355,
+           0.08035, 0.0871, 0.09385, 0.06492, 0.07571, 0.08054, 0.0853, 0.09006, 0.06689, 0.07689, 0.08064, 0.08432,
+           0.088]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_dwbl_zero function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [0, 0, 0]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]
+
+- description: test_dwbl_negative function testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['shape', 'scale', 'dur']
+    value: [-0.5, -0.8, -5]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]

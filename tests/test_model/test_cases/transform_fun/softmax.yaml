@@ -1,0 +1,137 @@
+- description: test_logistic_series function testing case 0
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 3
+      lambda: 0.4
+      std: 9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [7.3300e-03, 1.4400e-03, 1.6298e-01, 5.0000e-01, 1.0000e-05,
+       9.6347e-01, 9.9267e-01, 0.0000e+00, 9.9972e-01, 9.9995e-01,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00]
+    dtype: 'float64'
+
+- description: test_logistic_array function testing case 1
+  params:
+    x: !np.array
+      object: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 3
+      lambda: 0.4
+      std: 9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [7.3300e-03, 1.4400e-03, 1.6298e-01, 5.0000e-01, 1.0000e-05,
+       9.6347e-01, 9.9267e-01, 0.0000e+00, 9.9972e-01, 9.9995e-01,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00]
+    dtype: 'float64'
+
+- description: test_logistic_zero_avg function testing case 2
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 0
+      lambda: 0.4
+      std: 9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [5.0000e-01, 1.6298e-01, 9.6347e-01, 9.9267e-01, 1.4400e-03,
+       9.9972e-01, 9.9995e-01, 1.0000e-05, 1.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00]
+    dtype: 'float64'
+
+- description: test_logistic_zero_lambda function testing case 3
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 3
+      lambda: 0
+      std: 9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [ 0.,  0.,  0., nan,  0.,  1.,  1.,  0.,  1.,  1.,  0.,  1.,  0.,
+        0.,  1.,  0.,  1.,  1.,  0.,  1.,  0.,  1.,  0.,  1.,  0.]
+    dtype: 'float64'
+
+- description: test_logistic_zero_std function testing case 4
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 3
+      lambda: 0.4
+      std: 0
+  exp_err: False
+  expected_result: !np.array
+    object: [ 0.,  0.,  0., nan,  0.,  1.,  1.,  0.,  1.,  1.,  0.,  1.,  0.,
+        0.,  1.,  0.,  1.,  1.,  0.,  1.,  0.,  1.,  0.,  1.,  0.]
+    dtype: 'float64'
+
+- description: test_logistic_neg_avg function testing case 5
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: -3
+      lambda: 0.4
+      std: 9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [9.9267e-01, 9.6347e-01, 9.9972e-01, 9.9995e-01, 1.6298e-01,
+       1.0000e+00, 1.0000e+00, 1.4400e-03, 1.0000e+00, 1.0000e+00,
+       1.0000e-05, 1.0000e+00, 0.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00,
+       0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00]
+    dtype: 'float64'
+
+- description: test_logistic_neg_lambda function testing case 6
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 3
+      lambda: -0.4
+      std: 9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [9.9267e-01, 9.9856e-01, 8.3702e-01, 5.0000e-01, 9.9999e-01,
+       3.6530e-02, 7.3300e-03, 1.0000e+00, 2.8000e-04, 5.0000e-05,
+       1.0000e+00, 0.0000e+00, 1.0000e+00, 1.0000e+00, 0.0000e+00,
+       1.0000e+00, 0.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00,
+       1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00]
+    dtype: 'float64'
+
+- description: test_logistic_neg_std function testing case 7
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      avg: 3
+      lambda: 0.4
+      std: -9.6
+  exp_err: False
+  expected_result: !np.array
+    object: [9.9267e-01, 9.9856e-01, 8.3702e-01, 5.0000e-01, 9.9999e-01,
+       3.6530e-02, 7.3300e-03, 1.0000e+00, 2.8000e-04, 5.0000e-05,
+       1.0000e+00, 0.0000e+00, 1.0000e+00, 1.0000e+00, 0.0000e+00,
+       1.0000e+00, 0.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00,
+       1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00]
+    dtype: 'float64'

@@ -1,0 +1,263 @@
+- description: test_init_bad_path function testing case 0
+  params:
+    path: 'test_cases\model_conf\models\no_model_def.xlsx'
+    ds:
+    if_stable:
+  exp_err: FermatricaError
+  expected_result:
+
+- description: test_init_empty_model_def function testing case 1
+  params:
+    path: 'test_cases\model_conf\models\empty_model_def.xlsx'
+    ds:
+    if_stable:
+  exp_err: ValueError
+  expected_result:
+
+- description: test_init_model_def_simple function testing case 2
+  params:
+    path: 'test_cases\model_conf\models\model_def_without_LHS_and_data.xlsx'
+    ds:
+    if_stable:
+  exp_err: False
+  expected_result:
+    Y_var: 'units'
+    model_type: 'OLS'
+    price_var: 'price_distr'
+    summary_type: 'sum'
+    conversion_var: null
+    model_objects: null
+    model_lhs: null
+    scoring: !pd.DataFrame
+      data:
+        metrics: ['r_squared']
+        if_invert: [0]
+        width: [0.3]
+        weight: [1]
+        if_active: [1]
+    scoring_dict:
+      r_squared:
+        if_active: 1
+        if_invert: 0
+        weight: 1
+        width: 0.3
+
+- description: test_init_model_def_bad_model_type function testing case 3
+  params:
+    path: 'test_cases\model_conf\models\model_def_bad_model_type.xlsx'
+    ds:
+    if_stable:
+  exp_err: FermatricaError
+  expected_result:
+
+- description: test_init_model_def_simple function testing case 4
+  params:
+    path: 'test_cases\model_conf\models\model_def_without_LHS_and_data.xlsx'
+    ds: basic_data
+    if_stable:
+  exp_err: False
+  expected_result:
+    Y_var: 'units'
+    model_type: 'OLS'
+    price_var: 'price_distr'
+    summary_type: 'sum'
+    conversion_var: null
+    model_objects: null
+    model_lhs: null
+    scoring: !pd.DataFrame
+      data:
+        metrics: ['r_squared']
+        if_invert: [0]
+        width: [0.3]
+        weight: [1]
+        if_active: [1]
+    scoring_dict:
+      r_squared:
+        if_active: 1
+        if_invert: 0
+        weight: 1
+        width: 0.3
+
+- description: test_init_model_def_simple function testing case 5
+  params:
+    path: 'test_cases\model_conf\models\model_def_without_trans_path_df_and_disp_var.xlsx'
+    ds: str_superbrand_data
+    if_stable: True
+  exp_err: False
+  expected_result:
+    Y_var: 'my_units'
+    bs_key: ['superbrand', 'market']
+    conversion_fun: ['conversion', 'fun']
+    conversion_var: null
+    custom_scoring: 'rmse_bs_key * ((1 + sign_t_value_s) ** 4)'
+    exclude_curves: 'exclude'
+    exclude_from_curves: ['exclude', 'from', 'curves']
+    fixed_effect_var: 'bs_key'
+    lme_method: ['lmemethod', 'method']
+    model_lhs: !pd.DataFrame
+      data:
+        type: ['multiplicative', 'multiplicative']
+        name: ['ssn_on', 'ssn_off']
+        token: ['((coef.ttl_tr_ssn_on + 1) / (coef.ttl_tr_ssn_on * ds.tt_tr_ssn_on + 1))', '((coef.ttl_tr_ssn_off + 1) / (coef.ttl_tr_ssn_off * ds.tt_tr_ssn_off + 1))']
+        if_active: [1,1]
+        display_var: ['ssn_on', 'ssn_off']
+    model_objects: null
+    model_rhs: !pd.DataFrame
+      data:
+        token: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd : type_online']
+        fixed: [1, 1]
+        if_active: [1, 0]
+        sign: [1, 1]
+        sign_weight: [10, 1]
+        signif_weight: [10, 1]
+        display_var: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd : type_online']
+    model_type: 'LME'
+    params: !pd.DataFrame
+      data:
+        variable: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_all_25_45_rolik_nat', 'kpi_coef', 'kpi_coef', 'kpi_coef', 'kpi_coef', 'brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_all_25_45_rolik_nat']
+        fun: ['share', 'share', 'mar', 'mar', 'mar', 'mar', 'olololol', 'olololol', 'olololol']
+        arg: ['coef_var', 'include_coef_var', 'n', 'n', 'if_scale', 'if_scale', 'olo', 'lol', 'dummy']
+        lower: !pd.Series
+          data: [null, null, null, null, null, null, null, null, null]
+          dtype: 'float64'
+        upper: !pd.Series
+          data: [null, null, null, null, null, null, null, null, null]
+          dtype: 'float64'
+        value: [null, True, 5.0, 5.0, True, True, 'stroka', False, True]
+        type: ['str', 'bool', 'float64', 'float64', 'bool', 'bool', 'str', 'bool', 'int']
+        fixed: [1, 1, 0, 0, 1, 1, 1, 1, 1]
+        if_active: [1, 1, 1, 1, 1, 1, 1, 1, 0]
+        index_vars: ['"market","date","listed"', '"market","date","listed"',  null, null, null, null, null, null, null]
+        index_aggr: [null, null, null, null, null, null, null, null, null]
+        index_free_var: [null, null, 'superbrand___brand', 'superbrand___super', 'superbrand___brand', 'superbrand___super', 'bs_key___3', 'bs_key___3', null]
+        set_start: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        formula: !pd.Series
+          data: [null, null, null, null, null, null, null, null, null]
+          dtype: 'float64'
+        index_free_var_work: !pd.Series
+          data: [null, null, null, null, null, null, null, null, null]
+          dtype: 'float64'
+    period_var: 'week'
+    price_var: 'price'
+    scoring: !pd.DataFrame
+      data:
+        metrics: ['rmse_bs_key', 'r_squared', 'r_squared_adjusted', 'sign_t_value_s']
+        if_invert: [0, 0, 0, 1]
+        width: [0.3, 0.3, 0.3, 0.3]
+        weight: [0.25, 0.25, 1.0, 0.5]
+        if_active: [1, 1, 0, 1]
+    scoring_dict:
+      rmse_bs_key:
+        if_active: 1
+        if_invert: 0
+        weight: 0.25
+        width: 0.3
+      r_squared:
+        if_active: 1
+        if_invert: 0
+        weight: 0.25
+        width: 0.3
+      sign_t_value_s:
+        if_active: 1
+        if_invert: 1
+        weight: 0.5
+        width: 0.3
+    summary_type: 'sum'
+    target_audience: ['target', 'audience']
+    target_superbrand: 'tefal_off'
+    trans_path_df: !pd.DataFrame
+      data:
+        variable: ['brnd_ots_all_25_45_rolik_nat', 'kpi_coef', 'brnd_clipl_all_25_45_rolik_nat']
+        variable_fin: ['brnd_ots_all_25_45_rolik_nat_share', 'kpi_coef_mar', 'brnd_clipl_all_25_45_rolik_nat_olololol']
+        price: [1, 1, 1]
+        display_var: ['brnd_ots_all_25_45_rolik_nat_share', 'kpi_coef_mar', 'brnd_clipl_all_25_45_rolik_nat_olololol']
+      index: [0, 2, 6]
+    _StableClass__if_stable: True
+
+- description: test_init_model_def_simple function testing case 6
+  params:
+    path: 'test_cases\model_conf\models\model_def_full.xlsx'
+    ds: basic_data
+    if_stable: True
+  exp_err: False
+  expected_result:
+    Y_var: 'my_units'
+    bs_key: ['superbrand', 'market']
+    conversion_fun: ['conversion', 'fun']
+    conversion_var: null
+    custom_scoring: 'rmse_bs_key * ((1 + sign_t_value_s) ** 4)'
+    exclude_curves: 'exclude'
+    exclude_from_curves: ['exclude', 'from', 'curves']
+    fixed_effect_var: 'bs_key'
+    lme_method: ['lmemethod', 'method']
+    model_lhs: !pd.DataFrame
+      data:
+        type: ['multiplicative', 'multiplicative']
+        name: ['ssn_on', 'ssn_off']
+        token: ['((coef.ttl_tr_ssn_on + 1) / (coef.ttl_tr_ssn_on * ds.tt_tr_ssn_on + 1))', '((coef.ttl_tr_ssn_off + 1) / (coef.ttl_tr_ssn_off * ds.tt_tr_ssn_off + 1))']
+        if_active: [1,1]
+        display_var: ['ssn_on', 'Сезонность2']
+    model_objects: null
+    model_rhs: !pd.DataFrame
+      data:
+        token: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd : type_online']
+        fixed: [1, 1]
+        if_active: [1, 0]
+        sign: [1, 1]
+        sign_weight: [10, 1]
+        signif_weight: [10, 1]
+        display_var: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'TV_online']
+    model_type: 'LME'
+    params: !pd.DataFrame
+      data:
+        variable: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_all_25_45_rolik_nat', 'kpi_coef', 'kpi_coef', 'kpi_coef', 'kpi_coef', 'brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_all_25_45_rolik_nat']
+        fun: ['share', 'share', 'mar', 'mar', 'mar', 'mar', 'olololol', 'olololol', 'olololol']
+        arg: ['coef_var', 'include_coef_var', 'n', 'n', 'if_scale', 'if_scale', 'olo', 'lol', 'dummy']
+        lower: [null, null, -1, -1, null, null, null, null, null]
+        upper: [null, null, 1.45, 1.45, null, null, null, null, null]
+        value: [null, True, 5.0, 5.0, True, True, 'stroka', False, True]
+        type: ['str', 'bool', 'float64', 'float64', 'bool', 'bool', 'str', 'bool', 'int']
+        fixed: [1, 1, 0, 0, 1, 1, 1, 1, 1]
+        if_active: [1, 1, 1, 1, 1, 1, 1, 1, 0]
+        index_vars: ['"market","date","listed"', '"market","date","listed"',  null, null, null, null, null, null, null]
+        index_aggr: ['mfreq', 'mfreq', null, null, null, null, null, null, null]
+        index_free_var: [null, null, 'superbrand___0', 'superbrand___1', 'superbrand___0', 'superbrand___1', 'bs_key___3', 'bs_key___3', null]
+        set_start: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        formula: ["ds.loc[ds['listed']==2, 'my_units'].min()", null, null, null, null, null, null, null, null]
+        index_free_var_work: !pd.Series
+          data: [null, null, null, null, null, null, null, null, null]
+          dtype: 'float64'
+    period_var: 'week'
+    price_var: 'price'
+    scoring: !pd.DataFrame
+      data:
+        metrics: ['rmse_bs_key', 'r_squared', 'r_squared_adjusted', 'sign_t_value_s']
+        if_invert: [0, 0, 0, 1]
+        width: [0.3, 0.3, 0.3, 0.3]
+        weight: [0.25, 0.25, 1.0, 0.5]
+        if_active: [1, 1, 0, 1]
+    scoring_dict:
+      rmse_bs_key:
+        if_active: 1
+        if_invert: 0
+        weight: 0.25
+        width: 0.3
+      r_squared:
+        if_active: 1
+        if_invert: 0
+        weight: 0.25
+        width: 0.3
+      sign_t_value_s:
+        if_active: 1
+        if_invert: 1
+        weight: 0.5
+        width: 0.3
+    summary_type: 'sum'
+    target_audience: ['target', 'audience']
+    target_superbrand: 'tefal_off'
+    trans_path_df: !pd.DataFrame
+      data:
+        variable: ['ololo']
+        variable_fin: ['ololo_trololol']
+        price: [20]
+        display_var: ['ololo_trololol']

@@ -1,0 +1,94 @@
+- description: test_guassianzero_base function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, -0.3546, -3.69918, -7.93594, -11.14723, -12.83455, -13.47963, -13.66306, -13.70232, -13.70868,
+           -13.70947, -13.70954, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955,
+           -13.70955, -13.70955, -13.70955, -13.70955, -13.70955]
+    name: 'var'
+
+- description: test_guassianzero_zero_amplitude function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [0, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassianzero_zero_expvalue function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, -1.71932, -5.71092, -9.69494, -12.27956, -13.47096, -13.87482, -13.97721, -13.99681, -13.99966,
+           -13.99997, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0, -14.0]
+    name: 'var'
+
+- description: test_guassianzero_zero_hwhm function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassianzero_neg_amplitude function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [-14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.3546, 3.69918, 7.93594, 11.14723, 12.83455, 13.47963, 13.66306, 13.70232, 13.70868, 13.70947,
+           13.70954, 13.70955, 13.70955, 13.70955, 13.70955, 13.70955, 13.70955, 13.70955, 13.70955, 13.70955, 13.70955,
+           13.70955, 13.70955, 13.70955]
+    name: 'var'
+
+- description: test_guassianzero_neg_expvalue function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, -0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, -2.88043, -7.12763, -10.63132, -12.60181, -13.40281, -13.64419, -13.69883, -13.7082, -13.70942,
+           -13.70954, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955,
+           -13.70955, -13.70955, -13.70955, -13.70955, -13.70955]
+    name: 'var'
+
+- description: test_guassianzero_neg_hwhm function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, -2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, -0.3546, -3.69918, -7.93594, -11.14723, -12.83455, -13.47963, -13.66306, -13.70232, -13.70868,
+           -13.70947, -13.70954, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955, -13.70955,
+           -13.70955, -13.70955, -13.70955, -13.70955, -13.70955]
+    name: 'var'

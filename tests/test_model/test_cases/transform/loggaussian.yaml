@@ -1,0 +1,116 @@
+- description: test_guassian_base function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, 14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, 13.88076, 8.35615, 7.91079, 7.84752, 7.83478, 7.83153, 7.83056, 7.83022, 7.8301, 7.83004, 7.83002,
+           7.83001, 7.83001, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83]
+    name: 'var'
+
+- description: test_guassian_zero_offset function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [0, 14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, 6.05076, 0.52615, 0.08079, 0.01752, 0.00478, 0.00153, 0.00056, 0.00022, 0.0001, 4e-05, 2e-05, 1e-05,
+           1e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    name: 'var'
+
+- description: test_guassian_zero_amplitude function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, 0, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83,
+           7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83]
+    name: 'var'
+
+- description: test_guassian_zero_expvalue function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, 14, 0, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83,
+           7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83]
+    name: 'var'
+
+- description: test_guassian_zero_hwhm function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, 14, 0.4, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, 21.83, 14.83, 12.49667, 11.33, 10.63, 10.16333, 9.83, 9.58, 9.38556, 9.23, 9.10273, 8.99667, 8.90692,
+           8.83, 8.76333, 8.705, 8.65353, 8.60778, 8.56684, 8.53, 8.49667, 8.46636, 8.4387, 8.41333]
+    name: 'var'
+
+- description: test_guassian_neg_offset function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [-7.83, -14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, -13.88076, -8.35615, -7.91079, -7.84752, -7.83478, -7.83153, -7.83056, -7.83022, -7.8301, -7.83004,
+           -7.83002, -7.83001, -7.83001, -7.83, -7.83, -7.83, -7.83, -7.83, -7.83, -7.83, -7.83, -7.83, -7.83, -7.83]
+    name: 'var'
+
+- description: test_guassian_neg_amplitude function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, -14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, 1.77924, 7.30385, 7.74921, 7.81248, 7.82522, 7.82847, 7.82944, 7.82978, 7.8299, 7.82996, 7.82998,
+           7.82999, 7.82999, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83, 7.83]
+    name: 'var'
+
+- description: test_guassian_neg_expvalue function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, 14, -0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+           null, null, null, null, null, null, null]
+    name: 'var'
+
+- description: test_guassian_neg_hwhm function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['offset', 'amplitude', 'expvalue', 'hwhm']
+    value: [7.83, 14, 0.4, -2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+           null, null, null, null, null, null, null]
+    name: 'var'

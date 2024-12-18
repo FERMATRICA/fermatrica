@@ -1,0 +1,93 @@
+- description: test_adbudg_basic function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0.     , 5.04429, 5.96884, 6.52965, 6.9317 , 7.244  , 7.4985 ,
+                  7.71268, 7.89714, 8.05881, 8.20246, 8.33152, 8.44853, 8.55543,
+                  8.65372, 8.74462, 8.82908, 8.90791, 8.98175, 9.05117, 9.11661,
+                  9.17849, 9.23714, 9.29285, 9.3459 ]
+
+- description: test_adbudg_zero_level function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [0, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                  0., 0., 0., 0., 0., 0., 0., 0.]
+
+- description: test_adbudg_zero_steep function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7., 7.,
+                  7., 7., 7., 7., 7., 7., 7., 7.]
+
+- description: test_adbudg_zero_ec50 function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0.4, 0]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [ 0., 14., 14., 14., 14., 14., 14., 14., 14., 14., 14., 14., 14.,
+                  14., 14., 14., 14., 14., 14., 14., 14., 14., 14., 14., 14.]
+
+- description: test_adbudg_neg_level function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [-14, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [   0.     ,   18.05486,   40.51952,   97.17744,  710.38047,
+       -207.82309, -105.29496,  -75.75475,  -61.61808,  -53.27843,
+        -47.74982,  -43.8001 ,  -40.82746,  -38.50264,  -36.63012,
+        -35.08635,  -33.78935,  -32.68254,  -31.72556,  -30.88884,
+        -30.1502 ,  -29.49266,  -28.90299,  -28.37075,  -27.88755]
+
+- description: test_adbudg_neg_steep function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, -0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0.     , 8.95571, 8.03116, 7.47035, 7.0683 , 6.756  , 6.5015 ,
+                  6.28732, 6.10286, 5.94119, 5.79754, 5.66848, 5.55147, 5.44457,
+                  5.34628, 5.25538, 5.17092, 5.09209, 5.01825, 4.94883, 4.88339,
+                  4.82151, 4.76286, 4.70715, 4.6541 ]
+
+- description: test_adbudg_neg_ec50 function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['level', 'steep', 'ec50']
+    value: [14, 0.4, -0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [   0.     ,  -18.05486,  -40.51952,  -97.17744, -710.38047,
+        207.82309,  105.29496,   75.75475,   61.61808,   53.27843,
+         47.74982,   43.8001 ,   40.82746,   38.50264,   36.63012,
+         35.08635,   33.78935,   32.68254,   31.72556,   30.88884,
+         30.1502 ,   29.49266,   28.90299,   28.37075,   27.88755]

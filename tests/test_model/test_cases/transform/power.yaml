@@ -1,0 +1,39 @@
+- description: test_power_basic function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['pwr']
+    value: [2.34]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 1.0, 5.06303, 13.07566, 25.63424, 43.21055, 66.20243, 94.95753, 129.78681, 170.97298, 218.77616,
+           273.43801, 335.18465, 404.22898, 480.77248, 565.00663, 657.11406, 757.26952, 865.64069, 982.38885,
+           1107.66948, 1241.63272, 1384.42385, 1536.18364, 1697.0487]
+    name: 'var'
+
+- description: test_power_zero function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['pwr']
+    value: [0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+           1.0, 1.0, 1.0, 1.0]
+    name: 'var'
+
+- description: test_power_neg function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['pwr']
+    value: [-2.34]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [inf, 1.0, 0.19751, 0.07648, 0.03901, 0.02314, 0.01511, 0.01053, 0.0077, 0.00585, 0.00457, 0.00366, 0.00298,
+           0.00247, 0.00208, 0.00177, 0.00152, 0.00132, 0.00116, 0.00102, 0.0009, 0.00081, 0.00072, 0.00065, 0.00059]
+    name: 'var'

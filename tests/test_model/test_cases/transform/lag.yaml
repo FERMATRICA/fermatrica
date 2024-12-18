@@ -1,0 +1,263 @@
+- description: test_lag_basic function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    name: 'var'
+
+- description: test_lag_with_zero_shift function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [0, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    name: 'var'
+
+- description: test_lag_with_negative_shift function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [-1, 0]
+  index_vars:
+  exp_err: FermatricaError
+  expected_type: series
+  expected_result:
+    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    name: 'var'
+
+- description: test_lag_with_cval function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, -1]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    name: 'var'
+
+- description: test_lag_with_index_vars function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+  index_vars: '"bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 0, 1, 2, 3, 0, 5, 6, 7, 8, 0, 10, 11, 12, 13, 0, 15, 16, 17, 18, 0, 20, 21, 22, 23]
+    name: 'var'
+
+- description: test_lag_with_index_vars_max_aggr function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['max', 'max']
+  index_vars: '"date"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 20, 21, 22, 23, 0, 20, 21, 22, 23, 0, 20, 21, 22, 23, 0, 20, 21, 22, 23, 0, 20, 21, 22, 23]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_index_vars_mfreq_aggr function testing case 6
+  data: duppl_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['mfreq', 'mfreq']
+  index_vars: '"date"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 1, 1, 2, 0, 1, 1, 1, 2, 0, 1, 1, 1, 2, 0, 1, 1, 1, 2, 0, 1, 1, 1, 2]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_index_vars_sum_kpi_coef function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['sum_kpi_coef', 'sum_kpi_coef']
+  index_vars: '"date"'
+  exp_err: KeyError
+  expected_type: series
+  expected_result:
+    data: [0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_index_vars_sum_kpi_coef_master function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['sum_kpi_coef_master', 'sum_kpi_coef_master']
+  index_vars: '"date"'
+  exp_err: KeyError
+  expected_type: series
+  expected_result:
+    data: [0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_index_vars_sum_aggr function testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['sum', 'sum']
+  index_vars: '"date"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_superbrand_index_vars_max_aggr function testing case 10
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['max', 'max']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 10, 11, 12, 13,  0, 10, 11, 12, 13, 0, 10, 11, 12, 13,  0, 20, 21, 22, 23,  0, 20, 21, 22, 23]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_superbrand_index_vars_mfreq_aggr function testing case 11
+  data: duppl_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['mfreq', 'mfreq']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 1, 1, 1, 2, 0, 1, 1, 1, 2, 0, 1, 1, 1, 2, 0, 1, 1, 1, 2, 0, 1, 1, 1, 2]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_superbrand_index_vars_sum_aggr function testing case 12
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['sum', 'sum']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_superbrand_index_vars_sum_kpi_coef function testing case 13
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['sum_kpi_coef', 'sum_kpi_coef']
+  index_vars: '"superbrand"'
+  exp_err: KeyError
+  expected_type: series
+  expected_result:
+    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_with_superbrand_index_vars_sum_kpi_coef_master function testing case 14
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1, 0]
+    index_aggr: ['sum_kpi_coef_master', 'sum_kpi_coef_master']
+  index_vars: '"superbrand"'
+  exp_err: KeyError
+  expected_type: series
+  expected_result:
+    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    name: 'var'
+    index: !pd.RangeIndex
+      start: 0
+      stop: 25
+      step: 1
+      name: 'wrk_index'
+
+- description: test_lag_basic function testing case 15
+  data: sample_data
+  params_subset:
+    arg: ['n', 'cval']
+    value: [1.43, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    name: 'var'
+
+- description: test_lag_without_cval function testing case 16
+  data: sample_data
+  params_subset:
+    arg: ['n']
+    value: [1]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    name: 'var'

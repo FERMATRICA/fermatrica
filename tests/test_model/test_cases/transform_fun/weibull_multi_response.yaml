@@ -1,0 +1,173 @@
+- description: test_weibull_multy_response_base function testing case 0
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: 3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [ 0.     , -0.16547,  0.05503,  0.99048,  0.28034, -0.10106,
+        2.14441,  0.78187, -0.25613,  3.29833,  1.28341, -0.41121,
+        0.48102, -4.83688, -1.95212,  0.61798, -0.69584,  6.37545,
+        2.62084, -0.82475,  0.91066, -0.96434,  1.01805, -1.07175,
+        1.12546]
+
+- description: test_weibull_multy_response_without_scale function testing case 1
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      shape: 3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [  0.     ,  -0.55182,   1.10163,   1.65948,  -2.20124,   2.75104,
+         3.32098,  -3.85066,   4.40046,   4.98247,  -5.50008,   6.04988,
+        -6.59969,  -7.1978 ,   7.6993 ,  -8.24911,   8.79891,   9.41313,
+        -9.89853,  10.44833, -10.99814,  11.54795, -12.09775,  12.64756,
+       -13.19737]
+
+- description: test_weibull_multy_response_if_weight function testing case 2
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: 3
+      dur: 10
+    if_weight: True
+  exp_err: False
+  expected_result: !np.array
+    object: [ 0.     , -0.02068,  0.00688,  0.12381,  0.03504, -0.01263,
+        0.26805,  0.09773, -0.03202,  0.41229,  0.16043, -0.0514 ,
+        0.06013, -0.60461, -0.24402,  0.07725, -0.08698,  0.79693,
+        0.3276 , -0.10309,  0.11383, -0.12054,  0.12726, -0.13397,
+        0.14068]
+
+- description: test_weibull_multy_response_array function testing case 3
+  params:
+    x: !np.array
+      object: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: 3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [ 0.     , -0.16547,  0.05503,  0.99048,  0.28034, -0.10106,
+        2.14441,  0.78187, -0.25613,  3.29833,  1.28341, -0.41121,
+        0.48102, -4.83688, -1.95212,  0.61798, -0.69584,  6.37545,
+        2.62084, -0.82475,  0.91066, -0.96434,  1.01805, -1.07175,
+        1.12546]
+
+- description: test_weibull_multy_response_zeros function testing case 4
+  params:
+    x: !pd.Series
+      data: [0, 0, 0, 0, 0, 0, 0, 0]
+    params_dict:
+      scale: 2
+      shape: 3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0]
+
+- description: test_weibull_multy_response_zero_scale function testing case 5
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 0
+      shape: 3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0]
+
+- description: test_weibull_multy_response_neg_scale function testing case 6
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: -2
+      shape: 3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0]
+
+- description: test_weibull_multy_response_zero_shape function testing case 7
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: 0
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0]
+
+- description: test_weibull_multy_response_neg_shape function testing case 8
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: -3
+      dur: 10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0]
+
+- description: test_weibull_multy_response_zero_dur function testing case 9
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: 3
+      dur: 0
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0]
+
+- description: test_weibull_multy_response_neg_dur function testing case 10
+  params:
+    x: !pd.Series
+      data: [0, -1, 2, 3, -4, 5, 6, -7, 8, 9, -10, 11, -12, -13, 14, -15, 16, 17, -18, 19, -20, 21,
+                                -22, 23, -24]
+    params_dict:
+      scale: 2
+      shape: 3
+      dur: -10
+    if_weight:
+  exp_err: False
+  expected_result: !np.array
+    object: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0]
