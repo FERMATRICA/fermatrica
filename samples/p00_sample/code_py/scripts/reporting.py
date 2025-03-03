@@ -36,7 +36,7 @@ if __name__ == '__main__':
     if_correct = False
     if_visual = False  # switch on/off visuals
     if_curves = False
-    if_export = True
+    if_export = False
     if_save = True
     if_debug = True
 

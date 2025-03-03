@@ -188,19 +188,21 @@ Cross-sectional & non-dimension-specific transformations
 
 @profile
 def sum_inv_exp_dist(x: pd.Series | np.ndarray
-                     , wght=None
+                     # , wght=None
                      , product=1
                      ):
     """
     Sum of inverted exponented distance. Used in price calculation to find brand clusters by price
 
     :param x: vector / series to apply transformation
-    :param wght:
     :param product:
     :return:
     """
 
-    x1 = x.array
+    if isinstance(x, pd.Series):
+        x1 = x.to_numpy()
+    else:
+        x1 = x
 
     m = np.zeros((len(x1), len(x1)))
 
@@ -213,10 +215,11 @@ def sum_inv_exp_dist(x: pd.Series | np.ndarray
 
     m = pd.DataFrame(m)
     m.replace([np.inf, -np.inf], 0, inplace=True)
-    m.index = x.index
+    if isinstance(x, pd.Series):
+        m.index = x.index
 
-    if not pd.isna(wght):
-        m = m * wght
+    # if not pd.isna(wght):
+    #     m = m * wght
 
     m = m.sum(axis=1)
 
@@ -225,7 +228,7 @@ def sum_inv_exp_dist(x: pd.Series | np.ndarray
 
 @profile
 def scale_classic_median(x: pd.Series | np.ndarray
-                         , mask: pd.DataFrame
+                         , mask: pd.Series | np.ndarray
                          ):
     """
     Classic scaling: (X - median(X)) / STD(X).
@@ -238,11 +241,22 @@ def scale_classic_median(x: pd.Series | np.ndarray
     :return:
     """
 
+    if_array = False
+    if isinstance(x, np.ndarray):
+        x = pd.Series(x)
+        if_array = True
+
+    if isinstance(mask, pd.Series):
+        mask = mask.values
+
     x_r = (x - x.loc[mask].median()) / x.loc[mask].std()
 
     mask = x_r.isin([np.inf, -np.inf])
     x_r.loc[mask] = x.loc[mask]
     x_r.loc[x_r.isna()] = 0
+
+    if if_array:
+        x_r = x_r.to_numpy()
 
     rtrn = x_r
 

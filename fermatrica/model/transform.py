@@ -822,7 +822,7 @@ def age(ds: pd.DataFrame
     mask = ~ds_tmp[var].isna()
 
     if pd.isna(index_vars):
-        rtrn = ds_tmp.loc[mask, :].groupby(var).cumcount()[var]
+        rtrn = ds_tmp.loc[mask, :].groupby(var).cumcount().rename(var)
         rtrn = ds_tmp.join(rtrn, how='left', rsuffix='_tmp')[var + '_tmp']
 
     elif index_vars == '"bs_key"':
@@ -1034,7 +1034,7 @@ def expm1scaled(ds: pd.DataFrame
     """
 
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
-    listed = ast.literal_eval('[' + params_dict['listed'] + ']')
+    listed = ast.literal_eval('[' + str(params_dict['listed']) + ']')
     product = params_dict['product']
 
     if type(index_vars) == str:

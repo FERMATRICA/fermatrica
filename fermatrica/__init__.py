@@ -10,7 +10,7 @@ import fermatrica.model
 import fermatrica.evaluation
 import fermatrica.optim
 
-from fermatrica.basics.basics import fermatrica_error, FermatricaError
+from fermatrica.basics.basics import fermatrica_error, FermatricaError, params_to_dict
 from fermatrica.model.model import Model, model_load_ext
 from fermatrica.model.model_conf import ModelConf
 from fermatrica.model.model_obj import ModelObj, prepickle as model_obj_prepickle

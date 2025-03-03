@@ -91,7 +91,7 @@ class ModelConf(StableClass):
         self._trans_path_df_set(shts)
 
         # read setup
-        self._setup()
+        self._setup(ds)
 
         # read scoring
         self._scoring_set(shts)
@@ -107,7 +107,8 @@ class ModelConf(StableClass):
         if if_stable:
             self._init_finish()
 
-    def _setup(self):
+    def _setup(self
+               , ds: pd.DataFrame | None = None):
         """
         Unfold setup settings to object attributes
 
@@ -138,7 +139,7 @@ class ModelConf(StableClass):
         model_setup = model_setup[~model_setup['key'].isin(['bs_key', 'target_audience', 'lme_method', 'conversion_fun', 'exclude_from_curves', 'exclude_curve']) & model_setup['value'].notna()]
         model_setup.apply(lambda x: setattr(self, x['key'], x['value']), axis=1)
 
-        self._check_setup()
+        self._check_setup(ds)
 
         pass
 
@@ -179,7 +180,8 @@ class ModelConf(StableClass):
 
         pass
 
-    def _check_setup(self):
+    def _check_setup(self
+                     , ds: pd.DataFrame | None = None):
         """
         Check loaded setup for potential problems
 
@@ -194,6 +196,10 @@ class ModelConf(StableClass):
             self.price_var = 'price_distr'
             logging.warning("Model definition : Setup : `price_var` value missed, set to default `price_distr`")
 
+        if isinstance(ds, pd.DataFrame) and self.price_var not in ds.columns:
+            logging.warning("Model definition : Setup : price variable`" + self.price_var +
+                            "` column not found in the dataset, calculations could result in error")
+
         if not hasattr(self, 'conversion_var') or self.conversion_var == '':
             self.conversion_var = None
             logging.warning("Model definition : Setup : `conversion_var` value missed (it's OK if no conversion is expected)")
@@ -205,7 +211,7 @@ class ModelConf(StableClass):
         if not hasattr(self, 'summary_type') or self.summary_type is None or self.summary_type == '':
             self.summary_type = 'sum'
             logging.warning("Model definition : Setup : `summary_type` value missed, set to default `sum`." +\
-                            " Acceptable values: `sum`, `fin`")
+                            " Acceptable values: `sum`, `fin` / `mean_fin`")
 
         model_type_allowed = ['OLS', 'LME', 'LMEA', 'FE']
         if self.model_type not in model_type_allowed:

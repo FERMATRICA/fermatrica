@@ -101,10 +101,11 @@
     value: [1, 0]
     index_aggr: ['sum_kpi_coef', 'sum_kpi_coef']
   index_vars: '"date"'
-  exp_err: KeyError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65]
+    data: [ 0.,  5., 11., 18., 26.,  0.,  5., 11., 18., 26.,  0.,  5., 11.,
+       18., 26.,  0.,  5., 11., 18., 26.,  0.,  5., 11., 18., 26.]
     name: 'var'
     index: !pd.RangeIndex
       start: 0
@@ -119,10 +120,11 @@
     value: [1, 0]
     index_aggr: ['sum_kpi_coef_master', 'sum_kpi_coef_master']
   index_vars: '"date"'
-  exp_err: KeyError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65, 0, 50, 55, 60, 65]
+    data: [ 0., 25., 22., 18., 13.,  0., 25., 22., 18., 13.,  0., 25., 22.,
+       18., 13.,  0., 25., 22., 18., 13.,  0., 25., 22., 18., 13.]
     name: 'var'
     index: !pd.RangeIndex
       start: 0
@@ -209,10 +211,12 @@
     value: [1, 0]
     index_aggr: ['sum_kpi_coef', 'sum_kpi_coef']
   index_vars: '"superbrand"'
-  exp_err: KeyError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    data: [ 0. ,  1.5,  3.6,  6.3,  9.6,  0. ,  1.5,  3.6,  6.3,  9.6,  0. ,
+        1.5,  3.6,  6.3,  9.6,  0. ,  3.5,  7.4, 11.7, 16.4,  0. ,  3.5,
+        7.4, 11.7, 16.4]
     name: 'var'
     index: !pd.RangeIndex
       start: 0
@@ -227,10 +231,12 @@
     value: [1, 0]
     index_aggr: ['sum_kpi_coef_master', 'sum_kpi_coef_master']
   index_vars: '"superbrand"'
-  exp_err: KeyError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 15, 18, 21, 24,  0, 35, 37, 39, 41,  0, 35, 37, 39, 41]
+    data: [ 0. ,  7.5,  7.2,  6.3,  4.8,  0. ,  7.5,  7.2,  6.3,  4.8,  0. ,
+        7.5,  7.2,  6.3,  4.8,  0. , 17.5, 14.8, 11.7,  8.2,  0. , 17.5,
+       14.8, 11.7,  8.2]
     name: 'var'
     index: !pd.RangeIndex
       start: 0

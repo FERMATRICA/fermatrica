@@ -37,7 +37,7 @@ def params_to_dict(params: pd.DataFrame) -> "DotDict":
     Converts DataFrame with transformation params to the dictionary
     with elements accessible with dot notation
 
-    :param params: paandas DataFrame with columns `arg` and `value` (at least)
+    :param params: pandas DataFrame with columns `arg` and `value` (at least)
     :return: dictionary
     """
 

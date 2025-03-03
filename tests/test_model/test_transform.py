@@ -302,7 +302,7 @@ class TestINFL:
                 fun(np.round(result, 5), expected_result)
 
 
-class TestAGE:
+class TestAge:
 
     @pytest.mark.parametrize("data,params_subset,index_vars,expected_result,fun,exp_err", parametrize_params('age.yaml'))
     def test_age(self, data, params_subset, index_vars, expected_result, fun, exp_err, if_debug):
