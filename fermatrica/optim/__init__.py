@@ -14,5 +14,7 @@ at least for some most popular transformations.
 """
 
 
-import fermatrica.optim.optim
+import fermatrica.optim.objective
+import fermatrica.optim.globals
+import fermatrica.optim.locals
 import fermatrica.optim.pygad

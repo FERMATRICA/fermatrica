@@ -17,6 +17,7 @@ from statsmodels.regression.linear_model import OLS
 from fermatrica.basics.basics import fermatrica_error
 from fermatrica.model.model import Model
 import fermatrica.evaluation.metrics as mtr
+from fermatrica.evaluation.metrics import durbin_watson
 
 
 """
@@ -377,28 +378,6 @@ def p_value(model: "Model") -> float | int:
     return rtrn
 
 
-def durbin_watson(model: "Model") -> int | float:
-    """
-    Durbin-Watson test for autocorrelation. Assumes OLS linear model as `model.obj.models['main']`
-
-    :param model: FERMATRICA Model object
-    :return:
-    """
-
-    if not isinstance(model.obj.models['main'].model, OLS):
-        logging.error('Durbin-Watson cannot be calculated. Supported model types: OLS. Supported data type: time series. ' +
-                      'Please change the model type to OLS and be sure data is a time series (not a panel nor slices).')
-        return 0
-
-    residuals = model.obj.models['main'].resid
-    resid_df = pd.DataFrame([residuals, residuals.shift(1)]).T
-    coef = resid_df.corr()[0][1]
-
-    rtrn = 2 * (1 - coef)
-
-    return rtrn
-
-
 def durbin_watson_score(model: "Model"):
     """
     Durbin-Watson test for autocorrelation. Assumes OLS linear model as `model.obj.models['main']`.
@@ -413,11 +392,7 @@ def durbin_watson_score(model: "Model"):
                       'Please change the model type to OLS and be sure data is a time series (not a panel nor slices).')
         return 0
 
-    residuals = model.obj.models['main'].resid
-    resid_df = pd.DataFrame([residuals, residuals.shift(1)]).T
-    coef = resid_df.corr()[0][1]
-
-    rtrn = abs(2 * (1 - coef) - 2)
+    rtrn = abs(durbin_watson(model) - 2)
 
     return rtrn
 

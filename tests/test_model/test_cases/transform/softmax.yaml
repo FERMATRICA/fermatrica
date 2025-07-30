@@ -28,11 +28,9 @@
     arg: ['avg', 'lambda', 'std']
     value: [14, 0, 0.3]
   index_vars:
-  exp_err: False
+  exp_err: ZeroDivisionError
   expected_type: array
-  expected_result:
-    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-                  0., 0., 0., 0., 0., 0., 0., 0.]
+  expected_result: [0]
 
 - description: test_softmax_zero_std function testing case 3
   data: sample_data
@@ -85,3 +83,176 @@
     object:  [0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,
                    0. ,  0. ,  0. , -0.5, -1. , -1. , -1. , -1. , -1. , -1. , -1. ,
                   -1. , -1. , -1. ]
+
+- description: test_softmax_basic_ec50 function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [28, .5, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. ,
+                  0. , 0.5, 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ]
+
+- description: test_softmax_zero_avg_ec50 function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [36, 0, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0. , 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+
+- description: test_softmax_zero_lambda_ec50 function testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [7, 2, 0, 0.3]
+  index_vars:
+  exp_err: ZeroDivisionError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_softmax_zero_std_ec50 function testing case 10
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [42, .333333333, 0.4, 0]
+  index_vars:
+  exp_err: Exception
+  expected_type: series
+  expected_result:
+    data: [6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 53.59815,
+           53.59815, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906,
+           6.38906, 53.59815, 53.59815]
+    name: 'var'
+
+- description: test_softmax_negative_avg_ec50 function testing case 11
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [-28, .5, 0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                  0., 0., 0., 0., 0., 0., 0., 0.]
+
+- description: test_softmax_negative_lambda_ec50 function testing case 12
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [7, 2, -0.4, 0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [ 0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,
+                   0. ,  0. ,  0. , -0.5, -1. , -1. , -1. , -1. , -1. , -1. , -1. ,
+                  -1. , -1. , -1. ]
+
+- description: test_softmax_negative_std_ec50 function testing case 13
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std']
+    value: [56, .25, 0.4, -0.3]
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object:  [0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,
+                   0. ,  0. ,  0. , -0.5, -1. , -1. , -1. , -1. , -1. , -1. , -1. ,
+                  -1. , -1. , -1. ]
+
+
+- description: test_softmax_basic_ec50_scale function testing case 14
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [28, .5, 0.4, 0.3, 'max']
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. , 0. ,
+                  0. , 0.5, 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. , 1. ]
+
+- description: test_softmax_zero_avg_ec50_scale function testing case 15
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [36, 0, 0.4, 0.3, 'avg_max']
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0. , 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0,
+                  36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0]
+
+- description: test_softmax_zero_lambda_ec50_scale function testing case 16
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [7, 2, 0, 0.3, 'avg_max']
+  index_vars:
+  exp_err: ZeroDivisionError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_softmax_zero_std_ec50_scale function testing case 17
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [42, .333333333, 0.4, 0, 'max']
+  index_vars:
+  exp_err: Exception
+  expected_type: series
+  expected_result:
+    data: [6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 53.59815,
+           53.59815, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 6.38906, 53.59815, 53.59815, 6.38906, 6.38906,
+           6.38906, 53.59815, 53.59815]
+    name: 'var'
+
+- description: test_softmax_negative_avg_ec50_scale function testing case 18
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [-28, .5, 0.4, 0.3, 'avg_min']
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                  0., 0., 0., 0., 0., 0., 0., 0.]
+
+- description: test_softmax_negative_lambda_ec50_scale function testing case 19
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [7, 2, -0.4, 0.3, 'min']
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object: [ 0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,
+                   0. ,  0. ,  0. , 0.5, 1. , 1. , 1. , 1. , 1. , 1. , 1. ,
+                  1. , 1. , 1. ]
+
+- description: test_softmax_negative_std_ec50_scale function testing case 20
+  data: sample_data
+  params_subset:
+    arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
+    value: [56, .25, 0.4, -0.3, 'min']
+  index_vars:
+  exp_err: False
+  expected_type: array
+  expected_result:
+    object:  [0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,  0. ,
+                   0. ,  0. ,  0. , 0.5, 1. , 1. , 1. , 1. , 1. , 1. , 1. ,
+                  1. , 1. , 1. ]

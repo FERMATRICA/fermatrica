@@ -13,7 +13,7 @@ import re
 
 from line_profiler_pycharm import profile
 
-from fermatrica_utils import pandas_tree_final_child, StableClass
+from fermatrica_utils import pandas_tree_final_child, StableClass, sr_na
 from fermatrica.basics.basics import fermatrica_error
 
 
@@ -228,6 +228,12 @@ class ModelConf(StableClass):
 
         if 'display_var' not in self.model_rhs.columns:
             self.model_rhs['display_var'] = self.model_rhs['token']
+
+        mask = ~sr_na(self.model_rhs['token'])
+        self.model_rhs.loc[mask, 'token'] = (self.model_rhs.loc[mask, 'token'].str.
+                                             replace(r' *\+ *', ' + ', regex=True))
+        self.model_rhs.loc[mask, 'token'] = (self.model_rhs.loc[mask, 'token'].str.
+                                             replace(r' *: *', ':', regex=True))
 
         self.model_rhs.loc[self.model_rhs['display_var'].isna(), 'display_var'] = self.model_rhs.loc[self.model_rhs['display_var'].isna(), 'token']
 

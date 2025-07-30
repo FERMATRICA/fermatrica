@@ -218,11 +218,11 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['max','max','max','max','max','max']
   index_vars: '"date"'
-  exp_err: ValueError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
+    data: [1.7, 1.7, 1.0698, 1.98938, 2.78077, 1.7, 1.7, 1.0698, 1.98938, 2.78077, 1.7, 1.7, 1.0698, 1.98938,
+       2.78077, 1.7, 1.7, 1.0698, 1.98938, 2.78077, 1.7, 1.7, 1.0698, 1.98938, 2.78077]
     name: 'tmp'
 
 - description: test_arl_with_index_vars_date_mfreq function testing case 17
@@ -232,12 +232,9 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['mfreq','mfreq','mfreq','mfreq','mfreq','mfreq']
   index_vars: '"date"'
-  exp_err: ValueError
-  expected_type: series
-  expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
-    name: 'tmp'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
 
 - description: test_arl_with_index_vars_date_sum_kpi_coef function testing case 18
   data: sample_data
@@ -246,11 +243,11 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef']
   index_vars: '"date"'
-  exp_err: ValueError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
+    data: [1.7, 1.7, 0.18943, 1.1959, 3.57416, 1.7, 1.7, 0.18943, 1.1959 , 3.57416, 1.7, 1.7, 0.18943, 1.1959,
+       3.57416, 1.7, 1.7, 0.18943, 1.1959, 3.57416, 1.7, 1.7, 0.18943, 1.1959, 3.574169]
     name: 'tmp'
 
 - description: test_arl_with_index_vars_date_sum_kpi_coef_master function testing case 19
@@ -260,11 +257,11 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master']
   index_vars: '"date"'
-  exp_err: ValueError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
+    data: [1.7, 1.7, 4.73578, 6.71578, 6.3307, 1.7, 1.7, 4.73578, 6.71578, 6.3307, 1.7, 1.7, 4.73578, 6.71578,
+       6.3307, 1.7, 1.7, 4.73578, 6.71578, 6.3307, 1.7, 1.7, 4.73578, 6.71578, 6.3307]
     name: 'tmp'
 
 - description: test_arl_with_index_vars_date_sum function testing case 20
@@ -274,12 +271,9 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum','sum','sum','sum','sum','sum']
   index_vars: '"date"'
-  exp_err: ValueError
-  expected_type: series
-  expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
-    name: 'tmp'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
 
 - description: test_arl_with_index_vars_superbrand_max function testing case 21
   data: sample_data
@@ -302,12 +296,9 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['mfreq','mfreq','mfreq','mfreq','mfreq','mfreq']
   index_vars: '"superbrand"'
-  exp_err: False
-  expected_type: series
-  expected_result:
-    data: [1.7, 1.7, 0.50098, 0.92682, 1.28878, 1.7, 1.7, 0.50098, 0.92682, 1.28878, 1.7, 1.7,
-           0.50098, 0.92682, 1.28878, 1.7, 1.7, 0.50098, 0.92682, 1.28878, 1.7, 1.7, 0.50098, 0.92682, 1.28878]
-    name: 'tmp'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
 
 - description: test_arl_with_index_vars_superbrand_sum function testing case 23
   data: sample_data
@@ -316,12 +307,9 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum','sum','sum','sum','sum','sum']
   index_vars: '"superbrand"'
-  exp_err: False
-  expected_type: series
-  expected_result:
-    data: [1.7, 1.7, 5.12822, 11.15796, 16.77042, 1.7, 1.7, 5.12822, 11.15796, 16.77042, 1.7, 1.7, 5.12822, 11.15796,
-           16.77042, 1.7, 1.7, 4.15843, 7.74065, 10.83051, 1.7, 1.7, 4.15843, 7.74065, 10.83051]
-    name: 'tmp'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
 
 - description: test_arl_with_index_vars_superbrand_sum_kpi_coef function testing case 24
   data: sample_data
@@ -330,11 +318,11 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef']
   index_vars: '"superbrand"'
-  exp_err: KeyError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
+    data: [1.7, 1.7, 0.05128, 0.35914, 1.11366, 1.7, 1.7, 0.05128, 0.35914, 1.11366, 1.7, 1.7, 0.05128, 0.35914,
+       1.11366, 1.7, 1.7, 0.04158, 0.23893, 0.68723, 1.7, 1.7, 0.04158, 0.23893, 0.68723]
     name: 'tmp'
 
 - description: test_arl_with_index_vars_superbrand_sum_kpi_coef_master function testing case 25
@@ -344,11 +332,11 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master']
   index_vars: '"superbrand"'
-  exp_err: KeyError
+  exp_err: False
   expected_type: series
   expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.57107, 2.07662, 2.54969, 2.98796, 3.39152, 3.76171, 4.10055, 4.41031,
-           4.69338, 4.9521, 5.18873, 5.40538, 5.60398, 5.78634, 5.95406, 6.10863, 6.25137, 6.38347, 6.50599, 6.61989]
+    data: [1.7, 1.7, 1.28206, 1.95963, 1.90502, 1.7, 1.7, 1.28206, 1.95963, 1.90502, 1.7, 1.7, 1.28206, 1.95963,
+       1.90502, 1.7, 1.7, 1.03961, 1.37989, 1.26227, 1.7, 1.7, 1.03961, 1.37989, 1.26227]
     name: 'tmp'
 
 - description: test_arl_with_multiple_index function testing case 26
@@ -358,9 +346,6 @@
     value: [0.4, 14, 1.3, 0.85, 2, 1.7]
     index_aggr: ['sum','sum','sum','sum','sum','sum']
   index_vars: '"superbrand", "bs_key"'
-  exp_err: False
-  expected_type: series
-  expected_result:
-    data: [1.7, 1.7, 0.0, 0.50098, 1.04007, 1.7, 1.7, 0.78456, 1.4876, 2.11621, 1.7, 1.7, 0.92484, 1.73073, 2.43386,
-           1.7, 1.7, 1.00941, 1.88095, 2.63449, 1.7, 1.7, 1.0698, 1.98938, 2.78077]
-    name: 'tmp'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]

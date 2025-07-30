@@ -10,6 +10,7 @@ import fermatrica.model.transform as tr
 from fermatrica.basics.basics import FermatricaError
 
 from tests.basics.basics import construct_pandas_index
+from tests.conftest import if_debug
 
 
 yaml.add_constructor('!pd.RangeIndex', construct_pandas_index)
@@ -33,9 +34,15 @@ def parametrize_params(file_name):
                 type_dict = {
                     'dataframe': pd.DataFrame,
                     'series': pd.Series,
-                    'array': np.array}
+                    'array': np.array,
+                }
                 type = type_dict[item['expected_type']]
-                expected_result = type(**item['expected_result'])
+
+                if isinstance(item['expected_result'], list):
+                    expected_result = item['expected_result']
+                else:
+                    expected_result = type(**item['expected_result'])
+
                 # type conversion
 
                 if item['expected_type'] == 'dataframe' and 'date' in expected_result.columns:

@@ -263,6 +263,38 @@ def scale_classic_median(x: pd.Series | np.ndarray
     return rtrn
 
 
+def scale_level(x: pd.Series | np.ndarray
+                , mask: pd.Series | np.ndarray
+                , params_dict: dict):
+    """
+
+    :param x: 
+    :param mask:
+    :param params_dict: transformation function params
+    :return:
+    """
+
+    w = 1.0
+
+    if params_dict['scale'] == 'max':
+        w = x.loc[mask].max()
+
+    elif params_dict['scale'] == 'min':
+        w = x.loc[mask].min()
+
+    elif params_dict['scale'] == 'avg_max':
+        w = x.loc[mask].max()
+        x = x * params_dict['avg_level']
+
+    elif params_dict['scale'] == 'avg_min':
+        w = x.loc[mask].min()
+        x = x * params_dict['avg_level']
+
+    if w not in [0, 1]:
+        x = x / w
+
+    return x
+
 """
 Saturation transformations
 """

@@ -18,4 +18,7 @@ from fermatrica.model.transform import transform
 from fermatrica.model.predict import fit_predict, predict_ext
 import fermatrica.evaluation.metrics as metrics
 from fermatrica.evaluation.scoring import scoring
-from fermatrica.optim.optim import optimize_local_cobyla, optimize_global_ga
+from fermatrica.optim.locals import optimize_local_cobyla, optimize_local_bobyqa, optimize_local_sbplx, \
+    optimize_local_rbf, optimize_local_ncma
+from fermatrica.optim.globals import optimize_global_ga, optimize_global_tpe
+from fermatrica.optim.globals_deap import optimize_global_de

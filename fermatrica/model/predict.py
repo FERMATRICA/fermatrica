@@ -111,17 +111,33 @@ def _predict_worker(ds: pd.DataFrame
 
     if custom_predict_fn is not None:
 
-        model.obj.models = custom_predict_fn(ds, model, if_fit)
+        try:
+            model.obj.models = custom_predict_fn(ds, model, if_fit)
+        except Exception as e:
+            if if_verbose:
+                fermatrica_error('Custom predict function failed. It could be category model or something. ' +
+                                 'Error might be inside function itself')
+            if return_full:
+                return None, None, None
+            else:
+                return None
 
         if model.obj.models is None:
             if if_verbose:
                 fermatrica_error('Custom predict function failed. It could be category model or something')
-            return None
+            if return_full:
+                return None, None, None
+            else:
+                return None
+
         elif not isinstance(model.obj.models, dict):
             if if_verbose:
                 fermatrica_error('Custom predict function returns unexpected type. ' +
                                  'Please be sure if it returns model.obj.models and not model')
-            return None
+            if return_full:
+                return None, None, None
+            else:
+                return None
 
     # main model : LHS transformation
 

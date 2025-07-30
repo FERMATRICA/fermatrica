@@ -1,4 +1,4 @@
-- description: test_var_aggregate_sum_kpi_coef function testing case 1
+- description: test_var_aggregate_sum_kpi_coef function testing case 0
   data: sample_data
   params_subset:
     arg: ['n']
@@ -13,7 +13,7 @@
       date: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']
       var: [1.5, 3.6, 6.3, 9.6, 13.5, 3.5, 7.4, 11.7, 16.4, 21.5]
 
-- description: test_var_aggregate_sum_kpi_coef_master function testing case 2
+- description: test_var_aggregate_sum_kpi_coef_master function testing case 1
   data: sample_data
   params_subset:
     arg: ['n']
@@ -28,7 +28,7 @@
       date: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']
       var: [7.5, 7.2, 6.3, 4.8, 2.7, 17.5, 14.8, 11.7, 8.2, 4.3]
 
-- description: test_var_aggregate_max function testing case 3
+- description: test_var_aggregate_max function testing case 2
   data: sample_data
   params_subset:
     arg: ['n']
@@ -43,7 +43,7 @@
       date: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']
       var: [10, 11, 12, 13, 14, 20, 21, 22, 23, 24]
 
-- description: test_var_aggregate_mfreq function testing case 4
+- description: test_var_aggregate_mfreq function testing case 3
   data: duppl_data
   params_subset:
     arg: ['n']
@@ -58,7 +58,7 @@
       date: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']
       var: [1, 1, 1, 2, 2, 1, 1, 1, 2, 2]
 
-- description: test_var_aggregate_sum function testing case 5
+- description: test_var_aggregate_sum function testing case 4
   data: sample_data
   params_subset:
     arg: ['n']
@@ -73,7 +73,7 @@
       date: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']
       var: [15, 18, 21, 24, 27, 35, 37, 39, 41, 43]
 
-- description: test_var_aggregate_error function testing case 6
+- description: test_var_aggregate_error function testing case 5
   data: sample_data
   params_subset:
     arg: ['n']
@@ -81,14 +81,10 @@
     index_aggr: ['sum']
   index_vars: '"super"'
   exp_err: KeyError
-  expected_type: dataframe
-  expected_result:
-    data:
-      superbrand: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
-      date: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']
-      var: [15, 18, 21, 24, 27, 35, 37, 39, 41, 43]
+  expected_type: array
+  expected_result: [0]
 
-- description: test_var_aggregate_mfreq_diff_answer function testing case 7
+- description: test_var_aggregate_mfreq_diff_answer function testing case 6
   data: mfreq_data
   params_subset:
     arg: ['n']

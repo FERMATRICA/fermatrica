@@ -183,7 +183,7 @@ def _var_aggregate(ds: pd.DataFrame
         cols.append(var)
 
         tmp = select_eff(ds, cols).copy(deep=False)
-        tmp = tmp.groupby(index_vars_list)[var].agg(pd.Series.mode)
+        tmp = tmp.groupby(index_vars_list)[var].agg(lambda x: pd.Series.mode(x).iat[0])
         tmp = tmp.reset_index(name=var)
         tmp.fillna(0, inplace=True)
 
@@ -196,7 +196,7 @@ def _var_aggregate(ds: pd.DataFrame
 
 @profile
 def _check_type(ds: pd.DataFrame
-                , var: str):
+                , var: str | int):
     """
     Check and cleanse types of `var` variable to name it uniformly numeric and `np.ndarray`.
     Works by reference, no value is returned
@@ -206,16 +206,10 @@ def _check_type(ds: pd.DataFrame
     :return: void
     """
 
-    if isinstance(var, list):
-        ds[var] = np.array(var).astype(float)
-    elif isinstance(var, np.ndarray):
-        ds[var] = var.astype(float)
-    elif isinstance(var, str):
-        if var not in ds.columns.tolist():
-            fermatrica_error(var + ' should be among data frame columns')
-        elif ds[var].dtype.name not in ['float64', 'float']:
-            ds[var] = ds[var].to_numpy().astype(float)
-    pass
+    if var not in ds.columns.tolist():
+        fermatrica_error(var + ' should be among data frame columns')
+    elif ds[var].dtype.name not in ['float64', 'float']:
+        ds[var] = ds[var].to_numpy().astype(float)
 
 
 @profile
@@ -358,9 +352,11 @@ def lag(ds: pd.DataFrame
         params_dict['cval'] = 0
 
     cols = [var, 'date']
-    if type(index_vars) == str:
+
+    if isinstance(index_vars, str):
         index_vars_list = ast.literal_eval('[' + index_vars + ']')
         cols = index_vars_list + cols
+    
     cols = list(set(cols))
 
     if pd.isna(index_vars):
@@ -377,9 +373,8 @@ def lag(ds: pd.DataFrame
 
         rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
         rtrn = \
-            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index(
-                'wrk_index')[
-                var]
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
+
     else:
         tmp = _var_aggregate(ds, var, params_subset, index_vars)
 
@@ -389,9 +384,7 @@ def lag(ds: pd.DataFrame
 
         rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
         rtrn = \
-            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index(
-                'wrk_index')[
-                var]
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
     return rtrn
 
@@ -414,9 +407,12 @@ def adstock(ds: pd.DataFrame
     :return: transformed time series
     """
 
-    # check data type
+    # check data type etc.
 
     _check_type(ds, var)
+
+    if isinstance(index_vars, str):
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
     # run
 
@@ -426,10 +422,17 @@ def adstock(ds: pd.DataFrame
         rtrn = ftr.recursive_filter(ds[var], params_dict["a"]) * (1 - params_dict["a"])
 
     elif index_vars == '"bs_key"':
-        index_vars_list = ast.literal_eval('[' + index_vars + ']')
-
         rtrn = ds.groupby(index_vars_list)[var].transform(
             lambda x: ftr.recursive_filter(x, params_dict["a"]) * (1 - params_dict["a"]))
+
+    elif index_vars == '"date"':
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
+
+        tmp[var] = ftr.recursive_filter(tmp[var], params_dict["a"]) * (1 - params_dict["a"])
+
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
+        rtrn = \
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
     else:
         tmp = _var_aggregate(ds, var, params_subset, index_vars)
@@ -471,6 +474,9 @@ def adstockp(ds: pd.DataFrame
 
     _check_type(ds, var)
 
+    if isinstance(index_vars, str):
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
+
     # run
 
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
@@ -479,10 +485,17 @@ def adstockp(ds: pd.DataFrame
         rtrn = ftr.recursive_filter(ds[var], params_dict["a"])
 
     elif index_vars == '"bs_key"':
-        index_vars_list = ast.literal_eval('[' + index_vars + ']')
-
         rtrn = ds.groupby(index_vars_list)
         rtrn = rtrn[var].transform(lambda x: ftr.recursive_filter(x, params_dict["a"]))
+
+    elif index_vars == '"date"':
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
+
+        tmp[var] = ftr.recursive_filter(tmp[var], params_dict["a"])
+
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
+        rtrn = \
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
     else:
         tmp = _var_aggregate(ds, var, params_subset, index_vars)
@@ -524,6 +537,9 @@ def adstockpd(ds: pd.DataFrame
 
     _check_type(ds, var)
 
+    if isinstance(index_vars, str):
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
+
     # run
 
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
@@ -535,9 +551,19 @@ def adstockpd(ds: pd.DataFrame
 
         rtrn = rtrn1 * (1 - params_dict["w2"]) + rtrn2 * params_dict["w2"]
 
-    elif index_vars == '"bs_key"':
-        index_vars_list = ast.literal_eval('[' + index_vars + ']')
+    elif index_vars == '"date"':
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
 
+        rtrn1 = ftr.recursive_filter(tmp[var], params_dict["a1"])
+        rtrn2 = ftr.recursive_filter(tmp[var], params_dict["a2"])
+
+        tmp[var] = rtrn1 * (1 - params_dict["w2"]) + rtrn2 * params_dict["w2"]
+
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
+        rtrn = \
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
+
+    elif index_vars == '"bs_key"':
         rtrn = ds.groupby(index_vars_list)
 
         rtrn1 = rtrn[var].transform(lambda x: ftr.recursive_filter(x, params_dict["a1"]))
@@ -591,6 +617,9 @@ def dwbl(ds: pd.DataFrame
 
     _check_type(ds, var)
 
+    if isinstance(index_vars, str):
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
+
     # run
 
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
@@ -599,9 +628,17 @@ def dwbl(ds: pd.DataFrame
         rtrn = ftr.weibull_multi_response(ds[var], params_dict, if_weight=True)
 
     elif index_vars == '"bs_key"':
-        index_vars_list = ast.literal_eval('[' + index_vars + ']')
         rtrn = ds.groupby(index_vars_list)[var].transform(
             lambda x: ftr.weibull_multi_response(x, params_dict, if_weight=True))
+
+    elif index_vars == '"date"':
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
+
+        tmp[var] = ftr.weibull_multi_response(tmp[var], params_dict, if_weight=True)
+
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
+        rtrn = \
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
     else:
         tmp = _var_aggregate(ds, var, params_subset, index_vars)
@@ -617,8 +654,7 @@ def dwbl(ds: pd.DataFrame
 
         rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
         rtrn = \
-            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index(
-                'wrk_index')[var]
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
 
     return rtrn
@@ -650,6 +686,9 @@ def dwblp(ds: pd.DataFrame
 
     _check_type(ds, var)
 
+    if isinstance(index_vars, str):
+        index_vars_list = ast.literal_eval('[' + index_vars + ']')
+
     # run
 
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
@@ -658,9 +697,17 @@ def dwblp(ds: pd.DataFrame
         rtrn = ftr.weibull_multi_response(ds[var], params_dict)
 
     elif index_vars == '"bs_key"':
-        index_vars_list = ast.literal_eval('[' + index_vars + ']')
         rtrn = ds.groupby(index_vars_list)[var].transform(
             lambda x: ftr.weibull_multi_response(x, params_dict))
+
+    elif index_vars == '"date"':
+        tmp = _var_aggregate(ds, var, params_subset, index_vars)
+
+        tmp[var] = ftr.weibull_multi_response(tmp[var], params_dict)
+
+        rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
+        rtrn = \
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
     else:
         tmp = _var_aggregate(ds, var, params_subset, index_vars)
@@ -676,8 +723,7 @@ def dwblp(ds: pd.DataFrame
 
         rtrn = select_eff(ds, index_vars_list + ['wrk_index'])
         rtrn = \
-            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index(
-                'wrk_index')[var]
+            pd.merge(rtrn, tmp, how='left', on=index_vars_list, sort=False).set_index('wrk_index')[var]
 
 
     return rtrn
@@ -705,7 +751,7 @@ def mar(ds: pd.DataFrame
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
 
     cols = [var, 'date']
-    if type(index_vars) == str:
+    if isinstance(index_vars, str):
         index_vars_list = ast.literal_eval('[' + index_vars + ']')
         cols = index_vars_list + cols
     cols = list(set(cols))
@@ -812,7 +858,7 @@ def age(ds: pd.DataFrame
     """
 
     cols = [var, 'date', 'listed']
-    if type(index_vars) == str:
+    if isinstance(index_vars, str):
         index_vars_list = ast.literal_eval('[' + index_vars + ']')
         cols = index_vars_list + cols
     cols = list(set(cols))
@@ -869,7 +915,7 @@ def scale(ds: pd.DataFrame
     params_dict = fermatrica.basics.basics.params_to_dict(params_subset)
     listed = ast.literal_eval('[' + params_dict['listed'] + ']')
 
-    if type(index_vars) == str:
+    if isinstance(index_vars, str):
         index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
     if pd.isna(index_vars):
@@ -880,10 +926,17 @@ def scale(ds: pd.DataFrame
 
     else:
         ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
-        mask = ds_tmp['listed'].isin(listed)
+        ds_tmp['mask'] = ds_tmp['listed'].isin(listed)
 
-        rtrn = groupby_eff(ds_tmp, index_vars_list, [var], None)[var]
-        rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
+        rtrn = groupby_eff(ds_tmp, index_vars_list, [var, 'mask'], None)[[var, 'mask']]
+        rtrn = rtrn.apply(lambda x: ftr.scale_classic_median(x[var], x['mask']))
+
+        if isinstance(rtrn, pd.DataFrame) and len(rtrn) == 1:
+            rtrn = rtrn.squeeze()
+        else:
+            rtrn.index = rtrn.index.get_level_values(-1)
+
+        rtrn.sort_index(inplace=True)
 
     return rtrn
 
@@ -1037,7 +1090,7 @@ def expm1scaled(ds: pd.DataFrame
     listed = ast.literal_eval('[' + str(params_dict['listed']) + ']')
     product = params_dict['product']
 
-    if type(index_vars) == str:
+    if isinstance(index_vars, str):
         index_vars_list = ast.literal_eval('[' + index_vars + ']')
 
     if pd.isna(index_vars):
@@ -1050,12 +1103,19 @@ def expm1scaled(ds: pd.DataFrame
 
     else:
         ds_tmp = select_eff(ds, ([var, 'listed'] + index_vars_list))
-        mask = ds_tmp['listed'].isin(listed)
+        ds_tmp['mask'] = ds_tmp['listed'].isin(listed)
 
         ds_tmp.loc[:, 'tmp'] = np.exp(ds_tmp[var] * product) - 1
 
-        rtrn = groupby_eff(ds_tmp, index_vars_list, ['tmp'], None)['tmp']
-        rtrn = rtrn.transform(lambda x: ftr.scale_classic_median(x, mask))
+        rtrn = groupby_eff(ds_tmp, index_vars_list, ['tmp', 'mask'], None)[['tmp', 'mask']]
+        rtrn = rtrn.apply(lambda x: ftr.scale_classic_median(x['tmp'], x['mask']))
+
+        if isinstance(rtrn, pd.DataFrame) and len(rtrn) == 1:
+            rtrn = rtrn.squeeze()
+        else:
+            rtrn.index = rtrn.index.get_level_values(-1)
+
+        rtrn.sort_index(inplace=True)
 
     return rtrn
 
@@ -1068,6 +1128,8 @@ def softmaxfull(ds: pd.DataFrame
     """
     Transformation: flavour of logistic saturation curve with unit-specific `avg` and "abstract" `lambda`.
     The more is lambda, less steep is the curve.
+
+    If `ec50` is included in params, `avg` should be treated as fixed variable similar to `std`
 
     Interface is standard among all transformation functions
 
@@ -1091,7 +1153,20 @@ def softmaxfull(ds: pd.DataFrame
     if params_dict['std'] == 0:
         fermatrica_error('Error in: softmax function, variable: ' + var + ', `std` = 0')
 
+    params_dict['avg_level'] = copy.deepcopy(params_dict['avg'])
+    if 'ec50' in params_dict:
+        params_dict['avg'] = params_dict['avg'] * params_dict['ec50']
+
     rtrn = ftr.softmax(ds.loc[:, var], params_dict)
+
+    # weights (i.e. vertical scale) could be important for linear combinations and LHS variables
+
+    if 'scale' in params_dict:
+
+        mask = ds['listed'] == 2
+        if not isinstance(rtrn, pd.Series):
+            rtrn = pd.Series(rtrn, index=ds.index)
+        rtrn = ftr.scale_level(rtrn, mask, params_dict)
 
     return rtrn
 
@@ -1127,7 +1202,20 @@ def softmax(ds: pd.DataFrame
     if params_dict['std'] == 0:
         fermatrica_error('Error in: softmax function, variable: ' + var + ', `std` = 0')
 
+    params_dict['avg_level'] = copy.deepcopy(params_dict['avg'])
+    if 'ec50' in params_dict:
+        params_dict['avg'] = params_dict['avg'] * params_dict['ec50']
+
     rtrn = ftr.softmax(ds.loc[:, var], params_dict) - ftr.softmax(0, params_dict)
+
+    # weights (i.e. vertical scale) could be important for linear combinations and LHS variables
+
+    if 'scale' in params_dict:
+
+        mask = ds['listed'] == 2
+        if not isinstance(rtrn, pd.Series):
+            rtrn = pd.Series(rtrn, index=ds.index)
+        rtrn = ftr.scale_level(rtrn, mask, params_dict)
 
     return rtrn
 
@@ -1371,7 +1459,8 @@ def arl(ds: pd.DataFrame
         , index_vars: str | float = np.nan
         , adb: bool = True):
     """
-    Transformation: complex transformation, combining saturation, weighted geometric adstock, lag (fixed order)
+    Transformation: complex transformation, combining saturation, weighted geometric adstock, lag (fixed order).
+    Be very careful using ARL and ARL functions with panels due to risk of overaggregating and ambiguous behavior
 
     Interface is standard among all transformation functions
 
@@ -1408,12 +1497,24 @@ def arl(ds: pd.DataFrame
 
     ds['tmp'] = adstock(ds, 'tmp', params_subset[params_subset['arg'] == 'a'], index_vars)
 
+    # prevent overaggregating
+
+    if 'index_aggr' in params_subset.columns:
+        index_aggr = params_subset.loc[params_subset['index_aggr'].notna(), 'index_aggr']
+
+        if len(index_aggr) > 0 and index_aggr.iloc[0] not in ['max', 'sum_kpi_coef', 'sum_kpi_coef_master']:
+            fermatrica_error('ARL and ARLP functions do not allow aggregating other than ' +
+                             '`max`, `sum_kpi_coef`, `sum_kpi_coef`. Otherwise consistency of series ' +
+                             'would be lost due to overaggregating and/or ambitious aggregation logic')
+
     # lag
 
     if 'n_lag' in params_dict:
 
+        params_subset = params_subset.copy()  # important because of renaming `n_lag` param
+
         if 'cval' not in params_dict:
-            params_subset = pd.concat([params_subset.copy()
+            params_subset = pd.concat([params_subset
                                           , pd.DataFrame({'arg': ['cval'], 'value': [np.nan]})]
                                       , axis=0)
         params_subset.loc[params_subset['arg'] == 'n_lag', 'arg'] = 'n'
@@ -1435,7 +1536,9 @@ def arlp(ds: pd.DataFrame
          , index_vars: str | float = np.nan):
     """
     Transformation: complex transformation, combining saturation, weighted geometric adstock, lag (fixed order).
-    "Pure" flavour with S-version of saturation only
+    "Pure" flavour with S-version of saturation only.
+
+    Be very careful using ARL and ARL functions with panels due to risk of overaggregating and ambiguous behavior
 
     Interface is standard among all transformation functions
 
