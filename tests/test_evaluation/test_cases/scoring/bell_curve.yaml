@@ -1,0 +1,27 @@
+- description: test_bell_curve function testing case 1
+  exp_err: false
+  expected_result: [0.72614904, 0.8824969, 0.98019867]
+  if_invert: 0
+  width: 1
+  x: [0.2, 0.5, 0.8]
+
+- description: test_bell_curve_invert function testing case 2
+  exp_err: false
+  expected_result: [0.98019867, 0.8824969, 0.72614904]
+  if_invert: 1
+  width: 1
+  x: [0.2, 0.5, 0.8]
+
+- description: test_bell_curve_different_width function testing case 3
+  exp_err: false
+  expected_result: [0.90370708, 0.96923323, 0.99875078]
+  if_invert: 0
+  width: 2
+  x: [0.1, 0.5, 0.9]
+
+- description: test_bell_curve_extreme_values function testing case 4
+  exp_err: false
+  expected_result: [0.60653066, 0.8824969 , 1.]
+  if_invert: 0
+  width: 1
+  x: [0.0, 0.5, 1.0]

@@ -54,6 +54,8 @@ class TestMCInit:
         # get data from yaml if conditions are met (containing "testing case")
         # calc result
         with exp_err:
+            if os.path.basename(os.getcwd()) == 'tests':
+                os.chdir("test_model")
             result = mc.ModelConf(**input_params)
 
             if if_debug:

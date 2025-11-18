@@ -1,0 +1,31 @@
+﻿- description: test_ztest function testing case 1
+  obs: [100, 200, 300]
+  pred: [110, 190, 310]
+  exp_err: false
+  expected_result:
+    expected_z: -0.5
+    expected_p: 0.6170750774519738
+
+- description: test_ztest_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+  exp_err: false
+  expected_result:
+    expected_z: .nan
+    expected_p: .nan
+
+- description: test_ztest_large_errors function testing case 3
+  obs: [10, 20, 30]
+  pred: [20, 40, 60]
+  exp_err: false
+  expected_result:
+    expected_z: -3.4641016151377544
+    expected_p: 0.0005320055051392492
+
+- description: test_ztest_small_values function testing case 4
+  obs: [0.1, 0.2, 0.3]
+  pred: [0.11, 0.19, 0.31]
+  exp_err: false
+  expected_result:
+    expected_z: -0.5
+    expected_p: 0.6170750774519738

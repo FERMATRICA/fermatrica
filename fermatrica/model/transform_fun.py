@@ -470,7 +470,9 @@ def tv_clipl_affinity(ds: pd.DataFrame
 
     def affinity_series(s: str):
 
-        s_pattern = re.sub('(^(.+_)*ots_)|(_rolik|_sponsor|_nat|_local)', '', s)
+        s_pattern = re.sub(r'(^(.+_)*ots_)|(_rolik|_sponsor|_nat|_local)|_' + tv_pattern, '', s)
+        clipl_pattern = re.sub(r'((_|^)*ots_)', '_clipl_', s)
+        clipl_pattern = re.sub(r'^_', '', clipl_pattern)
 
         s_aff = [i for i in cln_aff if (bool(re.search(s_pattern, i)))
                  or (bool(re.search('m55plus', s)) and bool(re.search('m55_64', i)))
@@ -478,14 +480,11 @@ def tv_clipl_affinity(ds: pd.DataFrame
                  or (bool(re.search('m14_24', s)) and bool(re.search('m18_24', i)))
                  or (bool(re.search('f14_24', s)) and bool(re.search('f18_24', i)))]
 
-        s_clipl = [i for i in cln_clipl if (s_pattern in i) and (tv_pattern in i)]
+        s_clipl = [i for i in cln_clipl if (s_pattern in i) and i == clipl_pattern]
 
         if len(s_aff) == 0 or len(s_clipl) == 0:
-            # rtrn = rep(0, ds.shape[0])
             rtrn = pd.Series(0, index=ds.index)
         else:
-            # rtrn = ds.loc[:, s] * (ds.loc[:, s_aff] ** params_dict['power_coef']).iloc[:, 0] *\
-            #        (ds.loc[:, s_clipl] ** params_dict['clipl_curve']).iloc[:, 0]
             rtrn = ds[s].array * (ds[s_aff[0]].array ** params_dict['power_coef']) * (ds[s_clipl[0]].array ** params_dict['clipl_curve'])
             rtrn = pd.Series(rtrn, index=ds.index)
 
@@ -526,7 +525,7 @@ def tv_affinity(ds: pd.DataFrame
 
     def affinity_series(s: str):
 
-        s_pattern = re.sub('(^(.+_)*ots_)|(_rolik|_sponsor|_nat|_local)', '', s)
+        s_pattern = re.sub(r'(^(.+_)*ots_)|(_rolik|_sponsor|_nat|_local)|_' + tv_pattern, '', s)
 
         s_aff = [i for i in cln_aff if (bool(re.search(s_pattern, i)))
                  or (bool(re.search('m55plus', s)) and bool(re.search('m55_64', i)))

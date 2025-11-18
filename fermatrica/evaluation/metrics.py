@@ -13,7 +13,7 @@ from itertools import combinations
 import statistics
 from scipy.stats import norm
 from statsmodels.tools import eval_measures as em
-from statsmodels.regression.linear_model import OLS, OLSResults
+from statsmodels.regression.linear_model import OLS, OLSResults, RegressionResultsWrapper
 from statsmodels.regression.mixed_linear_model import MixedLM, MixedLMResults, MixedLMResultsWrapper
 from statsmodels.tools.tools import add_constant
 from statsmodels.stats.diagnostic import acorr_ljungbox
@@ -219,6 +219,10 @@ def eom(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
     Equality of means (two samples t-test) between observed `obs` and predicted `pred` vectors:
     EOM = (mean(pred) - mean(obs)) / mean(obs)
 
+    If abs(EOM) <= 10%, the result is good
+    If 10% < abs(EOM) <= 20%, the result is not good enough
+    If abs(EOM) > 20%, the result is bad
+
     :param obs: observed values (Y)
     :param pred: predicted values (Y-hat)
     :return:
@@ -245,9 +249,14 @@ def eom(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
 
 
 def ztest(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-          , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list) -> float:
+          , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
+          ) -> tuple | list:
     """
     Z-test for a systematic bias in prediction, used for test period mostly
+
+    H0: the mean of residuals is NOT statistically different from 0 (no systematic overforecast or underforecast)
+    H1: the mean of residuals is statistically different from 0 (there is a systematic overforecast or underforecast)
+    So, P-value >= 5% is good, P-value < 5% is bad
 
     :param obs: observed values (Y)
     :param pred: predicted values (Y-hat)
@@ -276,7 +285,9 @@ Grouped error and residuals model-free metrics
 def r_squared_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                     , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                     , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-                    , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None) -> float:
+                    , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+                    , if_mean: bool = True
+                    ) -> float | pd.Series:
     """
     Calculate R^2 per group (e.g. per superbrand or per region)
 
@@ -285,6 +296,7 @@ def r_squared_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarr
     :param group: vector with grouping values, e.g. 'superbrand'
     :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
         e.g. 'date'
+    :param if_mean: return mean result or per group
     :return:
     """
 
@@ -311,7 +323,10 @@ def r_squared_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarr
         tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum()
 
     tmp = rm_1_item_groups(tmp, 'group')
-    rtrn = tmp.groupby('group').apply(lambda x: r_squared(x['obs'], x['pred'])).mean()
+    rtrn = tmp.groupby('group').apply(lambda x: r_squared(x['obs'], x['pred']))
+
+    if if_mean:
+        rtrn = rtrn.mean()
 
     return rtrn
 
@@ -319,7 +334,8 @@ def r_squared_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarr
 def rmse_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-               , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None) -> float:
+               , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+               , if_mean: bool = True) -> float | pd.Series:
     """
     Calculate RMSE per group (e.g. per superbrand or per region)
 
@@ -328,6 +344,7 @@ def rmse_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | 
     :param group: vector with grouping values, e.g. 'superbrand'
     :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
         e.g. 'date'
+    :param if_mean: return mean result or per group
     :return:
     """
 
@@ -351,10 +368,13 @@ def rmse_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | 
                                  , 'group': group
                                  , 'reduce': reduce})
 
-        tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum()
+        tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum(skipna=False)
 
     tmp = rm_1_item_groups(tmp, 'group')
-    rtrn = tmp.groupby('group').apply(lambda x: rmse(x['obs'], x['pred'])).mean()
+    rtrn = tmp.groupby('group').apply(lambda x: rmse(x['obs'], x['pred']))
+
+    if if_mean:
+        rtrn = rtrn.mean(skipna=False)
 
     return rtrn
 
@@ -362,7 +382,8 @@ def rmse_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | 
 def mapef_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                 , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                 , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-                , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None) -> float:
+                , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+                , if_mean: bool = True) -> float | pd.Series:
     """
     Calculate MAPE-f (with 0-observations removed) per group (e.g. per superbrand or per region)
 
@@ -371,6 +392,7 @@ def mapef_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray |
     :param group: vector with grouping values, e.g. 'superbrand'
     :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
         e.g. 'date'
+    :param if_mean: return mean result or per group
     :return:
     """
 
@@ -397,7 +419,10 @@ def mapef_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray |
         tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum()
 
     tmp = rm_1_item_groups(tmp, 'group')
-    rtrn = tmp.groupby('group').apply(lambda x: mapef(x['obs'], x['pred'])).mean()
+    rtrn = tmp.groupby('group').apply(lambda x: mapef(x['obs'], x['pred']))
+
+    if if_mean:
+        rtrn = rtrn.mean()
 
     return rtrn
 
@@ -406,7 +431,8 @@ def mape_adj_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarra
                    , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                    , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
                    , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
-                   , adj_val: int | float = .01) -> float:
+                   , adj_val: int | float = .01
+                   , if_mean: bool = True) -> float | pd.Series:
     """
     Calculate MAPE-adj (with 0-observations removed) per group (e.g. per superbrand or per region).
 
@@ -419,6 +445,7 @@ def mape_adj_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarra
     :param group: vector with grouping values, e.g. 'superbrand'
     :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
         e.g. 'date'
+    :param if_mean: return mean result or per group
     :return:
     """
 
@@ -445,7 +472,10 @@ def mape_adj_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarra
         tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum()
 
     tmp = rm_1_item_groups(tmp, 'group')
-    rtrn = tmp.groupby('group').apply(lambda x: mape_adj(x['obs'], x['pred'], adj_val=adj_val)).mean()
+    rtrn = tmp.groupby('group').apply(lambda x: mape_adj(x['obs'], x['pred'], adj_val=adj_val))
+
+    if if_mean:
+        rtrn = rtrn.mean()
 
     return rtrn
 
@@ -453,16 +483,22 @@ def mape_adj_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarra
 def eom_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
               , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
               , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-              , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None) -> float:
+              , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+              , if_mean: bool = True) -> float | pd.Series:
     """
     Calculate Equality of means (two samples t-test) per group (e.g. per superbrand or per region).
     EOM = (mean(pred) - mean(obs)) / mean(obs)
+
+    If abs(EOM) <= 10%, the result is good
+    If 10% < abs(EOM) <= 20%, the result is not good enough
+    If abs(EOM) > 20%, the result is bad
 
     :param obs: vector with observed values (Y)
     :param pred: vector with predicted values (Y-hat)
     :param group: vector with grouping values, e.g. 'superbrand'
     :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
         e.g. 'date'
+    :param if_mean: return mean result or per group
     :return:
     """
 
@@ -489,23 +525,32 @@ def eom_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | l
         tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum()
 
     tmp = rm_1_item_groups(tmp, 'group')
-    rtrn = tmp.groupby('group').apply(lambda x: eom(x['obs'], x['pred'])).mean()
+    rtrn = tmp.groupby('group').apply(lambda x: eom(x['obs'], x['pred']))
+
+    if if_mean:
+        rtrn = rtrn.mean()
 
     return rtrn
 
 
 def ztest_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-              , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-              , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
-              , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None) -> float:
+                , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
+                , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
+                , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+                , if_mean: bool = True) -> float | pd.Series:
     """
     Calculate Z-test for a systematic bias in prediction per group (e.g. per superbrand or per region).
+
+    H0: the mean of residuals is NOT statistically different from 0 (no systematic overforecast or underforecast)
+    H1: the mean of residuals is statistically different from 0 (there is a systematic overforecast or underforecast)
+    So, P-value >= 5% is good, P-value < 5% is bad
 
     :param obs: vector with observed values (Y)
     :param pred: vector with predicted values (Y-hat)
     :param group: vector with grouping values, e.g. 'superbrand'
     :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
         e.g. 'date'
+    :param if_mean: return mean result or per group
     :return:
     """
 
@@ -532,7 +577,10 @@ def ztest_group(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray |
         tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs', 'pred']].sum()
 
     tmp = rm_1_item_groups(tmp, 'group')
-    rtrn = tmp.groupby('group').apply(lambda x: ztest(x['obs'], x['pred'])).mean()
+    rtrn = tmp.groupby('group').apply(lambda x: ztest(x['obs'], x['pred']))
+
+    if if_mean:
+        rtrn = rtrn.apply(lambda x: x[0]).mean()
 
     return rtrn
 
@@ -588,6 +636,15 @@ def durbin_watson(model: "Model") -> int | float:
     """
     Durbin-Watson test for autocorrelation. Assumes OLS linear model as `model.obj.models['main']`
 
+    DW-stat can be from 0 to 4
+    If DW-stat is close to 2, there is no autocorrelation in residuals
+    If DW-stat is close to 0, there is positive autocorrelation in residuals
+    If DW-stat is close to 4, there is negative autocorrelation in residuals
+
+    H0: no first order autocorrelation in residuals
+    H1: there is first order autocorrelation in residuals
+    So, P-value >= 5% is good, P-value < 5% is bad
+
     :param model: FERMATRICA Model object
     :return:
     """
@@ -613,6 +670,10 @@ def ljungbox(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndarra
              , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None):
     """
     Ljung-Box test for autocorrelation. Assumes OLS or LME linear model as `model.obj.models['main']`
+
+    H0: no first order autocorrelation in residuals
+    H1: there is first order autocorrelation in residuals
+    So, P-value >= 5% is good, P-value < 5% is bad
 
     :param obs_resid: vector with observed values (Y) or residulas vector if `pred` is `None`
     :param pred: vector with predicted values (Y-hat) or `None`
@@ -678,6 +739,10 @@ def adfuller(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndarra
              , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None):
     """
     Augmented Dickey-Fuller unit root test. Assumes OLS or LME linear model as `model.obj.models['main']`
+
+    H0: there is a unit root in residuals (non-stationarity)
+    H1: residuals is a stationary process
+    So, P-value <= 1% is good, P-value > 1% is bad
 
     :param obs_resid: vector with observed values (Y) or residulas vector if `pred` is `None`
     :param pred: vector with predicted values (Y-hat) or `None`
@@ -750,6 +815,10 @@ def pesaran_cd(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndar
     """
     Pesaran cross-sectional dependence test. Assumes OLS or LME linear model as `model.obj.models['main']`
 
+    H0: no cross-section correlation in residuals (no correlation in resuduals among entities)
+    H1: there is a cross-section correlation in residuals (correlation in resuduals among entities)
+    So, P-value >= 5% is good, P-value < 5% is bad
+
     :param obs_resid: vector with observed values (Y) or residulas vector if `pred` is `None`
     :param pred: vector with predicted values (Y-hat) or `None`
     :param model: FERMATRICA Model object or `None`. If `obs` is provided, `model` argument is ignored
@@ -762,11 +831,12 @@ def pesaran_cd(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndar
 
     if model is not None and obs_resid is None:
 
-        if not isinstance(model.obj.models['main'].model, MixedLM | MixedLMResults | MixedLMResultsWrapper):
-            logging.error(
-                'Pesaran cross-sectional dependence test cannot be calculated. Supported model types: LME. ' +
-                'Please change the model type to LME.')
-            return 0
+        if not isinstance(model.obj.models['main'].model, MixedLM | MixedLMResults | MixedLMResultsWrapper | OLS | OLSResults | RegressionResultsWrapper):
+                logging.error(
+                    'Pesaran cross-sectional dependence test cannot be calculated. Supported model types: LME, OLS for panels. ' +
+                    'Please change the model type to LME or OLS with groups.')
+                return 0
+
 
         obs_resid = model.obj.models['main'].model.fit().resid
         pred = None
@@ -775,6 +845,9 @@ def pesaran_cd(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndar
         if model is None:
             fermatrica_error("Error in calculation of Pesaran cross-sectional dependence test: " +
                              "Grouping vector nor model object is not provided")
+        elif isinstance(model.obj.models['main'].model, OLS | OLSResults | RegressionResultsWrapper):
+            logging.error(
+                'Pesaran cross-sectional dependence test cannot be calculated for OLS not for panels (without groups). ')
         group = model.obj.models['main'].model.groups
 
     if pred is not None and len(obs_resid) != len(pred):
@@ -860,13 +933,30 @@ def pesaran_cd(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndar
 
 def poolability(model: "Model"
                 , type: str = "entity"
-                , entity_var: str | None = None):
+                , entity_var: str | None = None
+                , lsdv_vars: list | None = None):
     """
     Panel specification test. Assumes OLS or LME linear model as `model.obj.models['main']`
+
+    model_ols - pool regression with no individual effects
+    model_intercept FE regression with individual effects on the intercept
+    model_slope regression with individual effects on the intercept and slopes (identical to separate regressions)
+
+    intercept_ols - F-test that model_ols is equal to model_intercept
+    slope_intercept - F-test that model_intercept is equal to model_slope
+    slope_ols - F-test that model_ols is equal to model_slope
+
+    For each test
+    H0: models are statistically equal, we choose the simpliest model (restricted)
+    H1: models are statistically different, we choose the unrestricated model
+    So, P-value >= 5% means that models are equal, P-value < 5% means that models are not equal
+
+    If at least 2 of 3 tests has P-value >= 5% than data are poolable (we can analyse them as a panel)
 
     :param model: FERMATRICA Model object
     :param type: type of panel specification test. Can be "entity" or "time" / "date"
     :param entity_var: variable containing entities (required for OLS only, otherwise real groups are used)
+    :param lsdv_vars: list of dummy variables from RHS used in panel LSDV model to account for fixed individual effects (entities or time) (required for LSDV model only)
     :return:
     """
 
@@ -886,6 +976,11 @@ def poolability(model: "Model"
     model_base_spec = model.obj.models['main'].model.formula
     model_base_y = model.obj.models['main'].model.endog_names
     model_base_x = model.obj.models['main'].model.exog_names
+
+    model_base_x = list(set(model_base_x) - set(lsdv_vars))
+
+    lsdv_part_spec = ' - '.join(lsdv_vars)
+    model_base_spec = model_base_spec + ' - ' + lsdv_part_spec
 
     model_ols = ols(model_base_spec, data=data_wrk)
 

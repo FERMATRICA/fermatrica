@@ -292,19 +292,57 @@ def _transform_all(ds: pd.DataFrame
             params_subset["index_free_var_work"] = params_subset["index_free_var"].apply(
                 lambda x: re.sub(r"^.+___", '', x))
 
-            rtrn = ds.groupby([index_free_var]).apply(lambda x: pd.Series(eval(fun_name)(x, var, params_subset[
+            # add another columns if used in standard transformations
+            cols = [var, 'date', 'listed', 'media', 'kpi_coef', 'kpi_coef_master', 'wrk_index']
+            cols_total = ds.columns.tolist()
+            cols = [x for x in cols if x in cols_total]
+
+            index_vars = params_subset['index_vars'].iloc[0]
+            if isinstance(index_vars, str):
+                cols = cols + ast.literal_eval('[' + index_vars + ']')
+
+            var_vals = params_subset.loc[(params_subset['type'] == 'str') & (params_subset['value'].notna()), 'value']
+            if len(var_vals) > 0:
+                for x in var_vals:
+                    if isinstance(x, str):
+                        cols = cols + [x]
+
+            cols = list(set(cols))
+
+            cols = [x for x in cols if x != index_free_var]
+
+            grp = groupby_eff(ds, [index_free_var], cols)
+            # sl = select_eff(ds, [index_free_var] + cols)
+            #
+            # index_free_var_uniques = sorted(sl[index_free_var].unique())
+            #
+            # rtrn = [0] * len(index_free_var_uniques)
+            # for i, iu in enumerate(index_free_var_uniques):
+            #     tmp = sl[sl[index_free_var] == iu]
+            #     rtrn[i] = pd.Series(eval(fun_name)(tmp, var, params_subset[
+            #         params_subset['index_free_var_work'] == iu], index_vars=params_subset['index_vars'].iloc[0]))
+            #
+            # rtrn = pd.concat(rtrn)
+
+            rtrn = grp.apply(lambda x: pd.Series(eval(fun_name)(x, var, params_subset[
                 params_subset['index_free_var_work'] == x[index_free_var].iloc[0]
                 ], index_vars=params_subset['index_vars'].iloc[0])))
 
             if len(rtrn) < ds.shape[0]:
-                rtrn = rtrn.stack()
+                rtrn = rtrn.stack(dropna=False)  # important to keep NaNs in place
 
             # main now
 
-            rtrn_ind = groupby_eff(ds, [index_free_var], ['date']).apply(lambda x: x.index).explode(
-                ignore_index=True)
+            # rtrn_ind = grp.apply(lambda x: x.index).explode(ignore_index=True)
+
+            rtrn_ind = grp.indices
+            rtrn_ind = np.concatenate([rtrn_ind[x] for x in sorted(rtrn_ind.keys())])  # less reliable, but much faster
+
+            # rtrn_ind = grp.apply(lambda x: x.index)
+            # rtrn_ind = np.concatenate(rtrn_ind.tolist())  # less reliable, but much faster
+
             rtrn = rtrn.set_axis(rtrn_ind).astype(float)
-            ds[var_new] = rtrn.sort_index()
+            ds[var_new] = rtrn  #.sort_index().array
 
         if set_start:
             params = params[~((params['variable'] == var_fun['variable']) & (params['fun'] == var_fun['fun']))]

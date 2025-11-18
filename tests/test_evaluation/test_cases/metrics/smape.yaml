@@ -1,0 +1,23 @@
+﻿- description: test_smape function testing case 1
+  obs: [100, 200, 300]
+  pred: [110, 190, 310]
+  exp_err: false
+  expected_result: 5.976901058868272
+
+- description: test_smape_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+  exp_err: false
+  expected_result: 0.0
+
+- description: test_smape_large_errors function testing case 3
+  obs: [10, 20, 30]
+  pred: [20, 40, 60]
+  exp_err: false
+  expected_result: 66.66666666666667
+
+- description: test_smape_small_values function testing case 4
+  obs: [0.1, 0.2, 0.3]
+  pred: [0.11, 0.19, 0.31]
+  exp_err: false
+  expected_result: 5.976901058868273

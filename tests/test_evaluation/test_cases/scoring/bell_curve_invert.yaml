@@ -1,0 +1,6 @@
+﻿- description: test_bell_curve_invert function testing case 1
+  x: [0.2, 0.5, 0.8]
+  if_invert: 1
+  width: 1
+  exp_err: false
+  expected_result: [0.98019867, 0.8824969, 0.72614904]

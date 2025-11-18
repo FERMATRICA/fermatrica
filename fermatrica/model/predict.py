@@ -188,10 +188,13 @@ def _predict_worker(ds: pd.DataFrame
 
                 try:
                     model.obj.models['main'] = smf.mixedlm(frm, ds_train, groups=ds_train[model.conf.fixed_effect_var])
+                    # Get the estimation method (ml or reml) from config
+                    estimation_method = model.conf.lme_estimation_method if hasattr(model.conf, 'lme_estimation_method') else 'reml'
+                    
                     if hasattr(model.conf, 'lme_method') and model.conf.lme_method is not None:
-                        model.obj.models['main'] = model.obj.models['main'].fit(method=model.conf.lme_method)
+                        model.obj.models['main'] = model.obj.models['main'].fit(method=model.conf.lme_method, reml=(estimation_method == 'reml'))
                     else:
-                        model.obj.models['main'] = model.obj.models['main'].fit(method=["powell", "lbfgs"])
+                        model.obj.models['main'] = model.obj.models['main'].fit(method=["powell", "lbfgs"], reml=(estimation_method == 'reml'))
 
                 except (RuntimeError, TypeError, NameError, IndexError, ValueError, UserWarning,
                         ConvergenceWarning, np.linalg.LinAlgError) as e:

@@ -1,0 +1,31 @@
+- description: test_ztest_group function testing case 1
+  exp_err: false
+  expected_result: 0.0
+  expected_type: float
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  obs: [100, 200, 300, 400, 500, 600]
+  pred: [110, 190, 310, 390, 510, 590]
+
+- description: test_ztest_group_perfect_fit function testing case 2
+  exp_err: false
+  expected_result: .nan
+  expected_type: float
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  obs: [1, 2, 3, 4, 5, 6]
+  pred: [1, 2, 3, 4, 5, 6]
+
+- description: test_ztest_group_large_errors function testing case 3
+  exp_err: false
+  expected_result: -6.0621778264910695
+  expected_type: float
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  obs: [10, 20, 30, 40, 50, 60]
+  pred: [20, 40, 60, 80, 100, 120]
+
+- description: test_ztest_group_small_values function testing case 4
+  exp_err: false
+  expected_result: 0.0
+  expected_type: float
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  obs: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+  pred: [0.11, 0.19, 0.31, 0.39, 0.51, 0.59]

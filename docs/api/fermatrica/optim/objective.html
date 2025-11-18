@@ -206,29 +206,29 @@ at least for some most popular transformations.</p>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="sd">Some &quot;extra&quot; imports in this file better to be preserved to be accessible for parallel computations</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">import</span> <span class="nn">copy</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">import</span> <span class="nn">datetime</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">import</span> <span class="nn">logging</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">import</span> <span class="nn">math</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="kn">from</span> <span class="nn">fermatrica.model.transform</span> <span class="kn">import</span> <span class="n">transform</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span> <span class="nn">fermatrica.model.predict</span> <span class="kn">import</span> <span class="n">fit_predict</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">import</span> <span class="nn">fermatrica.evaluation.scoring</span> <span class="k">as</span> <span class="nn">scr</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="kn">from</span> <span class="nn">fermatrica.model.model</span> <span class="kn">import</span> <span class="n">Model</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.model.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">transform</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.model.predict</span><span class="w"> </span><span class="kn">import</span> <span class="n">fit_predict</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">fermatrica.evaluation.scoring</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">scr</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.model.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="k">class</span> <span class="nc">ObjectiveFunction</span><span class="p">:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ObjectiveFunction</span><span class="p">:</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    Objective function generator / fabric. Variables required by model to run could be assigned to</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    the closure one time instead of passing every iteration. Works fine in single-process environment</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">    only, so to be used for local algorithms mostly.</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>                 <span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>                 <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">,</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>                 <span class="n">revert_score_sign</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -252,7 +252,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">iter_idx</span> <span class="o">=</span> <span class="mi">1</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="k">def</span> <span class="nf">_prepare_model</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_model</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>                       <span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">):</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        Prepare main model object for optimising</span>
@@ -277,10 +277,10 @@ at least for some most popular transformations.</p>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">_prepare_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">optim_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;if_active&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fixed&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>                 <span class="n">params_cur</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>                 <span class="n">solution_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -322,7 +322,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="n">score</span>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span> <span class="nf">_calculate_score</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_score</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>                         <span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>                         <span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -346,7 +346,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="n">score</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">def</span> <span class="nf">_verbose</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_verbose</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>                 <span class="p">,</span> <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        Verbose / log every 10th iteration</span>
@@ -365,7 +365,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">iter_idx</span> <span class="o">+=</span> <span class="mi">1</span>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="k">def</span> <span class="nf">objective_fun_args</span><span class="p">(</span><span class="n">params_cur</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="k">def</span><span class="w"> </span><span class="nf">objective_fun_args</span><span class="p">(</span><span class="n">params_cur</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>                       <span class="p">,</span> <span class="n">solution_idx</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>                       <span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -429,16 +429,16 @@ at least for some most popular transformations.</p>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">return</span> <span class="n">score</span>
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="k">class</span> <span class="nc">ObjectiveNG</span><span class="p">:</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ObjectiveNG</span><span class="p">:</span>
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>                 <span class="p">,</span> <span class="n">param_names</span><span class="p">:</span> <span class="nb">list</span>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>                 <span class="p">,</span> <span class="n">objective_fun</span><span class="p">):</span>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="n">param_names</span>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">objective_fun</span> <span class="o">=</span> <span class="n">objective_fun</span>
 </span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>                 <span class="p">,</span> <span class="o">**</span><span class="n">params_dict</span><span class="p">):</span>
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
@@ -452,9 +452,9 @@ at least for some most popular transformations.</p>
 </span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>        <span class="k">return</span> <span class="n">score</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>
 </span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a><span class="k">class</span> <span class="nc">ObjectiveRBF</span><span class="p">:</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ObjectiveRBF</span><span class="p">:</span>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>                 <span class="p">,</span> <span class="n">param_train</span>
 </span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>                 <span class="p">,</span> <span class="n">score_train</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>                 <span class="p">,</span> <span class="n">ub</span>
@@ -471,7 +471,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">ftol_abs</span> <span class="o">=</span> <span class="n">ftol_abs</span>
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sm_object</span> <span class="o">=</span> <span class="n">sm_object</span>
 </span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>
-</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>                 <span class="p">,</span> <span class="o">**</span><span class="n">params_dict</span><span class="p">):</span>
 </span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>
 </span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>        <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_train</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_train</span><span class="p">)]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span><span class="p">)</span>
@@ -494,13 +494,13 @@ at least for some most popular transformations.</p>
 </span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a><span class="sd">Objective callbacks</span>
 </span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>
-</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a><span class="k">class</span> <span class="nc">EarlyStopOptuna</span><span class="p">:</span>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EarlyStopOptuna</span><span class="p">:</span>
 </span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a><span class="sd">    Early Stopping Callback for Optuna optimizers.</span>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a><span class="sd">    More conditions could be added later</span>
 </span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>
-</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>                 <span class="p">,</span> <span class="n">ftol_abs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>                 <span class="p">,</span> <span class="n">max_no_improvement</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>                 <span class="p">,</span> <span class="n">if_min</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
@@ -516,7 +516,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">if_min</span> <span class="o">=</span> <span class="n">if_min</span>
 </span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">no_improvement_count</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a>
-</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>                 <span class="p">,</span> <span class="n">study</span>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>                 <span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>
@@ -544,12 +544,12 @@ at least for some most popular transformations.</p>
 </span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Early stop in optimisation was not fulfilled because conditions were not set&quot;</span><span class="p">)</span>
 </span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>
 </span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>
-</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="k">class</span> <span class="nc">VerboseOptuna</span><span class="p">:</span>
+</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="k">class</span><span class="w"> </span><span class="nc">VerboseOptuna</span><span class="p">:</span>
 </span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a><span class="sd">    Optuna callback to print progress</span>
 </span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>
-</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>                 <span class="p">,</span> <span class="n">verbose_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
 </span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>
@@ -560,24 +560,24 @@ at least for some most popular transformations.</p>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>
 </span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">verbose_level</span><span class="p">)</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>
-</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
+</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>        <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">is_finished</span><span class="p">()</span> <span class="ow">and</span> <span class="p">((</span><span class="n">trial</span><span class="o">.</span><span class="n">number</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
 </span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Combined scoring : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; ; step : &#39;</span> <span class="o">+</span>
 </span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>                  <span class="nb">str</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">number</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">timespec</span><span class="o">=</span><span class="s2">&quot;seconds&quot;</span><span class="p">))</span>
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
-</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a><span class="k">class</span> <span class="nc">VerboseNG</span><span class="p">:</span>
+</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a><span class="k">class</span><span class="w"> </span><span class="nc">VerboseNG</span><span class="p">:</span>
 </span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a><span class="sd">    Nevergrad callback to print progress</span>
 </span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>                 <span class="p">,</span> <span class="n">verbose_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
 </span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>
 </span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">=</span> <span class="n">verbose_level</span>
 </span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">iter_idx</span> <span class="o">=</span> <span class="mi">1</span>
 </span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>
-</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>                 <span class="p">,</span> <span class="n">optimizer</span>
 </span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>                 <span class="p">,</span> <span class="n">parametrization</span>
 </span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a>                 <span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="nb">float</span>
@@ -599,7 +599,7 @@ at least for some most popular transformations.</p>
 </span><span id="L-408"><a href="#L-408"><span class="linenos">408</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-409"><a href="#L-409"><span class="linenos">409</span></a>
 </span><span id="L-410"><a href="#L-410"><span class="linenos">410</span></a>
-</span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a><span class="k">def</span> <span class="nf">_save_model</span><span class="p">(</span><span class="n">model_iter</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span>
+</span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_save_model</span><span class="p">(</span><span class="n">model_iter</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span>
 </span><span id="L-412"><a href="#L-412"><span class="linenos">412</span></a>                <span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span>
 </span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a>                <span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
 </span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a>                <span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
@@ -645,14 +645,14 @@ at least for some most popular transformations.</p>
 
     </div>
     <a class="headerlink" href="#ObjectiveFunction"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveFunction-34"><a href="#ObjectiveFunction-34"><span class="linenos"> 34</span></a><span class="k">class</span> <span class="nc">ObjectiveFunction</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveFunction-34"><a href="#ObjectiveFunction-34"><span class="linenos"> 34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ObjectiveFunction</span><span class="p">:</span>
 </span><span id="ObjectiveFunction-35"><a href="#ObjectiveFunction-35"><span class="linenos"> 35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ObjectiveFunction-36"><a href="#ObjectiveFunction-36"><span class="linenos"> 36</span></a><span class="sd">    Objective function generator / fabric. Variables required by model to run could be assigned to</span>
 </span><span id="ObjectiveFunction-37"><a href="#ObjectiveFunction-37"><span class="linenos"> 37</span></a><span class="sd">    the closure one time instead of passing every iteration. Works fine in single-process environment</span>
 </span><span id="ObjectiveFunction-38"><a href="#ObjectiveFunction-38"><span class="linenos"> 38</span></a><span class="sd">    only, so to be used for local algorithms mostly.</span>
 </span><span id="ObjectiveFunction-39"><a href="#ObjectiveFunction-39"><span class="linenos"> 39</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="ObjectiveFunction-40"><a href="#ObjectiveFunction-40"><span class="linenos"> 40</span></a>
-</span><span id="ObjectiveFunction-41"><a href="#ObjectiveFunction-41"><span class="linenos"> 41</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+</span><span id="ObjectiveFunction-41"><a href="#ObjectiveFunction-41"><span class="linenos"> 41</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </span><span id="ObjectiveFunction-42"><a href="#ObjectiveFunction-42"><span class="linenos"> 42</span></a>                 <span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 </span><span id="ObjectiveFunction-43"><a href="#ObjectiveFunction-43"><span class="linenos"> 43</span></a>                 <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">,</span>
 </span><span id="ObjectiveFunction-44"><a href="#ObjectiveFunction-44"><span class="linenos"> 44</span></a>                 <span class="n">revert_score_sign</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -676,7 +676,7 @@ at least for some most popular transformations.</p>
 </span><span id="ObjectiveFunction-62"><a href="#ObjectiveFunction-62"><span class="linenos"> 62</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 </span><span id="ObjectiveFunction-63"><a href="#ObjectiveFunction-63"><span class="linenos"> 63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">iter_idx</span> <span class="o">=</span> <span class="mi">1</span>
 </span><span id="ObjectiveFunction-64"><a href="#ObjectiveFunction-64"><span class="linenos"> 64</span></a>
-</span><span id="ObjectiveFunction-65"><a href="#ObjectiveFunction-65"><span class="linenos"> 65</span></a>    <span class="k">def</span> <span class="nf">_prepare_model</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveFunction-65"><a href="#ObjectiveFunction-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_model</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveFunction-66"><a href="#ObjectiveFunction-66"><span class="linenos"> 66</span></a>                       <span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">):</span>
 </span><span id="ObjectiveFunction-67"><a href="#ObjectiveFunction-67"><span class="linenos"> 67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ObjectiveFunction-68"><a href="#ObjectiveFunction-68"><span class="linenos"> 68</span></a><span class="sd">        Prepare main model object for optimising</span>
@@ -701,10 +701,10 @@ at least for some most popular transformations.</p>
 </span><span id="ObjectiveFunction-87"><a href="#ObjectiveFunction-87"><span class="linenos"> 87</span></a>
 </span><span id="ObjectiveFunction-88"><a href="#ObjectiveFunction-88"><span class="linenos"> 88</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 </span><span id="ObjectiveFunction-89"><a href="#ObjectiveFunction-89"><span class="linenos"> 89</span></a>
-</span><span id="ObjectiveFunction-90"><a href="#ObjectiveFunction-90"><span class="linenos"> 90</span></a>    <span class="k">def</span> <span class="nf">_prepare_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ObjectiveFunction-90"><a href="#ObjectiveFunction-90"><span class="linenos"> 90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ObjectiveFunction-91"><a href="#ObjectiveFunction-91"><span class="linenos"> 91</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">optim_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;if_active&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fixed&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="ObjectiveFunction-92"><a href="#ObjectiveFunction-92"><span class="linenos"> 92</span></a>
-</span><span id="ObjectiveFunction-93"><a href="#ObjectiveFunction-93"><span class="linenos"> 93</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+</span><span id="ObjectiveFunction-93"><a href="#ObjectiveFunction-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </span><span id="ObjectiveFunction-94"><a href="#ObjectiveFunction-94"><span class="linenos"> 94</span></a>                 <span class="n">params_cur</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="ObjectiveFunction-95"><a href="#ObjectiveFunction-95"><span class="linenos"> 95</span></a>                 <span class="n">solution_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="ObjectiveFunction-96"><a href="#ObjectiveFunction-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -746,7 +746,7 @@ at least for some most popular transformations.</p>
 </span><span id="ObjectiveFunction-132"><a href="#ObjectiveFunction-132"><span class="linenos">132</span></a>
 </span><span id="ObjectiveFunction-133"><a href="#ObjectiveFunction-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="n">score</span>
 </span><span id="ObjectiveFunction-134"><a href="#ObjectiveFunction-134"><span class="linenos">134</span></a>
-</span><span id="ObjectiveFunction-135"><a href="#ObjectiveFunction-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">_calculate_score</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveFunction-135"><a href="#ObjectiveFunction-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_score</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveFunction-136"><a href="#ObjectiveFunction-136"><span class="linenos">136</span></a>                         <span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="ObjectiveFunction-137"><a href="#ObjectiveFunction-137"><span class="linenos">137</span></a>                         <span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="ObjectiveFunction-138"><a href="#ObjectiveFunction-138"><span class="linenos">138</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -770,7 +770,7 @@ at least for some most popular transformations.</p>
 </span><span id="ObjectiveFunction-156"><a href="#ObjectiveFunction-156"><span class="linenos">156</span></a>
 </span><span id="ObjectiveFunction-157"><a href="#ObjectiveFunction-157"><span class="linenos">157</span></a>        <span class="k">return</span> <span class="n">score</span>
 </span><span id="ObjectiveFunction-158"><a href="#ObjectiveFunction-158"><span class="linenos">158</span></a>
-</span><span id="ObjectiveFunction-159"><a href="#ObjectiveFunction-159"><span class="linenos">159</span></a>    <span class="k">def</span> <span class="nf">_verbose</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveFunction-159"><a href="#ObjectiveFunction-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_verbose</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveFunction-160"><a href="#ObjectiveFunction-160"><span class="linenos">160</span></a>                 <span class="p">,</span> <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 </span><span id="ObjectiveFunction-161"><a href="#ObjectiveFunction-161"><span class="linenos">161</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ObjectiveFunction-162"><a href="#ObjectiveFunction-162"><span class="linenos">162</span></a><span class="sd">        Verbose / log every 10th iteration</span>
@@ -806,7 +806,7 @@ only, so to be used for local algorithms mostly.</p>
 
     </div>
     <a class="headerlink" href="#ObjectiveFunction.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveFunction.__init__-41"><a href="#ObjectiveFunction.__init__-41"><span class="linenos">41</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveFunction.__init__-41"><a href="#ObjectiveFunction.__init__-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </span><span id="ObjectiveFunction.__init__-42"><a href="#ObjectiveFunction.__init__-42"><span class="linenos">42</span></a>                 <span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 </span><span id="ObjectiveFunction.__init__-43"><a href="#ObjectiveFunction.__init__-43"><span class="linenos">43</span></a>                 <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">,</span>
 </span><span id="ObjectiveFunction.__init__-44"><a href="#ObjectiveFunction.__init__-44"><span class="linenos">44</span></a>                 <span class="n">revert_score_sign</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -912,7 +912,7 @@ only, so to be used for local algorithms mostly.</p>
 
     </div>
     <a class="headerlink" href="#objective_fun_args"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="objective_fun_args-178"><a href="#objective_fun_args-178"><span class="linenos">178</span></a><span class="k">def</span> <span class="nf">objective_fun_args</span><span class="p">(</span><span class="n">params_cur</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="objective_fun_args-178"><a href="#objective_fun_args-178"><span class="linenos">178</span></a><span class="k">def</span><span class="w"> </span><span class="nf">objective_fun_args</span><span class="p">(</span><span class="n">params_cur</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="objective_fun_args-179"><a href="#objective_fun_args-179"><span class="linenos">179</span></a>                       <span class="p">,</span> <span class="n">solution_idx</span>
 </span><span id="objective_fun_args-180"><a href="#objective_fun_args-180"><span class="linenos">180</span></a>                       <span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 </span><span id="objective_fun_args-181"><a href="#objective_fun_args-181"><span class="linenos">181</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1008,16 +1008,16 @@ are used. Function generator / fabric is also not used because of the same reaso
 
     </div>
     <a class="headerlink" href="#ObjectiveNG"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveNG-242"><a href="#ObjectiveNG-242"><span class="linenos">242</span></a><span class="k">class</span> <span class="nc">ObjectiveNG</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveNG-242"><a href="#ObjectiveNG-242"><span class="linenos">242</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ObjectiveNG</span><span class="p">:</span>
 </span><span id="ObjectiveNG-243"><a href="#ObjectiveNG-243"><span class="linenos">243</span></a>
-</span><span id="ObjectiveNG-244"><a href="#ObjectiveNG-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveNG-244"><a href="#ObjectiveNG-244"><span class="linenos">244</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveNG-245"><a href="#ObjectiveNG-245"><span class="linenos">245</span></a>                 <span class="p">,</span> <span class="n">param_names</span><span class="p">:</span> <span class="nb">list</span>
 </span><span id="ObjectiveNG-246"><a href="#ObjectiveNG-246"><span class="linenos">246</span></a>                 <span class="p">,</span> <span class="n">objective_fun</span><span class="p">):</span>
 </span><span id="ObjectiveNG-247"><a href="#ObjectiveNG-247"><span class="linenos">247</span></a>
 </span><span id="ObjectiveNG-248"><a href="#ObjectiveNG-248"><span class="linenos">248</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="n">param_names</span>
 </span><span id="ObjectiveNG-249"><a href="#ObjectiveNG-249"><span class="linenos">249</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">objective_fun</span> <span class="o">=</span> <span class="n">objective_fun</span>
 </span><span id="ObjectiveNG-250"><a href="#ObjectiveNG-250"><span class="linenos">250</span></a>
-</span><span id="ObjectiveNG-251"><a href="#ObjectiveNG-251"><span class="linenos">251</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveNG-251"><a href="#ObjectiveNG-251"><span class="linenos">251</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveNG-252"><a href="#ObjectiveNG-252"><span class="linenos">252</span></a>                 <span class="p">,</span> <span class="o">**</span><span class="n">params_dict</span><span class="p">):</span>
 </span><span id="ObjectiveNG-253"><a href="#ObjectiveNG-253"><span class="linenos">253</span></a>
 </span><span id="ObjectiveNG-254"><a href="#ObjectiveNG-254"><span class="linenos">254</span></a>        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1044,7 +1044,7 @@ are used. Function generator / fabric is also not used because of the same reaso
 
     </div>
     <a class="headerlink" href="#ObjectiveNG.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveNG.__init__-244"><a href="#ObjectiveNG.__init__-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveNG.__init__-244"><a href="#ObjectiveNG.__init__-244"><span class="linenos">244</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveNG.__init__-245"><a href="#ObjectiveNG.__init__-245"><span class="linenos">245</span></a>                 <span class="p">,</span> <span class="n">param_names</span><span class="p">:</span> <span class="nb">list</span>
 </span><span id="ObjectiveNG.__init__-246"><a href="#ObjectiveNG.__init__-246"><span class="linenos">246</span></a>                 <span class="p">,</span> <span class="n">objective_fun</span><span class="p">):</span>
 </span><span id="ObjectiveNG.__init__-247"><a href="#ObjectiveNG.__init__-247"><span class="linenos">247</span></a>
@@ -1090,9 +1090,9 @@ are used. Function generator / fabric is also not used because of the same reaso
 
     </div>
     <a class="headerlink" href="#ObjectiveRBF"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveRBF-265"><a href="#ObjectiveRBF-265"><span class="linenos">265</span></a><span class="k">class</span> <span class="nc">ObjectiveRBF</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveRBF-265"><a href="#ObjectiveRBF-265"><span class="linenos">265</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ObjectiveRBF</span><span class="p">:</span>
 </span><span id="ObjectiveRBF-266"><a href="#ObjectiveRBF-266"><span class="linenos">266</span></a>
-</span><span id="ObjectiveRBF-267"><a href="#ObjectiveRBF-267"><span class="linenos">267</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveRBF-267"><a href="#ObjectiveRBF-267"><span class="linenos">267</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveRBF-268"><a href="#ObjectiveRBF-268"><span class="linenos">268</span></a>                 <span class="p">,</span> <span class="n">param_train</span>
 </span><span id="ObjectiveRBF-269"><a href="#ObjectiveRBF-269"><span class="linenos">269</span></a>                 <span class="p">,</span> <span class="n">score_train</span>
 </span><span id="ObjectiveRBF-270"><a href="#ObjectiveRBF-270"><span class="linenos">270</span></a>                 <span class="p">,</span> <span class="n">ub</span>
@@ -1109,7 +1109,7 @@ are used. Function generator / fabric is also not used because of the same reaso
 </span><span id="ObjectiveRBF-281"><a href="#ObjectiveRBF-281"><span class="linenos">281</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">ftol_abs</span> <span class="o">=</span> <span class="n">ftol_abs</span>
 </span><span id="ObjectiveRBF-282"><a href="#ObjectiveRBF-282"><span class="linenos">282</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sm_object</span> <span class="o">=</span> <span class="n">sm_object</span>
 </span><span id="ObjectiveRBF-283"><a href="#ObjectiveRBF-283"><span class="linenos">283</span></a>
-</span><span id="ObjectiveRBF-284"><a href="#ObjectiveRBF-284"><span class="linenos">284</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ObjectiveRBF-284"><a href="#ObjectiveRBF-284"><span class="linenos">284</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveRBF-285"><a href="#ObjectiveRBF-285"><span class="linenos">285</span></a>                 <span class="p">,</span> <span class="o">**</span><span class="n">params_dict</span><span class="p">):</span>
 </span><span id="ObjectiveRBF-286"><a href="#ObjectiveRBF-286"><span class="linenos">286</span></a>
 </span><span id="ObjectiveRBF-287"><a href="#ObjectiveRBF-287"><span class="linenos">287</span></a>        <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_train</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_train</span><span class="p">)]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span><span class="p">)</span>
@@ -1141,7 +1141,7 @@ are used. Function generator / fabric is also not used because of the same reaso
 
     </div>
     <a class="headerlink" href="#ObjectiveRBF.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveRBF.__init__-267"><a href="#ObjectiveRBF.__init__-267"><span class="linenos">267</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ObjectiveRBF.__init__-267"><a href="#ObjectiveRBF.__init__-267"><span class="linenos">267</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ObjectiveRBF.__init__-268"><a href="#ObjectiveRBF.__init__-268"><span class="linenos">268</span></a>                 <span class="p">,</span> <span class="n">param_train</span>
 </span><span id="ObjectiveRBF.__init__-269"><a href="#ObjectiveRBF.__init__-269"><span class="linenos">269</span></a>                 <span class="p">,</span> <span class="n">score_train</span>
 </span><span id="ObjectiveRBF.__init__-270"><a href="#ObjectiveRBF.__init__-270"><span class="linenos">270</span></a>                 <span class="p">,</span> <span class="n">ub</span>
@@ -1252,13 +1252,13 @@ are used. Function generator / fabric is also not used because of the same reaso
 
     </div>
     <a class="headerlink" href="#EarlyStopOptuna"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="EarlyStopOptuna-307"><a href="#EarlyStopOptuna-307"><span class="linenos">307</span></a><span class="k">class</span> <span class="nc">EarlyStopOptuna</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EarlyStopOptuna-307"><a href="#EarlyStopOptuna-307"><span class="linenos">307</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EarlyStopOptuna</span><span class="p">:</span>
 </span><span id="EarlyStopOptuna-308"><a href="#EarlyStopOptuna-308"><span class="linenos">308</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="EarlyStopOptuna-309"><a href="#EarlyStopOptuna-309"><span class="linenos">309</span></a><span class="sd">    Early Stopping Callback for Optuna optimizers.</span>
 </span><span id="EarlyStopOptuna-310"><a href="#EarlyStopOptuna-310"><span class="linenos">310</span></a><span class="sd">    More conditions could be added later</span>
 </span><span id="EarlyStopOptuna-311"><a href="#EarlyStopOptuna-311"><span class="linenos">311</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="EarlyStopOptuna-312"><a href="#EarlyStopOptuna-312"><span class="linenos">312</span></a>
-</span><span id="EarlyStopOptuna-313"><a href="#EarlyStopOptuna-313"><span class="linenos">313</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="EarlyStopOptuna-313"><a href="#EarlyStopOptuna-313"><span class="linenos">313</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="EarlyStopOptuna-314"><a href="#EarlyStopOptuna-314"><span class="linenos">314</span></a>                 <span class="p">,</span> <span class="n">ftol_abs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="EarlyStopOptuna-315"><a href="#EarlyStopOptuna-315"><span class="linenos">315</span></a>                 <span class="p">,</span> <span class="n">max_no_improvement</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="EarlyStopOptuna-316"><a href="#EarlyStopOptuna-316"><span class="linenos">316</span></a>                 <span class="p">,</span> <span class="n">if_min</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
@@ -1274,7 +1274,7 @@ are used. Function generator / fabric is also not used because of the same reaso
 </span><span id="EarlyStopOptuna-326"><a href="#EarlyStopOptuna-326"><span class="linenos">326</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">if_min</span> <span class="o">=</span> <span class="n">if_min</span>
 </span><span id="EarlyStopOptuna-327"><a href="#EarlyStopOptuna-327"><span class="linenos">327</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">no_improvement_count</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="EarlyStopOptuna-328"><a href="#EarlyStopOptuna-328"><span class="linenos">328</span></a>
-</span><span id="EarlyStopOptuna-329"><a href="#EarlyStopOptuna-329"><span class="linenos">329</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="EarlyStopOptuna-329"><a href="#EarlyStopOptuna-329"><span class="linenos">329</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="EarlyStopOptuna-330"><a href="#EarlyStopOptuna-330"><span class="linenos">330</span></a>                 <span class="p">,</span> <span class="n">study</span>
 </span><span id="EarlyStopOptuna-331"><a href="#EarlyStopOptuna-331"><span class="linenos">331</span></a>                 <span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
 </span><span id="EarlyStopOptuna-332"><a href="#EarlyStopOptuna-332"><span class="linenos">332</span></a>
@@ -1318,7 +1318,7 @@ More conditions could be added later</p>
 
     </div>
     <a class="headerlink" href="#EarlyStopOptuna.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="EarlyStopOptuna.__init__-313"><a href="#EarlyStopOptuna.__init__-313"><span class="linenos">313</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EarlyStopOptuna.__init__-313"><a href="#EarlyStopOptuna.__init__-313"><span class="linenos">313</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="EarlyStopOptuna.__init__-314"><a href="#EarlyStopOptuna.__init__-314"><span class="linenos">314</span></a>                 <span class="p">,</span> <span class="n">ftol_abs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="EarlyStopOptuna.__init__-315"><a href="#EarlyStopOptuna.__init__-315"><span class="linenos">315</span></a>                 <span class="p">,</span> <span class="n">max_no_improvement</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="EarlyStopOptuna.__init__-316"><a href="#EarlyStopOptuna.__init__-316"><span class="linenos">316</span></a>                 <span class="p">,</span> <span class="n">if_min</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
@@ -1395,12 +1395,12 @@ More conditions could be added later</p>
 
     </div>
     <a class="headerlink" href="#VerboseOptuna"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseOptuna-357"><a href="#VerboseOptuna-357"><span class="linenos">357</span></a><span class="k">class</span> <span class="nc">VerboseOptuna</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseOptuna-357"><a href="#VerboseOptuna-357"><span class="linenos">357</span></a><span class="k">class</span><span class="w"> </span><span class="nc">VerboseOptuna</span><span class="p">:</span>
 </span><span id="VerboseOptuna-358"><a href="#VerboseOptuna-358"><span class="linenos">358</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="VerboseOptuna-359"><a href="#VerboseOptuna-359"><span class="linenos">359</span></a><span class="sd">    Optuna callback to print progress</span>
 </span><span id="VerboseOptuna-360"><a href="#VerboseOptuna-360"><span class="linenos">360</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="VerboseOptuna-361"><a href="#VerboseOptuna-361"><span class="linenos">361</span></a>
-</span><span id="VerboseOptuna-362"><a href="#VerboseOptuna-362"><span class="linenos">362</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="VerboseOptuna-362"><a href="#VerboseOptuna-362"><span class="linenos">362</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="VerboseOptuna-363"><a href="#VerboseOptuna-363"><span class="linenos">363</span></a>                 <span class="p">,</span> <span class="n">verbose_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
 </span><span id="VerboseOptuna-364"><a href="#VerboseOptuna-364"><span class="linenos">364</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="VerboseOptuna-365"><a href="#VerboseOptuna-365"><span class="linenos">365</span></a>
@@ -1411,7 +1411,7 @@ More conditions could be added later</p>
 </span><span id="VerboseOptuna-370"><a href="#VerboseOptuna-370"><span class="linenos">370</span></a>
 </span><span id="VerboseOptuna-371"><a href="#VerboseOptuna-371"><span class="linenos">371</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">verbose_level</span><span class="p">)</span>
 </span><span id="VerboseOptuna-372"><a href="#VerboseOptuna-372"><span class="linenos">372</span></a>
-</span><span id="VerboseOptuna-373"><a href="#VerboseOptuna-373"><span class="linenos">373</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
+</span><span id="VerboseOptuna-373"><a href="#VerboseOptuna-373"><span class="linenos">373</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
 </span><span id="VerboseOptuna-374"><a href="#VerboseOptuna-374"><span class="linenos">374</span></a>
 </span><span id="VerboseOptuna-375"><a href="#VerboseOptuna-375"><span class="linenos">375</span></a>        <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">is_finished</span><span class="p">()</span> <span class="ow">and</span> <span class="p">((</span><span class="n">trial</span><span class="o">.</span><span class="n">number</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
 </span><span id="VerboseOptuna-376"><a href="#VerboseOptuna-376"><span class="linenos">376</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Combined scoring : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; ; step : &#39;</span> <span class="o">+</span>
@@ -1433,7 +1433,7 @@ More conditions could be added later</p>
 
     </div>
     <a class="headerlink" href="#VerboseOptuna.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseOptuna.__init__-362"><a href="#VerboseOptuna.__init__-362"><span class="linenos">362</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseOptuna.__init__-362"><a href="#VerboseOptuna.__init__-362"><span class="linenos">362</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="VerboseOptuna.__init__-363"><a href="#VerboseOptuna.__init__-363"><span class="linenos">363</span></a>                 <span class="p">,</span> <span class="n">verbose_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
 </span><span id="VerboseOptuna.__init__-364"><a href="#VerboseOptuna.__init__-364"><span class="linenos">364</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="VerboseOptuna.__init__-365"><a href="#VerboseOptuna.__init__-365"><span class="linenos">365</span></a>
@@ -1478,17 +1478,17 @@ More conditions could be added later</p>
 
     </div>
     <a class="headerlink" href="#VerboseNG"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseNG-380"><a href="#VerboseNG-380"><span class="linenos">380</span></a><span class="k">class</span> <span class="nc">VerboseNG</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseNG-380"><a href="#VerboseNG-380"><span class="linenos">380</span></a><span class="k">class</span><span class="w"> </span><span class="nc">VerboseNG</span><span class="p">:</span>
 </span><span id="VerboseNG-381"><a href="#VerboseNG-381"><span class="linenos">381</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="VerboseNG-382"><a href="#VerboseNG-382"><span class="linenos">382</span></a><span class="sd">    Nevergrad callback to print progress</span>
 </span><span id="VerboseNG-383"><a href="#VerboseNG-383"><span class="linenos">383</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="VerboseNG-384"><a href="#VerboseNG-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="VerboseNG-384"><a href="#VerboseNG-384"><span class="linenos">384</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="VerboseNG-385"><a href="#VerboseNG-385"><span class="linenos">385</span></a>                 <span class="p">,</span> <span class="n">verbose_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
 </span><span id="VerboseNG-386"><a href="#VerboseNG-386"><span class="linenos">386</span></a>
 </span><span id="VerboseNG-387"><a href="#VerboseNG-387"><span class="linenos">387</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">=</span> <span class="n">verbose_level</span>
 </span><span id="VerboseNG-388"><a href="#VerboseNG-388"><span class="linenos">388</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">iter_idx</span> <span class="o">=</span> <span class="mi">1</span>
 </span><span id="VerboseNG-389"><a href="#VerboseNG-389"><span class="linenos">389</span></a>
-</span><span id="VerboseNG-390"><a href="#VerboseNG-390"><span class="linenos">390</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="VerboseNG-390"><a href="#VerboseNG-390"><span class="linenos">390</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="VerboseNG-391"><a href="#VerboseNG-391"><span class="linenos">391</span></a>                 <span class="p">,</span> <span class="n">optimizer</span>
 </span><span id="VerboseNG-392"><a href="#VerboseNG-392"><span class="linenos">392</span></a>                 <span class="p">,</span> <span class="n">parametrization</span>
 </span><span id="VerboseNG-393"><a href="#VerboseNG-393"><span class="linenos">393</span></a>                 <span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="nb">float</span>
@@ -1520,7 +1520,7 @@ More conditions could be added later</p>
 
     </div>
     <a class="headerlink" href="#VerboseNG.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseNG.__init__-384"><a href="#VerboseNG.__init__-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="VerboseNG.__init__-384"><a href="#VerboseNG.__init__-384"><span class="linenos">384</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="VerboseNG.__init__-385"><a href="#VerboseNG.__init__-385"><span class="linenos">385</span></a>                 <span class="p">,</span> <span class="n">verbose_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
 </span><span id="VerboseNG.__init__-386"><a href="#VerboseNG.__init__-386"><span class="linenos">386</span></a>
 </span><span id="VerboseNG.__init__-387"><a href="#VerboseNG.__init__-387"><span class="linenos">387</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_level</span> <span class="o">=</span> <span class="n">verbose_level</span>

@@ -1,0 +1,27 @@
+﻿- description: test_mape_adj function testing case 1
+  obs: [100, 200, 300]
+  pred: [110, 190, 310]
+  adj_val: 50
+  exp_err: false
+  expected_result: 6.111111111111112
+
+- description: test_mape_adj_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+  adj_val: 1
+  exp_err: false
+  expected_result: 13.333333333333334
+
+- description: test_mape_adj_large_errors function testing case 3
+  obs: [10, 20, 30]
+  pred: [20, 40, 60]
+  adj_val: 5
+  exp_err: false
+  expected_result: 100.0
+
+- description: test_mape_adj_small_values function testing case 4
+  obs: [0.1, 0.2, 0.3]
+  pred: [0.11, 0.19, 0.31]
+  adj_val: 0.05
+  exp_err: false
+  expected_result: 6.111111111111112

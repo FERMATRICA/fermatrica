@@ -1,0 +1,23 @@
+﻿- description: test_mapef function testing case 1
+  obs: [0, 200, 300]
+  pred: [0, 190, 310]
+  exp_err: false
+  expected_result: 4.166666666666667
+
+- description: test_mapef_with_zeros function testing case 2
+  obs: [0, 0, 100]
+  pred: [0, 0, 110]
+  exp_err: false
+  expected_result: 10.0
+
+- description: test_mapef_no_zeros function testing case 3
+  obs: [1, 2, 3]
+  pred: [1.1, 1.9, 3.1]
+  exp_err: false
+  expected_result: 6.111111111111112
+
+- description: test_mapef_all_zeros function testing case 4
+  obs: [0, 0, 0]
+  pred: [0, 0, 0]
+  exp_err: false
+  expected_result: nan

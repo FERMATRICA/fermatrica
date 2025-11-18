@@ -1,0 +1,58 @@
+﻿# Test cases for p00_sample integration tests
+# This file contains expected metric values and testing parameters
+
+test_cases:
+  - name: "basic_model_creation"
+    description: "Model creation test"
+    expected:
+      model_created: true
+      has_configuration: true
+      has_y_variable: true
+  
+  - name: "data_preparation"
+    description: "Data preparation test"
+    expected:
+      data_loaded: true
+      required_columns: ["superbrand", "bs_key", "date", "listed", "price"]
+      train_period_exists: true
+      test_period_exists: true
+  
+  - name: "model_transformation"
+    description: "Model transformation test"
+    expected:
+      transformation_successful: true
+      model_objects_created: true
+  
+  - name: "predictions_generation"
+    description: "Predictions generation test"
+    expected:
+      predictions_created: true
+      predictions_length_matches_data: true
+      predictions_not_all_zero: true
+  
+  - name: "metrics_calculation"
+    description: "Metrics calculation test"
+    expected:
+      r_squared_train: 0.9305894233653526
+      mape_train: 7.0134460984408005
+      mape_test: 8.680521124956329
+      rmse_positive: true
+      score_finite: true
+  
+  - name: "model_consistency"
+    description: "Model consistency test"
+    expected:
+      no_fit_predictions_work: true
+      extended_predictions_work: true
+      model_objects_accessible: true
+
+  - name: "model_save_load"
+    description: "Model save and load test"
+    expected:
+      save_successful: true
+      load_successful: true
+      predictions_consistent: true
+      metrics_consistent: true
+      configuration_consistent: true
+      max_save_time_seconds: 30
+      max_load_time_seconds: 30

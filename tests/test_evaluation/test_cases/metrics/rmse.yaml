@@ -1,0 +1,23 @@
+﻿- description: test_rmse function testing case 1
+  obs: [10, 20, 30]
+  pred: [12, 18, 33]
+  exp_err: false
+  expected_result: 2.3804761428476167
+
+- description: test_rmse_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+  exp_err: false
+  expected_result: 0.0
+
+- description: test_rmse_large_errors function testing case 3
+  obs: [1, 2, 3]
+  pred: [10, 20, 30]
+  exp_err: false
+  expected_result: 19.44222209522358
+
+- description: test_rmse_negative_values function testing case 4
+  obs: [-1, -2, -3]
+  pred: [-2, -1, -4]
+  exp_err: false
+  expected_result: 1.0

@@ -15,7 +15,8 @@ from fermatrica_utils import DotDict, select_eff
 @profile
 def market_resize_flex(ds: pd.DataFrame
                        , y: pd.Series | np.ndarray
-                       , wght: int | float = 1) -> pd.Series:
+                       , wght: int | float = 1
+                       , if_listed_1: bool = True) -> pd.Series:
     """
     Resize main model by additional category model with some discount.
     Use it to simulate competition. More flexible than `market_resize`
@@ -28,13 +29,16 @@ def market_resize_flex(ds: pd.DataFrame
     :param ds: dataset
     :param y: predicted Y (target variable)
     :param wght: weight for correction by category prediction
+    :param if_listed_1: if True, use also products with `listed` = 1 for category calculation
     :return: predicted Y (target variable)
     """
 
     ds = select_eff(ds, ['bs_key', 'date', 'listed', 'market', 'pred_mrk'])
     ds['y'] = y
 
-    tmp = ds.loc[ds['listed'] >= 1].groupby(['date', 'market', 'pred_mrk'], as_index=False)['y'].sum()
+    listed_threshold = 1 if if_listed_1 else 2
+
+    tmp = ds.loc[ds['listed'] >= listed_threshold].groupby(['date', 'market', 'pred_mrk'], as_index=False)['y'].sum()
     tmp = tmp.set_index(['date', 'market'])
     tmp['resize'] = tmp['y'] / tmp['pred_mrk']
 

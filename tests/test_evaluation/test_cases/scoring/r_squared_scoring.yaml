@@ -1,0 +1,23 @@
+- description: test_r_squared_scoring function testing case 1
+  exp_err: false
+  expected_result: 0.99
+  obs: [100, 200, 300]
+  pred: [110, 190, 310]
+
+- description: test_r_squared_scoring_perfect_fit function testing case 2
+  exp_err: false
+  expected_result: 1.0
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+
+- description: test_r_squared_scoring_no_correlation function testing case 3
+  exp_err: false
+  expected_result: -2.2
+  obs: [1, 2, 3, 4, 5]
+  pred: [5, 4, 3, 2, 1]
+
+- description: test_r_squared_scoring_negative_correlation function testing case 4
+  exp_err: false
+  expected_result: -2.3
+  obs: [1, 2, 3, 4, 5]
+  pred: [4.5, 3.5, 2.5, 1.5, 0.5]

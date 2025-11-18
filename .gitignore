@@ -18,3 +18,4 @@ tmp/
 *.pclprof
 *__pycache__
 *.egg-info/
+*.py~

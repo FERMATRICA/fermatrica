@@ -126,7 +126,13 @@ class ModelConf(StableClass):
 
         if 'lme_method' in model_setup['key'].unique():
             self.lme_method = model_setup[model_setup['key'] == 'lme_method']['value'].astype('str').to_list()
-
+            
+        if 'lme_estimation_method' in model_setup['key'].unique():
+            self.lme_estimation_method = model_setup[model_setup['key'] == 'lme_estimation_method']['value'].iloc[0]
+            if self.lme_estimation_method not in ['ml', 'reml']:
+                fermatrica_error("LME estimation method `" + self.lme_estimation_method + "` not recognized. " +
+                                 "Please select one of `ml` or `reml` or remove this setting from the model setup.")
+            
         if 'conversion_fun' in model_setup['key'].unique():
             self.conversion_fun = model_setup[model_setup['key'] == 'conversion_fun']['value'].astype('str').to_list()
 
@@ -212,6 +218,11 @@ class ModelConf(StableClass):
             self.summary_type = 'sum'
             logging.warning("Model definition : Setup : `summary_type` value missed, set to default `sum`." +\
                             " Acceptable values: `sum`, `fin` / `mean_fin`")
+                            
+        if not hasattr(self, 'lme_estimation_method') or self.lme_estimation_method is None or self.lme_estimation_method == '':
+            self.lme_estimation_method = 'reml'
+            logging.warning("Model definition : Setup : `lme_estimation_method` value missed, set to default `reml`." +\
+                            " Acceptable values: `ml`, `reml`")
 
         model_type_allowed = ['OLS', 'LME', 'LMEA', 'FE']
         if self.model_type not in model_type_allowed:
@@ -319,10 +330,33 @@ class ModelConf(StableClass):
 
         if save_format in ['XLSX']:
 
-            with pd.ExcelWriter(os.path.join(path, 'model_conf.xlsx')) as writer:
-                # writer = pd.ExcelWriter(path)
+            with pd.ExcelWriter(os.path.join(path, 'model_conf.xlsx'), engine='xlsxwriter') as writer:
                 for df_name, df in model_conf_list.items():
+                    # Write dataframe to Excel
                     df.to_excel(writer, sheet_name=df_name, index=False, freeze_panes=(1, 0))
+                    
+                    # Get the xlsxwriter workbook and worksheet objects
+                    workbook = writer.book
+                    worksheet = writer.sheets[df_name]
+                    
+                    # Auto-adjust column widths based on content (exclude last column)
+                    for idx, col in enumerate(df.columns):
+                        # Skip auto-adjustment for the last column
+                        if idx == len(df.columns) - 1:
+                            continue
+                            
+                        # Calculate max width needed for the column
+                        max_len = max(
+                            df[col].astype(str).str.len().max(),  # Max content length
+                            len(str(col))  # Header length
+                        )
+                        # Set column width with some padding (minimum 10, maximum 50)
+                        adjusted_width = min(max(max_len + 2, 10), 50)
+                        worksheet.set_column(idx, idx, adjusted_width)
+                    
+                    # Add autofilter to the data range
+                    if len(df) > 0:
+                        worksheet.autofilter(0, 0, len(df), len(df.columns) - 1)
 
         else:
             fermatrica_error('Saving error. ' + save_format + ' format is not yet implemented. ' +

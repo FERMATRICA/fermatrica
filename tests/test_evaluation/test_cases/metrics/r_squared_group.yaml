@@ -1,0 +1,31 @@
+﻿- description: test_r_squared_group function testing case 1
+  obs: [1, 2, 3, 4, 5, 6]
+  pred: [1, 2, 2, 4, 5, 7]
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  exp_err: false
+  expected_result: 0.666666666666667
+  expected_type: float
+
+- description: test_r_squared_group_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5, 6]
+  pred: [1, 2, 3, 4, 5, 6]
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  exp_err: false
+  expected_result: 1.0
+  expected_type: float
+
+- description: test_r_squared_group_no_correlation function testing case 3
+  obs: [1, 2, 3, 4, 5, 6]
+  pred: [6, 5, 4, 3, 2, 1]
+  group: ['A', 'A', 'A', 'B', 'B', 'B']
+  exp_err: false
+  expected_result: -10.666666666666666
+  expected_type: float
+
+- description: test_r_squared_group_single_group function testing case 4
+  obs: [1, 2, 3]
+  pred: [1.1, 1.9, 3.1]
+  group: ['A', 'A', 'A']
+  exp_err: false
+  expected_result: 0.99
+  expected_type: float

@@ -1,0 +1,23 @@
+﻿- description: test_mse function testing case 1
+  obs: [5, 10, 15]
+  pred: [4, 12, 14]
+  exp_err: false
+  expected_result: 2.0
+
+- description: test_mse_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+  exp_err: false
+  expected_result: 0.0
+
+- description: test_mse_large_errors function testing case 3
+  obs: [1, 2, 3]
+  pred: [10, 20, 30]
+  exp_err: false
+  expected_result: 378.0
+
+- description: test_mse_small_errors function testing case 4
+  obs: [1.1, 2.2, 3.3]
+  pred: [1.0, 2.0, 3.0]
+  exp_err: false
+  expected_result: 0.04666666666666667

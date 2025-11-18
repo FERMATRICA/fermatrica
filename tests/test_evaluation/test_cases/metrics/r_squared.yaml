@@ -1,0 +1,23 @@
+﻿- description: test_r_squared function testing case 1
+  obs: [1, 2, 3, 4, 5]
+  pred: [1.1, 1.9, 3.2, 3.8, 4.7]
+  exp_err: false
+  expected_result: 0.9848
+
+- description: test_r_squared_perfect_fit function testing case 2
+  obs: [1, 2, 3, 4, 5]
+  pred: [1, 2, 3, 4, 5]
+  exp_err: false
+  expected_result: 1.0
+
+- description: test_r_squared_no_correlation function testing case 3
+  obs: [1, 2, 3, 4, 5]
+  pred: [5, 4, 3, 2, 1]
+  exp_err: false
+  expected_result: -2.2
+
+- description: test_r_squared_negative_correlation function testing case 4
+  obs: [1, 2, 3, 4, 5]
+  pred: [4.5, 3.5, 2.5, 1.5, 0.5]
+  exp_err: false
+  expected_result: -2.3

@@ -6,13 +6,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fermatrica"
-version = "0.3"
+version = "0.3.1"
 description = "FERMATRICA Flexible Econometrics Regression Models and Tools: Model"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache 2.0" }
 authors = [
-    { name = "OKKAM CS: AMeshkov, Ivan Kocherov, Anna Gladysheva, Anton Sevastianov, Grigoriy Selyavin" }
+    { name = "OKKAM CS: AMeshkov, Ivan Kocherov, Anna Gladysheva, Anton Sevastianov, Grigoriy Selyavin, Kirill Prilipko" }
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -22,7 +22,7 @@ classifiers = [
 dependencies = [
 ]
 
-urls = {"Homepage" = "https://gitlab.mitcoms.ru/Econometrics/fermatrica/fermatrica"}
+urls = {"Homepage" = "https://github.com/FERMATRICA/fermatrica"}
 
 [tool.setuptools.packages.find]
 where = ["."]

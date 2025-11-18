@@ -119,23 +119,23 @@ scalars, strings, tables.</p>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span> <span class="nn">copy</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">inspect</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span> <span class="nn">logging</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">import</span> <span class="nn">lzma</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">import</span> <span class="nn">os</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">import</span> <span class="nn">pickle</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">import</span> <span class="nn">re</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">lzma</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span> <span class="nn">fermatrica_utils</span> <span class="kn">import</span> <span class="n">StableClass</span><span class="p">,</span> <span class="n">import_module_from_string</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">StableClass</span><span class="p">,</span> <span class="n">import_module_from_string</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span> <span class="nn">fermatrica.basics.basics</span> <span class="kn">import</span> <span class="n">fermatrica_error</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span> <span class="nn">fermatrica.model.model_conf</span> <span class="kn">import</span> <span class="n">ModelConf</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span> <span class="nn">fermatrica.model.lhs_fun</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.basics.basics</span><span class="w"> </span><span class="kn">import</span> <span class="n">fermatrica_error</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.model.model_conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelConf</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.model.lhs_fun</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="k">class</span> <span class="nc">ModelObj</span><span class="p">(</span><span class="n">StableClass</span><span class="p">):</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ModelObj</span><span class="p">(</span><span class="n">StableClass</span><span class="p">):</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">    ModelObj (model objects) keeps programming / callable objects of the model.</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">    Use as the component / attribute of `fermatrica.model.model.Model`</span>
@@ -148,7 +148,7 @@ scalars, strings, tables.</p>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">models</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="n">adhoc_code_src</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>            <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">,</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>            <span class="n">custom_predict_fn</span><span class="p">:</span> <span class="s2">&quot;Callable | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -187,7 +187,7 @@ scalars, strings, tables.</p>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">if</span> <span class="n">if_stable</span><span class="p">:</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_init_finish</span><span class="p">()</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="k">def</span> <span class="nf">_transform_lhs_generate</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_transform_lhs_generate</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>                                <span class="p">,</span> <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">):</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Generate LHS function from LHS table in ModelConf</span>
@@ -199,7 +199,7 @@ scalars, strings, tables.</p>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_conf</span><span class="p">,</span> <span class="s1">&#39;model_lhs&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_conf</span><span class="o">.</span><span class="n">model_lhs</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">transform_lhs_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_lhs_src</span> <span class="o">=</span> <span class="n">transform_lhs_generate</span><span class="p">(</span><span class="n">model_conf</span><span class="o">.</span><span class="n">model_lhs</span><span class="p">)</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="k">def</span> <span class="nf">adhoc_code_fill</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">adhoc_code_fill</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>                        <span class="p">,</span> <span class="n">adhoc_code</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        Get source code from loaded adhoc Python modules and save them as `adhoc_code_src` attribute</span>
@@ -215,7 +215,7 @@ scalars, strings, tables.</p>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">adhoc_code</span><span class="p">:</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">adhoc_code_src</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">restore_loaded</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">restore_loaded</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>                       <span class="p">,</span> <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">):</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        When pickling it is important to destroy all callable attributes as non-pickable (and potentially</span>
@@ -229,7 +229,7 @@ scalars, strings, tables.</p>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_custom_predict_fn_load</span><span class="p">()</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_transform_lhs_generate</span><span class="p">(</span><span class="n">model_conf</span><span class="p">)</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">def</span> <span class="nf">_custom_predict_fn_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_custom_predict_fn_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        Restore custom predict function (mostly category model).</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        It is important cause function cannot be pickled and restored properly w/o its environment</span>
@@ -239,7 +239,7 @@ scalars, strings, tables.</p>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_predict_nm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">custom_predict_fn</span> <span class="o">=</span> <span class="n">fun_find</span><span class="p">(</span><span class="n">fn_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_predict_nm</span><span class="p">,</span> <span class="n">env_code_src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">adhoc_code_src</span><span class="p">)</span>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>             <span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>             <span class="p">):</span>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -268,7 +268,7 @@ scalars, strings, tables.</p>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="k">return</span> <span class="n">path</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="k">def</span> <span class="nf">transform_lhs_template</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_lhs_template</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>                           <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>                           <span class="p">,</span> <span class="n">coef</span><span class="p">:</span> <span class="s2">&quot;DotDict&quot;</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>                           <span class="p">,</span> <span class="n">to_original</span><span class="p">):</span>
@@ -290,7 +290,7 @@ scalars, strings, tables.</p>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="k">return</span> <span class="n">y</span>
 </span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="k">def</span> <span class="nf">transform_lhs_empty</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_lhs_empty</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>                        <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>                        <span class="p">,</span> <span class="n">coef</span><span class="p">:</span> <span class="s2">&quot;DotDict&quot;</span>
 </span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>                        <span class="p">,</span> <span class="n">to_original</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
@@ -307,7 +307,7 @@ scalars, strings, tables.</p>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="k">return</span> <span class="n">y</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="k">def</span> <span class="nf">transform_lhs_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_lhs_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">    Creates LHS transformation function from source</span>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
@@ -381,7 +381,7 @@ scalars, strings, tables.</p>
 </span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>    <span class="k">return</span> <span class="n">fn_cl</span><span class="p">,</span> <span class="n">fn_src</span>
 </span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
-</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="k">def</span> <span class="nf">fun_find</span><span class="p">(</span><span class="n">fn_name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fun_find</span><span class="p">(</span><span class="n">fn_name</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>             <span class="p">,</span> <span class="n">env_code_src</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">    Restores custom predict function (mostly category model).</span>
@@ -407,7 +407,7 @@ scalars, strings, tables.</p>
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>    <span class="k">return</span> <span class="n">fn</span>
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>
-</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a><span class="k">def</span> <span class="nf">fun_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">str</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fun_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">str</span>
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>                 <span class="p">,</span> <span class="n">fn_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;transform_lhs_fn&#39;</span><span class="p">):</span>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a><span class="sd">    Could generate any function from source, but mostly to generate transform_lhs_fn.</span>
@@ -432,7 +432,7 @@ scalars, strings, tables.</p>
 </span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>    <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">fn_name</span><span class="p">]</span>
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>
-</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelObj</span><span class="p">:</span>
+</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelObj</span><span class="p">:</span>
 </span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a><span class="sd">    Load ModelObj from disc</span>
 </span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>
@@ -446,7 +446,7 @@ scalars, strings, tables.</p>
 </span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>
 </span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>
-</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="k">def</span> <span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
+</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="k">def</span><span class="w"> </span><span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
 </span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">    Remove callable objects from ModelObj object before pickling (could be not pickable)</span>
 </span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>
@@ -476,7 +476,7 @@ scalars, strings, tables.</p>
 
     </div>
     <a class="headerlink" href="#ModelObj"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj-25"><a href="#ModelObj-25"><span class="linenos"> 25</span></a><span class="k">class</span> <span class="nc">ModelObj</span><span class="p">(</span><span class="n">StableClass</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj-25"><a href="#ModelObj-25"><span class="linenos"> 25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ModelObj</span><span class="p">(</span><span class="n">StableClass</span><span class="p">):</span>
 </span><span id="ModelObj-26"><a href="#ModelObj-26"><span class="linenos"> 26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj-27"><a href="#ModelObj-27"><span class="linenos"> 27</span></a><span class="sd">    ModelObj (model objects) keeps programming / callable objects of the model.</span>
 </span><span id="ModelObj-28"><a href="#ModelObj-28"><span class="linenos"> 28</span></a><span class="sd">    Use as the component / attribute of `fermatrica.model.model.Model`</span>
@@ -489,7 +489,7 @@ scalars, strings, tables.</p>
 </span><span id="ModelObj-35"><a href="#ModelObj-35"><span class="linenos"> 35</span></a>    <span class="n">models</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="ModelObj-36"><a href="#ModelObj-36"><span class="linenos"> 36</span></a>    <span class="n">adhoc_code_src</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
 </span><span id="ModelObj-37"><a href="#ModelObj-37"><span class="linenos"> 37</span></a>
-</span><span id="ModelObj-38"><a href="#ModelObj-38"><span class="linenos"> 38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="ModelObj-38"><a href="#ModelObj-38"><span class="linenos"> 38</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="ModelObj-39"><a href="#ModelObj-39"><span class="linenos"> 39</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="ModelObj-40"><a href="#ModelObj-40"><span class="linenos"> 40</span></a>            <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">,</span>
 </span><span id="ModelObj-41"><a href="#ModelObj-41"><span class="linenos"> 41</span></a>            <span class="n">custom_predict_fn</span><span class="p">:</span> <span class="s2">&quot;Callable | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -528,7 +528,7 @@ scalars, strings, tables.</p>
 </span><span id="ModelObj-74"><a href="#ModelObj-74"><span class="linenos"> 74</span></a>        <span class="k">if</span> <span class="n">if_stable</span><span class="p">:</span>
 </span><span id="ModelObj-75"><a href="#ModelObj-75"><span class="linenos"> 75</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_init_finish</span><span class="p">()</span>
 </span><span id="ModelObj-76"><a href="#ModelObj-76"><span class="linenos"> 76</span></a>
-</span><span id="ModelObj-77"><a href="#ModelObj-77"><span class="linenos"> 77</span></a>    <span class="k">def</span> <span class="nf">_transform_lhs_generate</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ModelObj-77"><a href="#ModelObj-77"><span class="linenos"> 77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_transform_lhs_generate</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj-78"><a href="#ModelObj-78"><span class="linenos"> 78</span></a>                                <span class="p">,</span> <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">):</span>
 </span><span id="ModelObj-79"><a href="#ModelObj-79"><span class="linenos"> 79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj-80"><a href="#ModelObj-80"><span class="linenos"> 80</span></a><span class="sd">        Generate LHS function from LHS table in ModelConf</span>
@@ -540,7 +540,7 @@ scalars, strings, tables.</p>
 </span><span id="ModelObj-86"><a href="#ModelObj-86"><span class="linenos"> 86</span></a>        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_conf</span><span class="p">,</span> <span class="s1">&#39;model_lhs&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_conf</span><span class="o">.</span><span class="n">model_lhs</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 </span><span id="ModelObj-87"><a href="#ModelObj-87"><span class="linenos"> 87</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">transform_lhs_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_lhs_src</span> <span class="o">=</span> <span class="n">transform_lhs_generate</span><span class="p">(</span><span class="n">model_conf</span><span class="o">.</span><span class="n">model_lhs</span><span class="p">)</span>
 </span><span id="ModelObj-88"><a href="#ModelObj-88"><span class="linenos"> 88</span></a>
-</span><span id="ModelObj-89"><a href="#ModelObj-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">adhoc_code_fill</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ModelObj-89"><a href="#ModelObj-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">adhoc_code_fill</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj-90"><a href="#ModelObj-90"><span class="linenos"> 90</span></a>                        <span class="p">,</span> <span class="n">adhoc_code</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 </span><span id="ModelObj-91"><a href="#ModelObj-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj-92"><a href="#ModelObj-92"><span class="linenos"> 92</span></a><span class="sd">        Get source code from loaded adhoc Python modules and save them as `adhoc_code_src` attribute</span>
@@ -556,7 +556,7 @@ scalars, strings, tables.</p>
 </span><span id="ModelObj-102"><a href="#ModelObj-102"><span class="linenos">102</span></a>            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">adhoc_code</span><span class="p">:</span>
 </span><span id="ModelObj-103"><a href="#ModelObj-103"><span class="linenos">103</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">adhoc_code_src</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 </span><span id="ModelObj-104"><a href="#ModelObj-104"><span class="linenos">104</span></a>
-</span><span id="ModelObj-105"><a href="#ModelObj-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="nf">restore_loaded</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ModelObj-105"><a href="#ModelObj-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">restore_loaded</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj-106"><a href="#ModelObj-106"><span class="linenos">106</span></a>                       <span class="p">,</span> <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">):</span>
 </span><span id="ModelObj-107"><a href="#ModelObj-107"><span class="linenos">107</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj-108"><a href="#ModelObj-108"><span class="linenos">108</span></a><span class="sd">        When pickling it is important to destroy all callable attributes as non-pickable (and potentially</span>
@@ -570,7 +570,7 @@ scalars, strings, tables.</p>
 </span><span id="ModelObj-116"><a href="#ModelObj-116"><span class="linenos">116</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_custom_predict_fn_load</span><span class="p">()</span>
 </span><span id="ModelObj-117"><a href="#ModelObj-117"><span class="linenos">117</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_transform_lhs_generate</span><span class="p">(</span><span class="n">model_conf</span><span class="p">)</span>
 </span><span id="ModelObj-118"><a href="#ModelObj-118"><span class="linenos">118</span></a>
-</span><span id="ModelObj-119"><a href="#ModelObj-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">_custom_predict_fn_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ModelObj-119"><a href="#ModelObj-119"><span class="linenos">119</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_custom_predict_fn_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ModelObj-120"><a href="#ModelObj-120"><span class="linenos">120</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj-121"><a href="#ModelObj-121"><span class="linenos">121</span></a><span class="sd">        Restore custom predict function (mostly category model).</span>
 </span><span id="ModelObj-122"><a href="#ModelObj-122"><span class="linenos">122</span></a><span class="sd">        It is important cause function cannot be pickled and restored properly w/o its environment</span>
@@ -580,7 +580,7 @@ scalars, strings, tables.</p>
 </span><span id="ModelObj-126"><a href="#ModelObj-126"><span class="linenos">126</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_predict_nm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="ModelObj-127"><a href="#ModelObj-127"><span class="linenos">127</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">custom_predict_fn</span> <span class="o">=</span> <span class="n">fun_find</span><span class="p">(</span><span class="n">fn_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_predict_nm</span><span class="p">,</span> <span class="n">env_code_src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">adhoc_code_src</span><span class="p">)</span>
 </span><span id="ModelObj-128"><a href="#ModelObj-128"><span class="linenos">128</span></a>
-</span><span id="ModelObj-129"><a href="#ModelObj-129"><span class="linenos">129</span></a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span>
+</span><span id="ModelObj-129"><a href="#ModelObj-129"><span class="linenos">129</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj-130"><a href="#ModelObj-130"><span class="linenos">130</span></a>             <span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </span><span id="ModelObj-131"><a href="#ModelObj-131"><span class="linenos">131</span></a>             <span class="p">):</span>
 </span><span id="ModelObj-132"><a href="#ModelObj-132"><span class="linenos">132</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -625,7 +625,7 @@ Use as the component / attribute of <code><a href="model.html#Model">fermatrica.
 
     </div>
     <a class="headerlink" href="#ModelObj.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.__init__-38"><a href="#ModelObj.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.__init__-38"><a href="#ModelObj.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="ModelObj.__init__-39"><a href="#ModelObj.__init__-39"><span class="linenos">39</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="ModelObj.__init__-40"><a href="#ModelObj.__init__-40"><span class="linenos">40</span></a>            <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">,</span>
 </span><span id="ModelObj.__init__-41"><a href="#ModelObj.__init__-41"><span class="linenos">41</span></a>            <span class="n">custom_predict_fn</span><span class="p">:</span> <span class="s2">&quot;Callable | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -758,7 +758,7 @@ is created from scratch</li>
 
     </div>
     <a class="headerlink" href="#ModelObj.adhoc_code_fill"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.adhoc_code_fill-89"><a href="#ModelObj.adhoc_code_fill-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">adhoc_code_fill</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.adhoc_code_fill-89"><a href="#ModelObj.adhoc_code_fill-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">adhoc_code_fill</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj.adhoc_code_fill-90"><a href="#ModelObj.adhoc_code_fill-90"><span class="linenos"> 90</span></a>                        <span class="p">,</span> <span class="n">adhoc_code</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 </span><span id="ModelObj.adhoc_code_fill-91"><a href="#ModelObj.adhoc_code_fill-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj.adhoc_code_fill-92"><a href="#ModelObj.adhoc_code_fill-92"><span class="linenos"> 92</span></a><span class="sd">        Get source code from loaded adhoc Python modules and save them as `adhoc_code_src` attribute</span>
@@ -800,7 +800,7 @@ is created from scratch</li>
 
     </div>
     <a class="headerlink" href="#ModelObj.restore_loaded"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.restore_loaded-105"><a href="#ModelObj.restore_loaded-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="nf">restore_loaded</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.restore_loaded-105"><a href="#ModelObj.restore_loaded-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">restore_loaded</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj.restore_loaded-106"><a href="#ModelObj.restore_loaded-106"><span class="linenos">106</span></a>                       <span class="p">,</span> <span class="n">model_conf</span><span class="p">:</span> <span class="s2">&quot;ModelConf&quot;</span><span class="p">):</span>
 </span><span id="ModelObj.restore_loaded-107"><a href="#ModelObj.restore_loaded-107"><span class="linenos">107</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ModelObj.restore_loaded-108"><a href="#ModelObj.restore_loaded-108"><span class="linenos">108</span></a><span class="sd">        When pickling it is important to destroy all callable attributes as non-pickable (and potentially</span>
@@ -842,7 +842,7 @@ from saved module code or directly from saved function source code)</p>
 
     </div>
     <a class="headerlink" href="#ModelObj.save"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.save-129"><a href="#ModelObj.save-129"><span class="linenos">129</span></a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ModelObj.save-129"><a href="#ModelObj.save-129"><span class="linenos">129</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span>
 </span><span id="ModelObj.save-130"><a href="#ModelObj.save-130"><span class="linenos">130</span></a>             <span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </span><span id="ModelObj.save-131"><a href="#ModelObj.save-131"><span class="linenos">131</span></a>             <span class="p">):</span>
 </span><span id="ModelObj.save-132"><a href="#ModelObj.save-132"><span class="linenos">132</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -897,7 +897,7 @@ from saved module code or directly from saved function source code)</p>
 
     </div>
     <a class="headerlink" href="#transform_lhs_template"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="transform_lhs_template-158"><a href="#transform_lhs_template-158"><span class="linenos">158</span></a><span class="k">def</span> <span class="nf">transform_lhs_template</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="transform_lhs_template-158"><a href="#transform_lhs_template-158"><span class="linenos">158</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_lhs_template</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
 </span><span id="transform_lhs_template-159"><a href="#transform_lhs_template-159"><span class="linenos">159</span></a>                           <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 </span><span id="transform_lhs_template-160"><a href="#transform_lhs_template-160"><span class="linenos">160</span></a>                           <span class="p">,</span> <span class="n">coef</span><span class="p">:</span> <span class="s2">&quot;DotDict&quot;</span>
 </span><span id="transform_lhs_template-161"><a href="#transform_lhs_template-161"><span class="linenos">161</span></a>                           <span class="p">,</span> <span class="n">to_original</span><span class="p">):</span>
@@ -947,7 +947,7 @@ from saved module code or directly from saved function source code)</p>
 
     </div>
     <a class="headerlink" href="#transform_lhs_empty"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="transform_lhs_empty-180"><a href="#transform_lhs_empty-180"><span class="linenos">180</span></a><span class="k">def</span> <span class="nf">transform_lhs_empty</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="transform_lhs_empty-180"><a href="#transform_lhs_empty-180"><span class="linenos">180</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_lhs_empty</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
 </span><span id="transform_lhs_empty-181"><a href="#transform_lhs_empty-181"><span class="linenos">181</span></a>                        <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 </span><span id="transform_lhs_empty-182"><a href="#transform_lhs_empty-182"><span class="linenos">182</span></a>                        <span class="p">,</span> <span class="n">coef</span><span class="p">:</span> <span class="s2">&quot;DotDict&quot;</span>
 </span><span id="transform_lhs_empty-183"><a href="#transform_lhs_empty-183"><span class="linenos">183</span></a>                        <span class="p">,</span> <span class="n">to_original</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
@@ -992,7 +992,7 @@ from saved module code or directly from saved function source code)</p>
 
     </div>
     <a class="headerlink" href="#transform_lhs_generate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="transform_lhs_generate-197"><a href="#transform_lhs_generate-197"><span class="linenos">197</span></a><span class="k">def</span> <span class="nf">transform_lhs_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="transform_lhs_generate-197"><a href="#transform_lhs_generate-197"><span class="linenos">197</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_lhs_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="transform_lhs_generate-198"><a href="#transform_lhs_generate-198"><span class="linenos">198</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="transform_lhs_generate-199"><a href="#transform_lhs_generate-199"><span class="linenos">199</span></a><span class="sd">    Creates LHS transformation function from source</span>
 </span><span id="transform_lhs_generate-200"><a href="#transform_lhs_generate-200"><span class="linenos">200</span></a>
@@ -1091,7 +1091,7 @@ from saved module code or directly from saved function source code)</p>
 
     </div>
     <a class="headerlink" href="#fun_find"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fun_find-271"><a href="#fun_find-271"><span class="linenos">271</span></a><span class="k">def</span> <span class="nf">fun_find</span><span class="p">(</span><span class="n">fn_name</span><span class="p">:</span> <span class="nb">str</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fun_find-271"><a href="#fun_find-271"><span class="linenos">271</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fun_find</span><span class="p">(</span><span class="n">fn_name</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="fun_find-272"><a href="#fun_find-272"><span class="linenos">272</span></a>             <span class="p">,</span> <span class="n">env_code_src</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="fun_find-273"><a href="#fun_find-273"><span class="linenos">273</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="fun_find-274"><a href="#fun_find-274"><span class="linenos">274</span></a><span class="sd">    Restores custom predict function (mostly category model).</span>
@@ -1146,7 +1146,7 @@ to be loaded first.</p>
 
     </div>
     <a class="headerlink" href="#fun_generate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fun_generate-297"><a href="#fun_generate-297"><span class="linenos">297</span></a><span class="k">def</span> <span class="nf">fun_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">str</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fun_generate-297"><a href="#fun_generate-297"><span class="linenos">297</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fun_generate</span><span class="p">(</span><span class="n">fn_src</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">str</span>
 </span><span id="fun_generate-298"><a href="#fun_generate-298"><span class="linenos">298</span></a>                 <span class="p">,</span> <span class="n">fn_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;transform_lhs_fn&#39;</span><span class="p">):</span>
 </span><span id="fun_generate-299"><a href="#fun_generate-299"><span class="linenos">299</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="fun_generate-300"><a href="#fun_generate-300"><span class="linenos">300</span></a><span class="sd">    Could generate any function from source, but mostly to generate transform_lhs_fn.</span>
@@ -1202,7 +1202,7 @@ as well.</p>
 
     </div>
     <a class="headerlink" href="#load"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="load-322"><a href="#load-322"><span class="linenos">322</span></a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelObj</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="load-322"><a href="#load-322"><span class="linenos">322</span></a><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelObj</span><span class="p">:</span>
 </span><span id="load-323"><a href="#load-323"><span class="linenos">323</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="load-324"><a href="#load-324"><span class="linenos">324</span></a><span class="sd">    Load ModelObj from disc</span>
 </span><span id="load-325"><a href="#load-325"><span class="linenos">325</span></a>
@@ -1241,7 +1241,7 @@ as well.</p>
 
     </div>
     <a class="headerlink" href="#prepickle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="prepickle-336"><a href="#prepickle-336"><span class="linenos">336</span></a><span class="k">def</span> <span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="prepickle-336"><a href="#prepickle-336"><span class="linenos">336</span></a><span class="k">def</span><span class="w"> </span><span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
 </span><span id="prepickle-337"><a href="#prepickle-337"><span class="linenos">337</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="prepickle-338"><a href="#prepickle-338"><span class="linenos">338</span></a><span class="sd">    Remove callable objects from ModelObj object before pickling (could be not pickable)</span>
 </span><span id="prepickle-339"><a href="#prepickle-339"><span class="linenos">339</span></a>
