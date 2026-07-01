@@ -1,5 +1,6 @@
 model_dict/
 .idea/
+.vscode/
 .pytest_cache/
 .git/
 venv/
@@ -19,3 +20,6 @@ tmp/
 *__pycache__
 *.egg-info/
 *.py~
+
+# Local configuration (copied from config_example.toml)
+config.toml

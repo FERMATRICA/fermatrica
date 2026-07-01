@@ -44,15 +44,34 @@ def parametrize_params(file_name):
                 params.append((input_params, expected_result, fun, exp_err))
     return params
 
-class TestRecursiveFilter:
+class TestAdstock:
 
-    @pytest.mark.parametrize("input_params,expected_result,fun,exp_err", parametrize_params('recursive_filter.yaml'))
-    def test_recursive_filter(self, input_params, expected_result, fun, exp_err, if_debug):
+    @pytest.mark.parametrize("input_params,expected_result,fun,exp_err", parametrize_params('adstock.yaml'))
+    def test_adstock(self, input_params, expected_result, fun, exp_err, if_debug):
 
         # get data from yaml if conditions are met (containing "testing case")
         # calc result
         with exp_err:
-            result = tr.recursive_filter(**input_params)
+            result = tr.adstock(**input_params)
+
+            if if_debug:
+                try:
+                    fun(np.round(result,5), expected_result)
+                except:
+                    breakpoint()
+            else:
+                fun(np.round(result,5), expected_result)
+
+
+class TestAdstockd:
+
+    @pytest.mark.parametrize("input_params,expected_result,fun,exp_err", parametrize_params('adstockd.yaml'))
+    def test_adstockd(self, input_params, expected_result, fun, exp_err, if_debug):
+
+        # get data from yaml if conditions are met (containing "testing case")
+        # calc result
+        with exp_err:
+            result = tr.adstockd(**input_params)
 
             if if_debug:
                 try:

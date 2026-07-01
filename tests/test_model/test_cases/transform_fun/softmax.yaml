@@ -61,7 +61,7 @@
       avg: 3
       lambda: 0
       std: 9.6
-  exp_err: False
+  exp_err: FermatricaError
   expected_result: !np.array
     object: [ 0.,  0.,  0., nan,  0.,  1.,  1.,  0.,  1.,  1.,  0.,  1.,  0.,
         0.,  1.,  0.,  1.,  1.,  0.,  1.,  0.,  1.,  0.,  1.,  0.]

@@ -72,7 +72,8 @@ def optimize_global_ga(ds: pd.DataFrame
 
     # preparations and checks
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")
@@ -203,7 +204,8 @@ def optimize_global_tpe(ds: pd.DataFrame,
 
     # set up settings
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")

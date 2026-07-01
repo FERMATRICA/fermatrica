@@ -28,7 +28,7 @@
     arg: ['avg', 'lambda', 'std']
     value: [14, 0, 0.3]
   index_vars:
-  exp_err: ZeroDivisionError
+  exp_err: FermatricaError
   expected_type: array
   expected_result: [0]
 
@@ -114,7 +114,7 @@
     arg: ['avg', 'ec50', 'lambda', 'std']
     value: [7, 2, 0, 0.3]
   index_vars:
-  exp_err: ZeroDivisionError
+  exp_err: FermatricaError
   expected_type: array
   expected_result: [0]
 
@@ -192,8 +192,8 @@
   exp_err: False
   expected_type: array
   expected_result:
-    object: [0. , 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0,
-                  36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0, 36.0]
+    object: [0. , 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0,
+                  9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0]
 
 - description: test_softmax_zero_lambda_ec50_scale function testing case 16
   data: sample_data
@@ -201,7 +201,7 @@
     arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
     value: [7, 2, 0, 0.3, 'avg_max']
   index_vars:
-  exp_err: ZeroDivisionError
+  exp_err: FermatricaError
   expected_type: array
   expected_result: [0]
 

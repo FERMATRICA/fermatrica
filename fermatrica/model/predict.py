@@ -22,6 +22,7 @@ Useful links:
 
 import copy
 import inspect
+import re
 import numpy as np
 import pandas as pd
 import warnings
@@ -205,7 +206,7 @@ def _predict_worker(ds: pd.DataFrame
                             return None, None, None
                         else:
                             return None
-
+                        
             case 'FE':
 
                 fermatrica_error('FE model type for panel models is not yet implemented. Use LME instead')

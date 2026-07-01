@@ -5,6 +5,7 @@ numpy>=1.26.4
 pandas>=2.0.3
 scipy>=1.9.3
 statsmodels>=0.13.1
+bottleneck>=1.3.7  # optional: enables algo='fast' in mar transformation
 nlopt>=2.7.1
 plotly>=5.12.0
 yaml>=0.2.5

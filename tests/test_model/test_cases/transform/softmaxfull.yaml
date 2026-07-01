@@ -28,7 +28,7 @@
     arg: ['avg', 'lambda', 'std']
     value: [14, 0, 0.3]
   index_vars:
-  exp_err: False
+  exp_err: FermatricaError
   expected_type: array
   expected_result:
     object: [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
@@ -114,7 +114,7 @@
     arg: ['avg', 'ec50', 'lambda', 'std']
     value: [7, 2, 0, 0.3]
   index_vars:
-  exp_err: False
+  exp_err: FermatricaError
   expected_type: array
   expected_result:
     object: [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
@@ -201,7 +201,7 @@
     arg: ['avg', 'ec50', 'lambda', 'std', 'scale']
     value: [7, 2, 0, 0.3, 'avg_max']
   index_vars:
-  exp_err: False
+  exp_err: FermatricaError
   expected_type: array
   expected_result:
     object: [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,

@@ -36,7 +36,8 @@ def optimize_local_cobyla(ds: pd.DataFrame
                           , epochs: int = 3
                           , iters_epoch: int = 300
                           , error_score: float = 1e+12
-                          , ftol_abs: float = .01):
+                          , ftol_abs: float = .01
+                          , bounds_rel_distance: float = 0.0):
     """
     Wrapper for COBYLA constrained optimization by local approximations algorithm (local). COBYLA
     is derivative-free, so no analytical gradient is required.
@@ -71,10 +72,14 @@ def optimize_local_cobyla(ds: pd.DataFrame
     :param iters_epoch: number of objective function calculations per epoch
     :param error_score: extremely big value to be used as score if fit_predict returns None (error)
     :param ftol_abs: early stop threshold: minimum absolute score gain per iteration, see description
+    :param bounds_rel_distance: relative distance from bounds to nudge start values inward, as fraction \
+        of bound range (0.01 = 1 %). If > 0, start values closer than this fraction to either bound \
+        are pushed to maintain the margin. Default 0.0 (no adjustment).
     :return: tuned Model
     """
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")
@@ -91,13 +96,22 @@ def optimize_local_cobyla(ds: pd.DataFrame
                                           , error_score=error_score
                                           , verbose=verbose)
 
-        start_values = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]['value'].values.tolist()
+        start_values = params_subset['value'].values.tolist()
+
+        lower = params_subset['lower'].values.astype(float)
+        upper = params_subset['upper'].values.astype(float)
+
+        if bounds_rel_distance > 0:
+            margins = bounds_rel_distance * (upper - lower)
+            start_values = np.maximum(start_values, lower + margins)
+            start_values = np.minimum(start_values, upper - margins)
+            start_values = start_values.tolist()
 
         opt_obj = nlopt.opt(nlopt.LN_COBYLA, len(start_values))
 
         opt_obj.set_min_objective(objective_fun)
-        opt_obj.set_lower_bounds(params_subset['lower'].values)
-        opt_obj.set_upper_bounds(params_subset['upper'].values)
+        opt_obj.set_lower_bounds(lower)
+        opt_obj.set_upper_bounds(upper)
 
         opt_obj.set_ftol_abs(ftol_abs)
         opt_obj.set_maxeval(iters_epoch)
@@ -135,7 +149,8 @@ def optimize_local_bobyqa(ds: pd.DataFrame
                           , epochs: int = 3
                           , iters_epoch: int = 300
                           , error_score: float = 1e+12
-                          , ftol_abs: float = .01):
+                          , ftol_abs: float = .01
+                          , bounds_rel_distance: float = 0.0):
     """
     Wrapper for BOBYQA constrained optimization by local approximations algorithm (local). BOBYQA
     is derivative-free, so no analytical gradient is required.
@@ -170,10 +185,14 @@ def optimize_local_bobyqa(ds: pd.DataFrame
     :param iters_epoch: number of objective function calculations per epoch
     :param error_score: extremely big value to be used as score if fit_predict returns None (error)
     :param ftol_abs: early stop threshold: minimum absolute score gain per iteration, see description
+    :param bounds_rel_distance: relative distance from bounds to nudge start values inward, as fraction \
+        of bound range (0.01 = 1 %). If > 0, start values closer than this fraction to either bound \
+        are pushed to maintain the margin. Default 0.0 (no adjustment).
     :return: tuned Model
     """
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")
@@ -190,13 +209,22 @@ def optimize_local_bobyqa(ds: pd.DataFrame
                                           , error_score=error_score
                                           , verbose=verbose)
 
-        start_values = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]['value'].values.tolist()
+        start_values = params_subset['value'].values.tolist()
+
+        lower = params_subset['lower'].values.astype(float)
+        upper = params_subset['upper'].values.astype(float)
+
+        if bounds_rel_distance > 0:
+            margins = bounds_rel_distance * (upper - lower)
+            start_values = np.maximum(start_values, lower + margins)
+            start_values = np.minimum(start_values, upper - margins)
+            start_values = start_values.tolist()
 
         opt_obj = nlopt.opt(nlopt.LN_BOBYQA, len(start_values))
 
         opt_obj.set_min_objective(objective_fun)
-        opt_obj.set_lower_bounds(params_subset['lower'].values)
-        opt_obj.set_upper_bounds(params_subset['upper'].values)
+        opt_obj.set_lower_bounds(lower)
+        opt_obj.set_upper_bounds(upper)
 
         opt_obj.set_ftol_abs(ftol_abs)
         opt_obj.set_maxeval(iters_epoch)
@@ -234,7 +262,8 @@ def optimize_local_sbplx(ds: pd.DataFrame
                          , epochs: int = 3
                          , iters_epoch: int = 300
                          , error_score: float = 1e+12
-                         , ftol_abs: float = .01):
+                         , ftol_abs: float = .01
+                         , bounds_rel_distance: float = 0.0):
     """
     Wrapper for Sblpx / Subplex constrained optimization by local approximations algorithm (local). Sblpx / Subplex
     is derivative-free, so no analytical gradient is required.
@@ -269,14 +298,21 @@ def optimize_local_sbplx(ds: pd.DataFrame
     :param iters_epoch: number of objective function calculations per epoch
     :param error_score: extremely big value to be used as score if fit_predict returns None (error)
     :param ftol_abs: early stop threshold: minimum absolute score gain per iteration, see description
+    :param bounds_rel_distance: relative distance from bounds to nudge start values inward, as fraction \
+        of bound range (0.01 = 1 %). If > 0, start values closer than this fraction to either bound \
+        are pushed to maintain the margin. Default 0.0 (no adjustment).
     :return: tuned Model
     """
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")
         return model
+
+    lower = params_subset['lower'].values.astype(float)
+    upper = params_subset['upper'].values.astype(float)
 
     for i in range(epochs):
 
@@ -291,11 +327,17 @@ def optimize_local_sbplx(ds: pd.DataFrame
 
         start_values = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]['value'].values.tolist()
 
+        if bounds_rel_distance > 0:
+            margins = bounds_rel_distance * (upper - lower)
+            start_values = np.maximum(start_values, lower + margins)
+            start_values = np.minimum(start_values, upper - margins)
+            start_values = start_values.tolist()
+
         opt_obj = nlopt.opt(nlopt.LN_SBPLX, len(start_values))
 
         opt_obj.set_min_objective(objective_fun)
-        opt_obj.set_lower_bounds(params_subset['lower'].values)
-        opt_obj.set_upper_bounds(params_subset['upper'].values)
+        opt_obj.set_lower_bounds(lower)
+        opt_obj.set_upper_bounds(upper)
 
         opt_obj.set_ftol_abs(ftol_abs)
         opt_obj.set_maxeval(iters_epoch)
@@ -334,7 +376,8 @@ def optimize_local_rbf(ds: pd.DataFrame
                        , iters_epoch: int = 300
                        , error_score: float = 1e+12
                        , cores: int = 4
-                       , ftol_abs: float = .01):
+                       , ftol_abs: float = .01
+                       , bounds_rel_distance: float = 0.0):
     """
     Surrogate-model-based optimization with parallel evaluation.
     Bayesian optimization using RBF surrogate model and Latin Hypercube Sampling.
@@ -348,11 +391,16 @@ def optimize_local_rbf(ds: pd.DataFrame
     :param error_score: extremely big value to be used as score if fit_predict returns None (error)
     :param cores: processor cores to be used in parallel computing
     :param ftol_abs: early stop threshold: minimum absolute score gain per iteration, see description
+    :param bounds_rel_distance: relative distance from bounds to nudge start values inward, as fraction \
+        of bound range (0.01 = 1 %). If > 0, start values closer than this fraction to either bound \
+        are pushed to maintain the margin. Default 0.0 (no adjustment).
     :return: tuned Model
 
     """
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
+
     start_values = params_subset['value'].values.tolist()
 
     if params_subset.empty:
@@ -369,8 +417,14 @@ def optimize_local_rbf(ds: pd.DataFrame
     n_params = len(params_subset)
     param_names = params_subset.index.tolist()
 
-    lb = params_subset['lower'].values
-    ub = params_subset['upper'].values
+    lb = params_subset['lower'].values.astype(float)
+    ub = params_subset['upper'].values.astype(float)
+
+    if bounds_rel_distance > 0:
+        margins = bounds_rel_distance * (ub - lb)
+        start_values = np.maximum(start_values, lb + margins)
+        start_values = np.minimum(start_values, ub - margins)
+        start_values = start_values.tolist()
 
     # generate initial points around model's current parameters
 
@@ -497,7 +551,8 @@ def optimize_local_ncma(ds: pd.DataFrame,
                         error_score: float = 1e+12,
                         cores: int = 4,
                         approach: str = 'init_sequent',
-                        save_epoch: bool | str = False):
+                        save_epoch: bool | str = False,
+                        bounds_rel_distance: float = 0.0):
     """
     Wrapper for CMA-ES optimization algorithm using nevergrad library. CMA-ES is a derivative-free
     global optimizer that maintains search history between iterations. It can handle bounds
@@ -515,10 +570,14 @@ def optimize_local_ncma(ds: pd.DataFrame,
     :param cores: processor cores to be used in parallel computing
     :param approach: 'void', 'init', 'sequent', 'init_sequent'
     :param save_epoch: if every epoch to be saved or path to the folder to save tuned models
+    :param bounds_rel_distance: relative distance from bounds to nudge start values inward, as fraction \
+        of bound range (0.01 = 1 %). If > 0, start values closer than this fraction to either bound \
+        are pushed to maintain the margin. Default 0.0 (no adjustment).
     :return: tuned Model of the last epoch
     """
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")
@@ -533,8 +592,8 @@ def optimize_local_ncma(ds: pd.DataFrame,
 
     # get parameter bounds
 
-    lwr = params_subset['lower'].values
-    upr = params_subset['upper'].values
+    lwr = params_subset['lower'].values.astype(float)
+    upr = params_subset['upper'].values.astype(float)
 
     lwr = np.nan_to_num(lwr, nan=-1e+8)
     upr = np.nan_to_num(upr, nan=1e+8)
@@ -556,6 +615,11 @@ def optimize_local_ncma(ds: pd.DataFrame,
 
     start_values = model.conf.params.loc[params_subset.index, 'value'].values
     param_names = params_subset.index.astype(str).tolist()
+
+    if bounds_rel_distance > 0:
+        margins = bounds_rel_distance * (upr - lwr)
+        start_values = np.maximum(start_values, lwr + margins)
+        start_values = np.minimum(start_values, upr - margins)
 
     best_score = objective_fun(params_cur=start_values.tolist())
 

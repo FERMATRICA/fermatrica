@@ -10,10 +10,11 @@ import os
 import numpy as np
 import pandas as pd
 import re
+import sys
 
 from line_profiler_pycharm import profile
 
-from fermatrica_utils import pandas_tree_final_child, StableClass, sr_na
+from fermatrica_utils import pandas_tree_final_child, StableClass, sr_na, fermatrica_warner
 from fermatrica.basics.basics import fermatrica_error
 
 
@@ -84,6 +85,12 @@ class ModelConf(StableClass):
         if ds is not None:
             self.params = params_expand(ds=ds, params=self.params)
 
+        # params checks
+        self._check_if_if_active_stable()
+        self._check_if_set_start_fixed()
+        self._check_if_following_fixed()
+        self._check_opt_bounds()
+
         # read RHS
         self.model_rhs = pd.read_excel(self._path, sheet_name='RHS')
 
@@ -142,7 +149,11 @@ class ModelConf(StableClass):
         if 'exclude_curve' in model_setup['key'].unique():
             self.exclude_curve = model_setup[model_setup['key'] == 'exclude_curve']['value'].astype('str').to_list()
 
-        model_setup = model_setup[~model_setup['key'].isin(['bs_key', 'target_audience', 'lme_method', 'conversion_fun', 'exclude_from_curves', 'exclude_curve']) & model_setup['value'].notna()]
+        if 'display_var_base' in model_setup['key'].unique():
+            self.display_var_base = model_setup[model_setup['key'] == 'display_var_base']['value'].iloc[0]
+            self.display_var_base = str(self.display_var_base)
+
+        model_setup = model_setup[~model_setup['key'].isin(['bs_key', 'target_audience', 'lme_method', 'conversion_fun', 'exclude_from_curves', 'exclude_curve', 'display_var_base']) & model_setup['value'].notna()]
         model_setup.apply(lambda x: setattr(self, x['key'], x['value']), axis=1)
 
         self._check_setup(ds)
@@ -196,39 +207,189 @@ class ModelConf(StableClass):
 
         if not hasattr(self, 'Y_var'):
             self.Y_var = 'units'
-            logging.warning("Model definition : Setup : `Y_var` value missed, set to default `units`")
+            fermatrica_warner.warning("Model definition : Setup : `Y_var` value missed, set to default `units`")
 
         if not hasattr(self, 'price_var'):
             self.price_var = 'price_distr'
-            logging.warning("Model definition : Setup : `price_var` value missed, set to default `price_distr`")
+            fermatrica_warner.warning("Model definition : Setup : `price_var` value missed, set to default `price_distr`")
 
         if isinstance(ds, pd.DataFrame) and self.price_var not in ds.columns:
-            logging.warning("Model definition : Setup : price variable`" + self.price_var +
+            fermatrica_warner.warning("Model definition : Setup : price variable`" + self.price_var +
                             "` column not found in the dataset, calculations could result in error")
 
         if not hasattr(self, 'conversion_var') or self.conversion_var == '':
             self.conversion_var = None
-            logging.warning("Model definition : Setup : `conversion_var` value missed (it's OK if no conversion is expected)")
+            fermatrica_warner.warning("Model definition : Setup : `conversion_var` value missed (it's OK if no conversion is expected)")
 
         if not hasattr(self, 'model_type') or self.model_type is None or self.model_type == '':
             self.model_type = 'OLS'
-            logging.warning("Model definition : Setup : `model_type` value missed, set to default `OLS`")
+            fermatrica_warner.warning("Model definition : Setup : `model_type` value missed, set to default `OLS`")
 
         if not hasattr(self, 'summary_type') or self.summary_type is None or self.summary_type == '':
             self.summary_type = 'sum'
-            logging.warning("Model definition : Setup : `summary_type` value missed, set to default `sum`." +\
-                            " Acceptable values: `sum`, `fin` / `mean_fin`")
+            fermatrica_warner.warning("Model definition : Setup : `summary_type` value missed, set to default `sum`." +\
+                            " Acceptable values: `sum`, `mean`, `fin`, `mean_fin`")
                             
         if not hasattr(self, 'lme_estimation_method') or self.lme_estimation_method is None or self.lme_estimation_method == '':
             self.lme_estimation_method = 'reml'
-            logging.warning("Model definition : Setup : `lme_estimation_method` value missed, set to default `reml`." +\
+            fermatrica_warner.warning("Model definition : Setup : `lme_estimation_method` value missed, set to default `reml`." +\
                             " Acceptable values: `ml`, `reml`")
+
+        if not hasattr(self, 'display_var_base') or self.display_var_base is None or self.display_var_base == '':
+            self.display_var_base = 'base'
+            fermatrica_warner.warning("Model definition : Setup : `display_var_base` value missed, set to default `base`")
 
         model_type_allowed = ['OLS', 'LME', 'LMEA', 'FE']
         if self.model_type not in model_type_allowed:
             fermatrica_error("Model type `" + self.model_type + "` not recognized. Please select one of " + str(model_type_allowed))
 
         pass
+
+    def _check_opt_bounds(self):
+        """Check the validity of optimization boundaries.
+
+        Parameters
+        ----------
+        params_subset : pd.DataFrame
+            Pandas DataFrame specifying the bounds and starting values for each parameter.
+
+        """
+
+        mask_main = (self.params['if_active'] == 1) & (self.params['fixed'] == 0)
+        params_subset = self.params[mask_main].copy()
+
+        # replace empty string in 'lower' and 'upper' with NaN
+
+        params_subset['lower'] = params_subset['lower'].replace('', pd.NA)
+        params_subset['upper'] = params_subset['upper'].replace('', pd.NA)
+
+        # set missing bounds to large finite values
+
+        mask = params_subset['lower'].isnull()
+        if mask.any():
+
+            # Fill NA in 'variable', 'fun', 'arg' with string 'NA' for display
+            missed = (
+                params_subset.loc[mask, 'variable'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'fun'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'arg'].fillna('NA').astype(str)
+            )
+            fermatrica_warner.warning(f"No lower bounds specified for parameters: {missed.tolist()}. Setting to -1e20.")
+
+            params_subset.loc[mask, 'lower'] = -1e20
+
+        mask = params_subset['upper'].isnull()
+        if mask.any():
+
+            missed = (
+                params_subset.loc[mask, 'variable'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'fun'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'arg'].fillna('NA').astype(str)
+            )
+            fermatrica_warner.warning(f"No upper bounds specified for parameters: {missed.tolist()}. Setting to +1e20.")
+
+            params_subset.loc[mask, 'upper'] = 1e20
+
+        # check bounds validity
+
+        mask = params_subset['lower'] > params_subset['value']
+
+        if mask.any():
+            missed = (
+                params_subset.loc[mask, 'variable'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'fun'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'arg'].fillna('NA').astype(str)
+            )
+            fermatrica_warner.warning(f"Invalid lower bounds for parameters: {missed.tolist()}. Lower bound reset to be less than or equal to starting value.")
+
+            params_subset.loc[mask, 'lower'] = params_subset.loc[mask, 'value']
+
+        mask = params_subset['upper'] < params_subset['value']
+
+        if mask.any():
+            missed = (
+                params_subset.loc[mask, 'variable'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'fun'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'arg'].fillna('NA').astype(str)
+            )
+            fermatrica_warner.warning(f"Invalid upper bounds for parameters: {missed.tolist()}. Upper bound reset to be greater than or equal to starting value.")
+
+            params_subset.loc[mask, 'upper'] = params_subset.loc[mask, 'value']
+
+        #
+
+        self.params[mask_main] = params_subset.copy()
+
+    def _check_if_set_start_fixed(self):
+        """Check if the parameters with set_start == 1 are fixed."""
+
+        params_subset = self.params.copy()
+
+        mask = (params_subset['set_start'] == 1) & (params_subset['fixed'] == 0)
+
+        if mask.any():
+
+            # Fill NA in 'variable', 'fun', 'arg' with string 'NA' for display
+            missed = (
+                params_subset.loc[mask, 'variable'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'fun'].fillna('NA').astype(str) + '_' +
+                params_subset.loc[mask, 'arg'].fillna('NA').astype(str)
+            )
+            fermatrica_warner.warning(f"Parameters with set_start == 1 are not fixed: {missed.tolist()}. Setting fixed to 1.")
+            params_subset.loc[mask, 'fixed'] = 1
+
+        self.params = params_subset
+
+    def _check_if_following_fixed(self):
+        """Check if the parameters, which are supposed to follow other parameters, are fixed."""
+
+        params_subset = self.params.copy()
+
+        mask = (params_subset.if_active == 1) & (params_subset.fun == 'follow_me')
+
+        if mask.any():
+
+            master_params = params_subset[mask][['variable', 'arg', 'value']]
+
+            need_to_be_fixed = []
+            for master_feature in master_params.variable.unique():
+                master_params_subset = master_params[master_params['variable'] == master_feature]
+                who_follows = [x.strip() for x in master_params_subset[master_params_subset.arg == 'who'].value.values[0].split(',')]
+                what_follows = master_params_subset[master_params_subset.arg == 'what'].value.values[0].strip()
+                which_follows = [x.strip() for x in master_params_subset[master_params_subset.arg == 'which'].value.values[0].split(',')]
+                need_to_be_fixed.extend([[x, what_follows, y] for x in who_follows for y in which_follows])
+
+            for [var,fun, arg] in need_to_be_fixed:
+                mask = (params_subset['variable'] == var) & (params_subset['fun'] == fun) & (params_subset['arg'] == arg)
+                if mask.any():
+                    params_subset.loc[mask, 'fixed'] = 1
+                    fermatrica_warner.warning(f"Parameter {var}_{fun}_{arg} is set to follow another parameter, but is not fixed. It will be set to fixed automatically.")
+
+        self.params = params_subset
+
+    def _check_if_if_active_stable(self):
+        """Check if the transformations have stable if_active, meaning that all the parameters
+        of this transformation are either active or inactive."""
+
+        params_subset = self.params[(self.params['variable'].notna()) & (self.params['variable'] != '')].copy()
+
+        unique_transforms = params_subset[['variable','fun']].drop_duplicates()
+        unique_transforms['if_active_stable'] = unique_transforms.apply(lambda x: params_subset[(params_subset['variable'] == x['variable']) & (params_subset['fun'] == x['fun'])]['if_active'].nunique() == 1, axis=1)
+
+        mask = (unique_transforms['if_active_stable'] == False)
+
+        if mask.any():
+
+            # Fill NA in 'variable', 'fun', 'arg' with string 'NA' for display
+            missed = (
+                unique_transforms.loc[mask, 'variable'].fillna('NA').astype(str) + '_' +
+                unique_transforms.loc[mask, 'fun'].fillna('NA').astype(str)
+            )
+
+            fermatrica_error(f"These transformations have unstable value of 'if_active': {missed.tolist()}. It means that inside one " +
+                             f"transformation some parameters are active and some are not, which is not allowed. Please set 'if_active' " +
+                             f"for all the parameters the same for each transformation.")
+
 
     def _check_model(self):
         """
@@ -237,14 +398,28 @@ class ModelConf(StableClass):
         :return:
         """
 
+        # create display_var in RHS if not exists
+
         if 'display_var' not in self.model_rhs.columns:
             self.model_rhs['display_var'] = self.model_rhs['token']
+
+        # trim tokens (a bit weird, but required so)
 
         mask = ~sr_na(self.model_rhs['token'])
         self.model_rhs.loc[mask, 'token'] = (self.model_rhs.loc[mask, 'token'].str.
                                              replace(r' *\+ *', ' + ', regex=True))
         self.model_rhs.loc[mask, 'token'] = (self.model_rhs.loc[mask, 'token'].str.
                                              replace(r' *: *', ':', regex=True))
+
+        # trim params
+
+        cols = [x for x in self.params.columns if x in ['variable', 'fun', 'arg']]
+
+        for col in cols:
+            mask = ~sr_na(self.params[col])
+            self.params.loc[mask, col] = self.params.loc[mask, col].str.strip()
+
+        # set missed display_var in LHS and RHS to token / name
 
         self.model_rhs.loc[self.model_rhs['display_var'].isna(), 'display_var'] = self.model_rhs.loc[self.model_rhs['display_var'].isna(), 'token']
 
@@ -405,8 +580,13 @@ def params_expand(ds: pd.DataFrame
     if params_subset.shape[0] == 0:
         return params
 
-    params_subset['index_free_var'] = params_subset['index_free_var'].apply(
-        lambda x: [x + '___' + y for y in ds[ds['listed'] == 2][x].unique()])
+    try:
+        params_subset['index_free_var'] = params_subset['index_free_var'].apply(
+            lambda x: [x + '___' + y for y in ds[ds['listed'] == 2][x].unique()])
+    except TypeError as e:
+        fermatrica_error(f"You might have non-string values in index_free_var column. It is common when using 'bs_key' or something. " + 
+                         f"Please make 'bs_key' strings, i.e. adding prefix like 'b', or use another variable")
+        return params
 
     params_subset = params_subset.explode('index_free_var').reset_index(drop=True)
 
@@ -414,4 +594,5 @@ def params_expand(ds: pd.DataFrame
     params = params.drop('index', axis=1).reset_index().drop('index', axis=1)
 
     return params
+
 

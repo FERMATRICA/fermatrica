@@ -16,7 +16,8 @@ from fermatrica_utils import DotDict, select_eff
 def market_resize_flex(ds: pd.DataFrame
                        , y: pd.Series | np.ndarray
                        , wght: int | float = 1
-                       , if_listed_1: bool = True) -> pd.Series:
+                       , if_listed_1: bool = True
+                       , groupby: list[str] | tuple[str, ...] = ('market', )) -> pd.Series:
     """
     Resize main model by additional category model with some discount.
     Use it to simulate competition. More flexible than `market_resize`
@@ -30,19 +31,22 @@ def market_resize_flex(ds: pd.DataFrame
     :param y: predicted Y (target variable)
     :param wght: weight for correction by category prediction
     :param if_listed_1: if True, use also products with `listed` = 1 for category calculation
+    :param groupby: if not None, groupby columns for category prediction (e.g. ['market'])
     :return: predicted Y (target variable)
     """
 
-    ds = select_eff(ds, ['bs_key', 'date', 'listed', 'market', 'pred_mrk'])
+    groupby = list(groupby)
+
+    ds = select_eff(ds, ['bs_key', 'date', 'listed', 'pred_mrk'] + groupby).copy()
     ds['y'] = y
 
     listed_threshold = 1 if if_listed_1 else 2
 
-    tmp = ds.loc[ds['listed'] >= listed_threshold].groupby(['date', 'market', 'pred_mrk'], as_index=False)['y'].sum()
-    tmp = tmp.set_index(['date', 'market'])
+    tmp = ds.loc[ds['listed'] >= listed_threshold].groupby(['date', 'pred_mrk'] + groupby, as_index=False)['y'].sum()
+    tmp = tmp.set_index(['date'] + groupby)
     tmp['resize'] = tmp['y'] / tmp['pred_mrk']
 
-    ds = ds.join(select_eff(tmp, ['resize']), on=['date', 'market'], how='left', sort=False)
+    ds = ds.join(select_eff(tmp, ['resize']), on=['date'] + groupby, how='left', sort=False)
     y_series = ds['y'] * ((1 - wght) + wght / ds['resize'])
 
     return y_series

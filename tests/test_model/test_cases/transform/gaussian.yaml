@@ -102,3 +102,16 @@
     data: [13.70955, 13.35494, 10.01037, 5.7736, 2.56232, 0.875, 0.22992, 0.04649, 0.00723, 0.00087, 8e-05, 1e-05, 0.0,
            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     name: 'var'
+
+- description: test_guassian_missing_if_scale_mean regression testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['amplitude', 'expvalue', 'hwhm']
+    value: [14, 0.4, 2.3]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [13.70955, 13.35494, 10.01037, 5.7736, 2.56232, 0.875, 0.22992, 0.04649, 0.00723, 0.00087, 8e-05, 1e-05, 0.0,
+           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    name: 'var'

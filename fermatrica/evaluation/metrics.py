@@ -19,6 +19,7 @@ from statsmodels.tools.tools import add_constant
 from statsmodels.stats.diagnostic import acorr_ljungbox
 from statsmodels.stats.weightstats import ztest as st_ztest
 from statsmodels.tsa.stattools import adfuller as st_adfuller
+from statsmodels.tsa.stattools import kpss as st_kpss
 
 from fermatrica_utils import rm_1_item_groups
 
@@ -1030,4 +1031,76 @@ def poolability(model: "Model"
 
     return rtrn
 
+def kpss(obs_resid: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list = None
+             , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+             , model: "Model | None" = None
+             , group: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None
+             , reduce: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list | None = None):
+    """
+    KPSS test. Assumes OLS or LME linear model as `model.obj.models['main']`
 
+    H0: residuals is a stationary process
+    H1: there is a unit root in residuals (non-stationarity)
+    So, P-value <= 1% is bad, P-value > 1% is good
+
+    :param obs_resid: vector with observed values (Y) or residulas vector if `pred` is `None`
+    :param pred: vector with predicted values (Y-hat) or `None`
+    :param model: FERMATRICA Model object or `None`. If `obs` is provided, `model` argument is ignored
+    :param group: vector with grouping values, e.g. 'superbrand'
+    :param reduce: if dataset's entity differs from `group`, additional vector to group by before metrics calculation,
+        e.g. 'date'
+    :return:
+    """
+
+    # calculate residuals if not provided directly
+
+    if model is not None and obs_resid is None:
+
+        if not isinstance(model.obj.models['main'].model, OLS | OLSResults | MixedLM | MixedLMResults | MixedLMResultsWrapper):
+            logging.error(
+                'KPSS test cannot be calculated. Supported model types: OLS, LME. ' +
+                'Please change the model type to OLS or LME.')
+            return 0
+
+        obs_resid = model.obj.models['main'].model.fit().resid
+        pred = None
+
+    if pred is not None and len(obs_resid) != len(pred):
+        fermatrica_error("Error in calculation of KPSS test: length of observed vector is not equal to length of predicted")
+    if group is not None and len(obs_resid) != len(group):
+        fermatrica_error("Error in calculation of KPSS test by group: " +
+                         "length of observed vector is not equal to length of grouping vector")
+
+    if pred is not None:
+        obs_resid = obs_resid - pred
+
+    if group is None:
+        group = np.zeros(len(obs_resid))
+
+    # combine
+
+    if reduce is None:
+        tmp = pd.DataFrame(data={'obs_resid': obs_resid
+                                 , 'group': group})
+
+    else:
+        if len(obs_resid) != len(reduce):
+            fermatrica_error(
+                "Error in calculation of KPSS test by group: length of observed vector is not equal to length of reduce vector")
+
+        tmp = pd.DataFrame(data={'obs_resid': obs_resid
+                                 , 'group': group
+                                 , 'reduce': reduce})
+
+        tmp = tmp.groupby(['group', 'reduce'], as_index=False)[['obs_resid']].sum()
+
+    tmp = rm_1_item_groups(tmp, 'group')
+
+    # calculate
+
+    rtrn = tmp.groupby('group').apply(lambda x: st_kpss(x['obs_resid'], regression="ct")).reset_index()
+
+    rtrn[['kpss_stat', 'p_value', 'lags', 'crit']] = rtrn[0].tolist()
+    rtrn.drop(columns=[0], inplace=True)
+
+    return rtrn

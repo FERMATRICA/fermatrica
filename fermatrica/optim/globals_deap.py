@@ -110,7 +110,8 @@ def optimize_global_de(ds: pd.DataFrame,
 
     # problem setup
 
-    params_subset = model.conf.params[(model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)]
+    mask = (model.conf.params['if_active'] == 1) & (model.conf.params['fixed'] == 0)
+    params_subset = model.conf.params[mask]
 
     if params_subset.empty:
         logging.warning("No active non-fixed parameters to optimize")

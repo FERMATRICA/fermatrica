@@ -104,7 +104,7 @@
     model_objects: null
     model_rhs: !pd.DataFrame
       data:
-        token: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd : type_online']
+        token: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd:type_online']
         fixed: [1, 1]
         if_active: [1, 0]
         sign: [1, 1]
@@ -118,15 +118,15 @@
         fun: ['share', 'share', 'mar', 'mar', 'mar', 'mar', 'olololol', 'olololol', 'olololol']
         arg: ['coef_var', 'include_coef_var', 'n', 'n', 'if_scale', 'if_scale', 'olo', 'lol', 'dummy']
         lower: !pd.Series
-          data: [null, null, null, null, null, null, null, null, null]
+          data: [null, null, -1.0e+20, -1.0e+20, null, null, null, null, null]
           dtype: 'float64'
         upper: !pd.Series
-          data: [null, null, null, null, null, null, null, null, null]
+          data: [null, null, 1.0e+20, 1.0e+20, null, null, null, null, null]
           dtype: 'float64'
         value: [null, True, 5.0, 5.0, True, True, 'stroka', False, True]
         type: ['str', 'bool', 'float64', 'float64', 'bool', 'bool', 'str', 'bool', 'int']
         fixed: [1, 1, 0, 0, 1, 1, 1, 1, 1]
-        if_active: [1, 1, 1, 1, 1, 1, 1, 1, 0]
+        if_active: [1, 1, 1, 1, 1, 1, 1, 1, 1]
         index_vars: ['"market","date","listed"', '"market","date","listed"',  null, null, null, null, null, null, null]
         index_aggr: [null, null, null, null, null, null, null, null, null]
         index_free_var: [null, null, 'superbrand___brand', 'superbrand___super', 'superbrand___brand', 'superbrand___super', 'bs_key___3', 'bs_key___3', null]
@@ -164,7 +164,7 @@
         width: 0.3
     summary_type: 'sum'
     target_audience: ['target', 'audience']
-    target_superbrand: 'tefal_off'
+    target_superbrand: 'brand_off'
     trans_path_df: !pd.DataFrame
       data:
         variable: ['brnd_ots_all_25_45_rolik_nat', 'kpi_coef', 'brnd_clipl_all_25_45_rolik_nat']
@@ -200,7 +200,7 @@
     model_objects: null
     model_rhs: !pd.DataFrame
       data:
-        token: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd : type_online']
+        token: ['brnd_tv_ots_clip_wght_softmax_adstockpd', 'brnd_tv_ots_clip_wght_softmax_adstockpd:type_online']
         fixed: [1, 1]
         if_active: [1, 0]
         sign: [1, 1]
@@ -214,14 +214,16 @@
         fun: ['share', 'share', 'mar', 'mar', 'mar', 'mar', 'olololol', 'olololol', 'olololol']
         arg: ['coef_var', 'include_coef_var', 'n', 'n', 'if_scale', 'if_scale', 'olo', 'lol', 'dummy']
         lower: [null, null, -1, -1, null, null, null, null, null]
-        upper: [null, null, 1.45, 1.45, null, null, null, null, null]
+        upper: !pd.Series
+          data: [null, null, 5.0, 5.0, null, null, null, null, null]
+          dtype: 'object'
         value: [null, True, 5.0, 5.0, True, True, 'stroka', False, True]
         type: ['str', 'bool', 'float64', 'float64', 'bool', 'bool', 'str', 'bool', 'int']
         fixed: [1, 1, 0, 0, 1, 1, 1, 1, 1]
-        if_active: [1, 1, 1, 1, 1, 1, 1, 1, 0]
+        if_active: [1, 1, 1, 1, 1, 1, 1, 1, 1]
         index_vars: ['"market","date","listed"', '"market","date","listed"',  null, null, null, null, null, null, null]
         index_aggr: ['mfreq', 'mfreq', null, null, null, null, null, null, null]
-        index_free_var: [null, null, 'superbrand___0', 'superbrand___1', 'superbrand___0', 'superbrand___1', 'bs_key___3', 'bs_key___3', null]
+        index_free_var: [null, null, 'superbrand___brand_a', 'superbrand___brand_b', 'superbrand___brand_a', 'superbrand___brand_b', 'bs_key___3', 'bs_key___3', null]
         set_start: [0, 0, 0, 0, 0, 0, 0, 0, 0]
         formula: ["ds.loc[ds['listed']==2, 'my_units'].min()", null, null, null, null, null, null, null, null]
         index_free_var_work: !pd.Series
@@ -254,7 +256,7 @@
         width: 0.3
     summary_type: 'sum'
     target_audience: ['target', 'audience']
-    target_superbrand: 'tefal_off'
+    target_superbrand: 'brand_off'
     trans_path_df: !pd.DataFrame
       data:
         variable: ['ololo']

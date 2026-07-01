@@ -128,7 +128,7 @@ scalars, strings, tables.</p>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">StableClass</span><span class="p">,</span> <span class="n">import_module_from_string</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">StableClass</span><span class="p">,</span> <span class="n">import_module_from_string</span><span class="p">,</span> <span class="n">read_pickle_compat</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.basics.basics</span><span class="w"> </span><span class="kn">import</span> <span class="n">fermatrica_error</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">fermatrica.model.model_conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelConf</span>
@@ -440,27 +440,29 @@ scalars, strings, tables.</p>
 </span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a><span class="sd">    :return:</span>
 </span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>
-</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>    <span class="k">with</span> <span class="n">lzma</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>        <span class="n">model_obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">pickle_compat</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>  <span class="c1"># use pickle_compat to avoid errors</span>
-</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
+</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>    <span class="n">model_obj</span> <span class="o">=</span> <span class="n">read_pickle_compat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="c1"># with lzma.open(path, &#39;rb&#39;) as handle:</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="c1">#     model_obj = pd.compat.pickle_compat.load(handle)  # use pickle_compat to avoid errors</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>
-</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>
-</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="k">def</span><span class="w"> </span><span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
-</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">    Remove callable objects from ModelObj object before pickling (could be not pickable)</span>
-</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>
-</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">    :param model_obj: ModelObj object</span>
-</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a><span class="sd">    :return:</span>
-</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>
-</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;transform_lhs_fn&#39;</span><span class="p">):</span>
-</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">transform_lhs_fn</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>
-</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;custom_predict_fn&#39;</span><span class="p">):</span>
-</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">custom_predict_fn</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>
-</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
+</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
+</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>
+</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a>
+</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="k">def</span><span class="w"> </span><span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">    Remove callable objects from ModelObj object before pickling (could be not pickable)</span>
+</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>
+</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="sd">    :param model_obj: ModelObj object</span>
+</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a><span class="sd">    :return:</span>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>
+</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;transform_lhs_fn&#39;</span><span class="p">):</span>
+</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">transform_lhs_fn</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>
+</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;custom_predict_fn&#39;</span><span class="p">):</span>
+</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">custom_predict_fn</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>
+</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
 </span></pre></div>
 
 
@@ -1210,10 +1212,12 @@ as well.</p>
 </span><span id="load-327"><a href="#load-327"><span class="linenos">327</span></a><span class="sd">    :return:</span>
 </span><span id="load-328"><a href="#load-328"><span class="linenos">328</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="load-329"><a href="#load-329"><span class="linenos">329</span></a>
-</span><span id="load-330"><a href="#load-330"><span class="linenos">330</span></a>    <span class="k">with</span> <span class="n">lzma</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-</span><span id="load-331"><a href="#load-331"><span class="linenos">331</span></a>        <span class="n">model_obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">pickle_compat</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>  <span class="c1"># use pickle_compat to avoid errors</span>
-</span><span id="load-332"><a href="#load-332"><span class="linenos">332</span></a>
-</span><span id="load-333"><a href="#load-333"><span class="linenos">333</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
+</span><span id="load-330"><a href="#load-330"><span class="linenos">330</span></a>    <span class="n">model_obj</span> <span class="o">=</span> <span class="n">read_pickle_compat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="load-331"><a href="#load-331"><span class="linenos">331</span></a>
+</span><span id="load-332"><a href="#load-332"><span class="linenos">332</span></a>    <span class="c1"># with lzma.open(path, &#39;rb&#39;) as handle:</span>
+</span><span id="load-333"><a href="#load-333"><span class="linenos">333</span></a>    <span class="c1">#     model_obj = pd.compat.pickle_compat.load(handle)  # use pickle_compat to avoid errors</span>
+</span><span id="load-334"><a href="#load-334"><span class="linenos">334</span></a>
+</span><span id="load-335"><a href="#load-335"><span class="linenos">335</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
 </span></pre></div>
 
 
@@ -1241,21 +1245,21 @@ as well.</p>
 
     </div>
     <a class="headerlink" href="#prepickle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="prepickle-336"><a href="#prepickle-336"><span class="linenos">336</span></a><span class="k">def</span><span class="w"> </span><span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
-</span><span id="prepickle-337"><a href="#prepickle-337"><span class="linenos">337</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="prepickle-338"><a href="#prepickle-338"><span class="linenos">338</span></a><span class="sd">    Remove callable objects from ModelObj object before pickling (could be not pickable)</span>
-</span><span id="prepickle-339"><a href="#prepickle-339"><span class="linenos">339</span></a>
-</span><span id="prepickle-340"><a href="#prepickle-340"><span class="linenos">340</span></a><span class="sd">    :param model_obj: ModelObj object</span>
-</span><span id="prepickle-341"><a href="#prepickle-341"><span class="linenos">341</span></a><span class="sd">    :return:</span>
-</span><span id="prepickle-342"><a href="#prepickle-342"><span class="linenos">342</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="prepickle-343"><a href="#prepickle-343"><span class="linenos">343</span></a>
-</span><span id="prepickle-344"><a href="#prepickle-344"><span class="linenos">344</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;transform_lhs_fn&#39;</span><span class="p">):</span>
-</span><span id="prepickle-345"><a href="#prepickle-345"><span class="linenos">345</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">transform_lhs_fn</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="prepickle-346"><a href="#prepickle-346"><span class="linenos">346</span></a>
-</span><span id="prepickle-347"><a href="#prepickle-347"><span class="linenos">347</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;custom_predict_fn&#39;</span><span class="p">):</span>
-</span><span id="prepickle-348"><a href="#prepickle-348"><span class="linenos">348</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">custom_predict_fn</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="prepickle-349"><a href="#prepickle-349"><span class="linenos">349</span></a>
-</span><span id="prepickle-350"><a href="#prepickle-350"><span class="linenos">350</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="prepickle-338"><a href="#prepickle-338"><span class="linenos">338</span></a><span class="k">def</span><span class="w"> </span><span class="nf">prepickle</span><span class="p">(</span><span class="n">model_obj</span><span class="p">:</span> <span class="n">ModelObj</span><span class="p">):</span>
+</span><span id="prepickle-339"><a href="#prepickle-339"><span class="linenos">339</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="prepickle-340"><a href="#prepickle-340"><span class="linenos">340</span></a><span class="sd">    Remove callable objects from ModelObj object before pickling (could be not pickable)</span>
+</span><span id="prepickle-341"><a href="#prepickle-341"><span class="linenos">341</span></a>
+</span><span id="prepickle-342"><a href="#prepickle-342"><span class="linenos">342</span></a><span class="sd">    :param model_obj: ModelObj object</span>
+</span><span id="prepickle-343"><a href="#prepickle-343"><span class="linenos">343</span></a><span class="sd">    :return:</span>
+</span><span id="prepickle-344"><a href="#prepickle-344"><span class="linenos">344</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="prepickle-345"><a href="#prepickle-345"><span class="linenos">345</span></a>
+</span><span id="prepickle-346"><a href="#prepickle-346"><span class="linenos">346</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;transform_lhs_fn&#39;</span><span class="p">):</span>
+</span><span id="prepickle-347"><a href="#prepickle-347"><span class="linenos">347</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">transform_lhs_fn</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="prepickle-348"><a href="#prepickle-348"><span class="linenos">348</span></a>
+</span><span id="prepickle-349"><a href="#prepickle-349"><span class="linenos">349</span></a>    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;custom_predict_fn&#39;</span><span class="p">):</span>
+</span><span id="prepickle-350"><a href="#prepickle-350"><span class="linenos">350</span></a>        <span class="n">model_obj</span><span class="o">.</span><span class="n">custom_predict_fn</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="prepickle-351"><a href="#prepickle-351"><span class="linenos">351</span></a>
+</span><span id="prepickle-352"><a href="#prepickle-352"><span class="linenos">352</span></a>    <span class="k">return</span> <span class="n">model_obj</span>
 </span></pre></div>
 
 

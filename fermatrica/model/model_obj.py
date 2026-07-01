@@ -14,7 +14,7 @@ import pickle
 import re
 from typing import Callable
 
-from fermatrica_utils import StableClass, import_module_from_string
+from fermatrica_utils import StableClass, import_module_from_string, read_pickle_compat
 
 from fermatrica.basics.basics import fermatrica_error
 from fermatrica.model.model_conf import ModelConf
@@ -326,8 +326,10 @@ def load(path: str) -> ModelObj:
     :return:
     """
 
-    with lzma.open(path, 'rb') as handle:
-        model_obj = pd.compat.pickle_compat.load(handle)  # use pickle_compat to avoid errors
+    model_obj = read_pickle_compat(path)
+
+    # with lzma.open(path, 'rb') as handle:
+    #     model_obj = pd.compat.pickle_compat.load(handle)  # use pickle_compat to avoid errors
 
     return model_obj
 

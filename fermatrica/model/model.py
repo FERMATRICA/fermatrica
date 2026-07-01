@@ -36,7 +36,7 @@ import re
 import zstandard
 from typing import Callable
 
-from fermatrica_utils import StableClass, listdir_abs
+from fermatrica_utils import StableClass, listdir_abs, read_pickle_compat
 
 from fermatrica.basics.basics import fermatrica_error, FermatricaError
 from fermatrica.model.model_conf import ModelConf
@@ -262,9 +262,8 @@ def model_load_ext(model_path: str
 
     if len(dt_p_fl) == 1:
         dt_p_fl = dt_p_fl[0]
-
-        with zstandard.open(dt_p_fl, 'rb') as handle:
-            dt_p = pickle.load(handle)
+        dt_p = read_pickle_compat(dt_p_fl)
+        
     elif model is not None:
         dt_p = model.obj.models['main'].model.data.frame
 

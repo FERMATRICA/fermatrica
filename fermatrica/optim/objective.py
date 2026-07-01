@@ -423,7 +423,7 @@ def _save_model(model_iter: "Model"
 
         model_iter = transform(ds=ds
                                , model=model_iter
-                               , set_start=False
+                               , set_start=True
                                , if_by_ref=True)
 
         pred, pred_raw, model_iter = fit_predict(ds=ds

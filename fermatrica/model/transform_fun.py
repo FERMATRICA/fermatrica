@@ -3,52 +3,10 @@ Transformation functions per se: working (mostly) with vectors. Returned value i
 containing new, transformed variable.
 
 For medium- and high-level wrappers see `fermatrica.model.transform`.
-
------------------------------------------------
-
-The function `recursive_filter` has the specific license, different form the license of the other source code of the file
-and of the whole project. The function `recursive_filter` is adopted with some modification from `statsmodels` library
-and is redistributed under BSD-3-Clause License:
-
-"
-Copyright (C) 2006, Jonathan E. Taylor
-All rights reserved.
-
-Copyright (c) 2006-2008 Scipy Developers.
-All rights reserved.
-
-Copyright (c) 2009-2018 statsmodels Developers.
-All rights reserved.
-
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-  a. Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-  b. Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in the
-     documentation and/or other materials provided with the distribution.
-  c. Neither the name of statsmodels nor the names of its contributors
-     may be used to endorse or promote products derived from this software
-     without specific prior written permission.
-
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL STATSMODELS OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGE.
-"
 """
 
 
+import logging
 import math
 import re
 
@@ -56,9 +14,79 @@ from line_profiler_pycharm import profile
 import numpy as np
 import pandas as pd
 
-from scipy.stats import dweibull
+try:
+    import bottleneck as bn
+    _BN_AVAILABLE = True
+except ImportError:
+    _BN_AVAILABLE = False
+
+_logger = logging.getLogger(__name__)
+
 import scipy.signal as signal
 from statsmodels.tools.validation.validation import array_like
+
+from fermatrica.basics.basics import fermatrica_error
+
+
+"""
+Grouping helpers
+"""
+
+
+def _group_sort_info(group_codes: np.ndarray):
+    """
+    For an integer-encoded group label array, return the stable-sort permutation,
+    its inverse, the sorted codes, and the boundary positions where each group
+    starts in sorted order (with the total length appended).
+
+    Used to broadcast per-group vectorized operations on a flat numpy array
+    while preserving the original row order of the source frame.
+    """
+
+    order = np.argsort(group_codes, kind='stable')
+    inv = np.empty_like(order)
+    inv[order] = np.arange(order.shape[0], dtype=order.dtype)
+
+    sorted_codes = group_codes[order]
+    n_total = sorted_codes.shape[0]
+
+    if n_total == 0:
+        boundaries = np.array([0], dtype=np.intp)
+    else:
+        is_new = np.empty(n_total, dtype=bool)
+        is_new[0] = True
+        is_new[1:] = sorted_codes[1:] != sorted_codes[:-1]
+        boundaries = np.flatnonzero(is_new).astype(np.intp)
+        boundaries = np.append(boundaries, np.intp(n_total))
+
+    return order, inv, boundaries
+
+
+def _apply_grouped(arr: np.ndarray
+                   , group_codes: np.ndarray
+                   , fn) -> np.ndarray:
+    """
+    Apply `fn(slice) -> np.ndarray` independently to each group's contiguous rows
+    of `arr`, in the original row order, and return results in the original row order.
+
+    Replaces `groupby(...)[var].transform(lambda x: fn(x.to_numpy()))` without
+    per-group pandas overhead.  O(N log N) for the stable sort; O(N) thereafter.
+
+    `fn` must accept and return a 1-D float64 numpy array of the same length.
+    Within-group order passed to `fn` matches the original frame order because
+    `np.argsort(..., kind='stable')` preserves the relative order of equal elements.
+    """
+
+    order, inv, boundaries = _group_sort_info(group_codes)
+    sorted_arr = arr[order]
+    sorted_out = np.empty_like(sorted_arr, dtype=np.float64)
+
+    for i in range(boundaries.shape[0] - 1):
+        s = int(boundaries[i])
+        e = int(boundaries[i + 1])
+        sorted_out[s:e] = fn(sorted_arr[s:e])
+
+    return sorted_out[inv]
 
 
 """
@@ -66,62 +94,187 @@ Time series transformations
 """
 
 
-@profile
-def recursive_filter(x: pd.Series | np.ndarray | list
-                     , ar_coeff: pd.Series | np.ndarray | list
-                     , init=None):
+def lag(arr: np.ndarray
+            , group_codes: np.ndarray | None
+            , n: int
+            , cval: float = 0.0) -> np.ndarray:
     """
-    Autoregressive, or recursive, filtering.
-    More performance efficient version derived from statsmodel's.
+    Order-preserving positional lag of `arr` by `n` rows.
 
-    Computes the recursive filter ::
+    Behaves like `pd.Series.shift(n, fill_value=cval)` when `group_codes` is None,
+    and like `groupby(...)[var].shift(n, fill_value=cval)` (preserving original
+    row order; the lag is positional within each group as the rows appear in
+    the source frame) when `group_codes` is provided.
 
-        y[n] = ar_coeff[0] * y[n-1] + ...
-                + ar_coeff[n_coeff - 1] * y[n - n_coeff] + x[n]
-
-    where n_coeff = len(n_coeff).
-
-    :param x: array_like
-        Time-series 1d data as Pandas Series or Numpy array
-    :param ar_coeff: array_like
-        AR coefficients in reverse time order. See Notes for details.
-    :param init: array_like
-        Initial values of the time-series prior to the first value of y.
-        The default is zero.
-    :return: array_like
-        Filtered array, number of columns determined by x and ar_coeff. If x
-        is a pandas object than a Series is returned.
-
+    Pure-numpy implementation: O(N) plus an O(N log N) stable sort when grouped.
     """
 
-    if isinstance(x, pd.Series):
-        x = x.to_numpy(dtype=np.double, copy=True)
-    elif not isinstance(x, np.ndarray):
-        x = np.asarray(x, dtype=np.double, order=None)
+    n_total = arr.shape[0]
 
-    if isinstance(ar_coeff, pd.Series):
-        ar_coeff = ar_coeff.to_numpy(dtype=np.double, copy=True)
-    elif not isinstance(ar_coeff, np.ndarray):
-        ar_coeff = np.asarray(ar_coeff, dtype=np.double, order=None)
+    if n == 0:
+        return arr.astype(np.float64, copy=True)
 
-    if init is not None:  # integer init are treated differently in lfiltic
-        init = array_like(init, 'init')
-        if len(init) != len(ar_coeff):
-            raise ValueError("ar_coeff must be the same length as init")
+    if group_codes is None:
+        out = np.empty(n_total, dtype=np.float64)
+        if n >= n_total:
+            out[:] = cval
+        else:
+            out[:n] = cval
+            out[n:] = arr[:-n]
+        return out
 
-    if init is not None:
-        zi = signal.lfiltic([1], np.r_[1, -ar_coeff], init, x)
-    else:
-        zi = None
+    order, inv, boundaries = _group_sort_info(group_codes)
+    sorted_arr = arr[order]
 
-    y = signal.lfilter([1.], np.r_[1, -ar_coeff], x, zi=zi)
+    arange = np.arange(n_total, dtype=np.intp)
+    group_start = np.repeat(boundaries[:-1], np.diff(boundaries))
+    pos = arange - group_start
 
-    if init is not None:
-        result = y[0]
-    else:
-        result = y
+    mask = pos >= n
+    src_idx = np.where(mask, arange - n, 0)
+    sorted_out = np.where(mask, sorted_arr[src_idx], np.float64(cval))
+
+    return sorted_out[inv]
+
+
+def mar(arr: np.ndarray
+            , group_codes: np.ndarray | None
+            , valid_mask: np.ndarray
+            , n: int
+            , algo: str = 'precise') -> np.ndarray:
+    """
+    Right moving average with window `n` and `min_count=1`, NaN-aware via an
+    explicit `valid_mask`. Output positions where `valid_mask` is False are
+    filled with NaN.
+
+    When `group_codes` is provided, the moving average is computed independently
+    within each group, on the subset of rows where `valid_mask` is True,
+    in the original row order of the source frame.
+
+    algo:
+      'precise' (default) — uses `pd.Series.rolling`, bit-exact with the
+          original mar_eff-based implementation.
+      'fast'    — uses `bottleneck.move_mean` (requires bottleneck installed);
+          ~2-5x faster but accumulates floating-point error O(N * eps * max_val)
+          over long series (~1e-8 for typical media data). Safe when downstream
+          transformations are not near-zero or near-infinity.
+    """
+
+    n_total = arr.shape[0]
+    out = np.full(n_total, np.nan, dtype=np.float64)
+
+    if isinstance(n, float):
+        n = int(round(n))
+
+    if n == 0:
+        out[valid_mask] = arr[valid_mask]
+        return out
+
+    valid_idx = np.flatnonzero(valid_mask)
+    if valid_idx.size == 0:
+        return out
+
+    valid_arr = arr[valid_idx].astype(np.float64, copy=False)
+
+    use_bn = algo == 'fast' and _BN_AVAILABLE
+
+    if algo == 'fast' and not _BN_AVAILABLE:
+        _logger.warning(
+            "mar: algo='fast' requested but 'bottleneck' is not installed; "
+            "falling back to algo='precise'. Install bottleneck to enable the fast path."
+        )
+
+    def _rolling(a: np.ndarray) -> np.ndarray:
+        if use_bn:
+            return bn.move_mean(a, window=n, min_count=1)
+        return pd.Series(a).rolling(window=n, min_periods=1).mean().to_numpy()
+
+    if group_codes is None:
+        out[valid_idx] = _rolling(valid_arr)
+        return out
+
+    valid_codes = group_codes[valid_idx]
+    order, _, boundaries = _group_sort_info(valid_codes)
+    sorted_arr = valid_arr[order]
+    sorted_idx = valid_idx[order]
+    sorted_out = np.empty_like(sorted_arr, dtype=np.float64)
+
+    for i in range(boundaries.shape[0] - 1):
+        s = int(boundaries[i])
+        e = int(boundaries[i + 1])
+        sorted_out[s:e] = _rolling(sorted_arr[s:e])
+
+    out[sorted_idx] = sorted_out
+    return out
+
+
+def adstock(x: np.ndarray
+            , a: float
+            , weighted: bool = True) -> np.ndarray:
+    
+    """Geometric adstock via lfilter. x must be a float64 numpy array."""
+
+    result = signal.lfilter([1.0], [1.0, -float(a)], x)
+
+    if weighted:
+        result *= (1.0 - float(a))
 
     return result
+
+
+def adstockd(x: np.ndarray
+             , a1: float
+             , a2: float
+             , w2: float
+             , weighted: bool = True) -> np.ndarray:
+    
+    """Double geometric adstock via two lfilter calls, linearly combined."""
+
+    a1, a2, w2 = float(a1), float(a2), float(w2)
+    r1 = signal.lfilter([1.0], [1.0, -a1], x)
+    r2 = signal.lfilter([1.0], [1.0, -a2], x)
+
+    if weighted:
+        r1 *= (1.0 - a1)
+        r2 *= (1.0 - a2)
+
+    return r1 * (1.0 - w2) + r2 * w2
+
+
+def _compute_weibull_kernel(params_dict: dict) -> np.ndarray:
+    """Compute the causal double-Weibull response kernel from params."""
+    c = np.float64(params_dict['shape'])
+    scale = np.float64(params_dict.get('scale', 1))
+    dur = int(round(params_dict['dur']))
+    if c <= 0 or scale <= 0 or dur <= 0:
+        return np.zeros(0)
+    t = np.arange(1.0, dur + 1.0, dtype=np.float64)
+    t_s = t / scale
+    kernel = (c / (2.0 * scale)) * t_s ** (c - 1.0) * np.exp(-(t_s ** c))
+    kernel[np.isinf(kernel)] = 0.0
+    return kernel
+
+
+def _weibull_convolve(x: np.ndarray
+                      , kernel: np.ndarray
+                      , if_weight: bool = False) -> np.ndarray:
+    """Apply causal convolution of x with a precomputed Weibull kernel, truncated to len(x)."""
+    rtrn_len = len(x)
+
+    if len(kernel) == 0 or np.count_nonzero(x) == 0:
+        return np.zeros(rtrn_len)
+
+    if if_weight:
+        nonzero_mask = x != 0
+        x = x.copy()
+        x[nonzero_mask] /= x[nonzero_mask].sum()
+
+    rtrn = np.convolve(x, kernel, mode='full')[:rtrn_len]
+
+    if not np.all(np.isfinite(rtrn)):
+        return np.zeros(rtrn_len)
+
+    return rtrn
 
 
 @profile
@@ -140,45 +293,11 @@ def weibull_multi_response(x: pd.Series | np.ndarray
 
     if isinstance(x, pd.Series):
         x = x.to_numpy().astype(float)
+    elif not isinstance(x, np.ndarray):
+        x = np.asarray(x, dtype=float)
 
-    if np.count_nonzero(x) == 0:
-        return x
-
-    idxs = np.nonzero(x)[0]
-    ks = x[x != 0]
-
-    if if_weight:
-        ks = ks / sum(ks)  # evil
-
-    if 'scale' not in params_dict:
-        params_dict['scale'] = 1
-
-    weibull_x = dweibull.pdf(range(1, round(params_dict['dur']) + 1), c=params_dict['shape'], scale=params_dict['scale'])
-    weibull_x[np.isinf(weibull_x)] = 0
-
-    rtrn_len = len(x)
-    idxs_len = len(idxs)
-
-    rtrn = np.zeros(rtrn_len * (idxs_len + 1)).reshape(-1, (idxs_len + 1))
-
-    for i in range(0, idxs_len):
-
-        tmp = np.zeros(rtrn_len)
-
-        len_new = rtrn_len - idxs[i]
-        if len_new > len(weibull_x):
-            len_new = len(weibull_x)
-
-        tmp[idxs[i]:(idxs[i] + len_new)] = (weibull_x * ks[i])[:len_new]
-
-        rtrn[:, (i+1)] = tmp
-
-    rtrn = rtrn.sum(axis=1, keepdims=True)
-
-    if sum(np.isfinite(rtrn))[0] != len(x):
-        rtrn = np.repeat(0, len(x), axis=0)
-
-    return rtrn.flatten()
+    kernel = _compute_weibull_kernel(params_dict)
+    return _weibull_convolve(x, kernel, if_weight=if_weight)
 
 
 """
@@ -276,21 +395,34 @@ def scale_level(x: pd.Series | np.ndarray
 
     w = 1.0
 
-    if params_dict['scale'] == 'max':
+    if params_dict['scale'] in ['max', 'max_rat']:
         w = x.loc[mask].max()
 
-    elif params_dict['scale'] == 'min':
+    if params_dict['scale'] in ['mean', 'mean_rat']:
+        w = x.loc[mask].mean()
+
+    if params_dict['scale'] in ['median', 'median_rat']:
+        w = x.loc[mask].median()
+
+    elif params_dict['scale'] in ['min', 'min_rat']:
         w = x.loc[mask].min()
 
-    elif params_dict['scale'] == 'avg_max':
+    elif params_dict['scale'] in ['avg_max', 'avg_max_rat']:
         w = x.loc[mask].max()
         x = x * params_dict['avg_level']
 
-    elif params_dict['scale'] == 'avg_min':
+    elif params_dict['scale'] in ['avg_min', 'avg_min_rat']:
         w = x.loc[mask].min()
         x = x * params_dict['avg_level']
 
-    if w not in [0, 1]:
+    # to restore scale (important for LHS)
+
+    if w not in [0, 1] and not params_dict['scale'].endswith('_rat'):
+        x = x * w
+
+    # to raw data scale
+
+    if w not in [0, 1] and params_dict['scale'].endswith('_rat'):
         x = x / w
 
     return x
@@ -312,16 +444,33 @@ def adbudg(x: pd.Series | np.ndarray
     """
 
     if isinstance(x, pd.Series):
-        x = x.array
+        x = x.to_numpy(dtype=np.float64, copy=True)
+    else:
+        x = np.asarray(x, dtype=np.float64)
 
-    with np.errstate(divide='ignore', invalid='ignore'):
-        summand = np.sign(x / (params_dict['level'] * params_dict['ec50'])) * \
-                  abs(x / (params_dict['level'] * params_dict['ec50'])) ** (-params_dict['steep'])
+    x = x.copy()
 
-    rtrn = params_dict['level'] / (1 + summand)
-    rtrn = np.where(x == 0, 0, rtrn)
+    rtrn = np.zeros_like(x, dtype=np.float64)
+    mask = (x != 0) & np.isfinite(x)
+    
+    if not np.any(mask):
+        return rtrn
+    
+    x_masked = x[mask]
+    denominator = params_dict['level'] * params_dict['ec50']
+    
+    ratio = x_masked / denominator
+    sign_ratio = np.sign(ratio)
+    abs_ratio = np.abs(ratio)
 
-    return rtrn
+    summand = sign_ratio * (abs_ratio ** (-params_dict['steep']))
+
+    finite_mask = np.isfinite(summand).copy()
+    summand[~finite_mask] = np.float64(0.0)
+
+    rtrn[mask] = params_dict['level'] / (1 + summand)
+
+    return rtrn.copy()
 
 
 @profile
@@ -348,23 +497,35 @@ def logistic(x: pd.Series | np.ndarray
 
 @profile
 def softmax(x: pd.Series | np.ndarray
-            , params_dict: dict):
-    """
-    Flavour of logistic saturation curve with unit-specific `avg` and "abstract" `lambda`.
-    The more is lambda, less steep is the curve.
+           , params_dict: dict):
 
-    :param x: vector / series to apply transformation
-    :param params_dict: transformation function params
-    :return:
-    """
+    if params_dict['lambda'] == 0:
+        fermatrica_error('Lambda parameter for softmax transformation cannot be 0')
 
     if isinstance(x, pd.Series):
-        x = x.array
-
-    rtrn = (x - params_dict['avg']) / (params_dict['lambda'] * (params_dict['std'] / (2 * np.pi)))
-    rtrn = 1 / (1 + np.exp(-rtrn))
-
-    return rtrn
+        x = x.to_numpy(dtype=np.float64, copy=True)
+    else:
+        x = np.asarray(x, dtype=np.float64)
+    
+    x = x.copy()
+    
+    avg = np.float64(params_dict['avg'])
+    std = np.float64(params_dict['std'])
+    lmbda = np.float64(params_dict['lambda'])
+    
+    x_normalized = (x - avg) / (lmbda * std / (2 * np.pi))
+    
+    exp_term = np.exp(-x_normalized)
+    # exp_term = np.clip(exp_term, 0, 1e308)
+    
+    denominator = np.float64(1.0) + exp_term
+    # denominator = np.clip(denominator, 1e-308, np.inf)
+    
+    rtrn = np.float64(1.0) / denominator
+    
+    # rtrn[~np.isfinite(rtrn)] = 0
+    
+    return rtrn.copy()
 
 
 @profile
@@ -450,40 +611,55 @@ Complex transformations
 def tv_clipl_affinity(ds: pd.DataFrame
                       , params_dict: dict
                       , cln_tv: list
-                      , cln_aff: list
-                      , cln_clipl: list
-                      , tv_pattern: str):
+                      , cln_aff: list | None = None
+                      , cln_clipl: list | None = None
+                      , tv_pattern: str | None = None):
     """
     Complex function to weight TV OTS by brands' affinity and clip duration
 
     :param ds: dataset
     :param params_dict:
     :param cln_tv: names of the TV OTS columns
-    :param cln_aff: names of the columns with brands' affinity data
-    :param cln_clipl: names of the clip duration columns
+    :param cln_aff: names of the columns with brands' affinity data. If omitted, affinity will not be taken into account
+                    and only clip duration will be used for weighting.
+    :param cln_clipl: names of the clip duration columns. If omitted, they will be generated from TV OTS columns names
+                      by replacing 'ots' with 'clipl' and removing placement type and media type info.
     :param tv_pattern: specific regex pattern containing media type and placement type, e.g. 'sponsor_nat'
     :return:
     """
 
+    if tv_pattern is None:
+        tv_pattern = '[a-z0-9]+'
+
     if len([i for i in cln_tv if (bool(re.search(tv_pattern, i)))]) == 0:
         return pd.Series(0, index=ds.index)
+    
+    if cln_clipl is None:
+        cln_clipl = [re.sub(r'((_|^)*ots_)', '_clipl_', x) for x in cln_tv]
+        cln_clipl = [re.sub(r'^_', '', x) for x in cln_clipl]
 
-    def affinity_series(s: str):
+    def weight_series(s: str):
 
         s_pattern = re.sub(r'(^(.+_)*ots_)|(_rolik|_sponsor|_nat|_local)|_' + tv_pattern, '', s)
         clipl_pattern = re.sub(r'((_|^)*ots_)', '_clipl_', s)
         clipl_pattern = re.sub(r'^_', '', clipl_pattern)
 
-        s_aff = [i for i in cln_aff if (bool(re.search(s_pattern, i)))
-                 or (bool(re.search('m55plus', s)) and bool(re.search('m55_64', i)))
-                 or (bool(re.search('f55plus', s)) and bool(re.search('f55_64', i)))
-                 or (bool(re.search('m14_24', s)) and bool(re.search('m18_24', i)))
-                 or (bool(re.search('f14_24', s)) and bool(re.search('f18_24', i)))]
+        if cln_aff is not None:
+            s_aff = [i for i in cln_aff if (bool(re.search(s_pattern, i)))
+                    or (bool(re.search('m55plus', s)) and bool(re.search('m55_64', i)))
+                    or (bool(re.search('f55plus', s)) and bool(re.search('f55_64', i)))
+                    or (bool(re.search('m14_24', s)) and bool(re.search('m18_24', i)))
+                    or (bool(re.search('f14_24', s)) and bool(re.search('f18_24', i)))]
+        else:
+            s_aff = []
 
         s_clipl = [i for i in cln_clipl if (s_pattern in i) and i == clipl_pattern]
 
-        if len(s_aff) == 0 or len(s_clipl) == 0:
+        if len(s_clipl) == 0 or (cln_aff is not None and len(s_aff) == 0):
             rtrn = pd.Series(0, index=ds.index)
+        elif len(s_clipl) != 0 and cln_aff is None:
+            rtrn = ds[s].array * (ds[s_clipl[0]].array ** params_dict['clipl_curve'])
+            rtrn = pd.Series(rtrn, index=ds.index)
         else:
             rtrn = ds[s].array * (ds[s_aff[0]].array ** params_dict['power_coef']) * (ds[s_clipl[0]].array ** params_dict['clipl_curve'])
             rtrn = pd.Series(rtrn, index=ds.index)
@@ -493,7 +669,7 @@ def tv_clipl_affinity(ds: pd.DataFrame
     rtrn = []
     for col in cln_tv:
         if re.search(tv_pattern, col):
-            tmp = affinity_series(col)
+            tmp = weight_series(col)
             rtrn.append(tmp)
     rtrn = pd.concat(rtrn, axis=1)
     rtrn = rtrn.sum(axis=1)
@@ -515,7 +691,6 @@ def tv_affinity(ds: pd.DataFrame
     :param params_dict:
     :param cln_tv: names of the TV OTS columns
     :param cln_aff: names of the columns with brands' affinity data
-    :param cln_clipl: names of the clip duration columns
     :param tv_pattern: specific regex pattern containing media type and placement type, e.g. 'sponsor_nat'
     :return:
     """

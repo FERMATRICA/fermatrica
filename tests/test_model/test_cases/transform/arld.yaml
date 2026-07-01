@@ -1,0 +1,381 @@
+- description: test_arl_base function testing case 0
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 2.00394, 2.80763, 3.34081, 3.77027, 4.13827, 4.46163, 4.74955,
+           5.0081, 5.24168, 5.4537, 5.64692, 5.82364, 5.98578, 6.13501,
+           6.27276, 6.40028, 6.51864, 6.6288, 6.7316, 6.82778, 6.91799, 7.0028]
+    name: 'tmp'
+
+- description: test_arl_without_cval function testing case 1
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [nan, nan, 0.0, 2.00394, 2.80763, 3.34081, 3.77027, 4.13827, 4.46163, 4.74955,
+           5.0081, 5.24168, 5.4537, 5.64692, 5.82364, 5.98578, 6.13501,
+           6.27276, 6.40028, 6.51864, 6.6288, 6.7316, 6.82778, 6.91799, 7.0028]
+    name: 'tmp'
+
+- description: test_arl_without_n_lag function testing case 2
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 2.00394, 2.80763, 3.34081, 3.77027, 4.13827, 4.46163, 4.74955, 5.0081,
+           5.24168, 5.4537, 5.64692, 5.82364, 5.98578, 6.13501, 6.27276, 6.40028, 6.51864,
+           6.6288, 6.7316, 6.82778, 6.91799, 7.0028, 7.08273, 7.15822]
+    name: 'tmp'
+
+- description: test_arl_zero_steep function testing case 3
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 0.6, 1.305, 2.05875, 2.84989, 3.6724, 4.52154, 5.39331, 6.28431,
+           7.19167, 8.11292, 9.04598, 9.98908, 10.94072, 11.89961, 12.86467, 13.83497,
+           14.80972, 15.78827, 16.77003, 17.75452, 18.74134, 19.73014]
+    name: 'tmp'
+
+- description: test_arl_zero_level function testing case 4
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 0, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+           0.0, 0.0, 0.0, 0.0]
+    name: 'tmp'
+
+- description: test_arl_zero_ec50 function testing case 5
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 0, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 8.4, 9.87, 10.5525, 11.07593, 11.51517, 11.88795, 12.20477,
+           12.47405, 12.70295, 12.8975, 13.06288, 13.20345, 13.32293, 13.42449,
+           13.51082, 13.58419, 13.64656, 13.69958, 13.74464, 13.78295, 13.8155, 13.84318]
+    name: 'tmp'
+
+- description: test_arl_zero_a function testing case 6
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0, 0, 0, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 3.3399, 4.09489, 4.58004, 4.94145, 5.23043, 5.47149, 5.67833, 5.85948, 6.02059, 6.16561,
+           6.29744, 6.41822, 6.52965, 6.63303, 6.72941, 6.81967, 6.90451, 6.98453, 7.06022, 7.13202, 7.20029, 7.26534]
+    name: 'tmp'
+
+- description: test_arl_zero_n_lag function testing case 7
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 0, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 2.00394, 2.80763, 3.34081, 3.77027, 4.13827, 4.46163, 4.74955, 5.0081,
+           5.24168, 5.4537, 5.64692, 5.82364, 5.98578, 6.13501, 6.27276, 6.40028, 6.51864,
+           6.6288, 6.7316, 6.82778, 6.91799, 7.0028, 7.08273, 7.15822]
+    name: 'tmp'
+
+- description: test_arl_zero_cval function testing case 8
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 0]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [0.0, 0.0, 0.0, 2.00394, 2.80763, 3.34081, 3.77027, 4.13827, 4.46163,
+           4.74955, 5.0081, 5.24168, 5.4537, 5.64692, 5.82364, 5.98578, 6.13501,
+           6.27276, 6.40028, 6.51864, 6.6288, 6.7316, 6.82778, 6.91799, 7.0028]
+    name: 'tmp'
+
+- description: test_arl_neg_steep function testing case 9
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [-0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 6.39606, 7.06237, 7.21169, 7.30566, 7.37689, 7.42633,
+           7.45522, 7.46595, 7.46127, 7.4438, 7.41595, 7.37981, 7.33715, 7.28948,
+           7.23805, 7.18392, 7.12793, 7.07078, 7.01304, 6.95516, 6.89751, 6.84038]
+    name: 'tmp'
+
+- description: test_arl_neg_level function testing case 10
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, -14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 3.83256, 6.59081, 9.29637, 12.19278, 15.39372, 19.00099, 23.13549, 27.95683,
+           33.68779, 40.65354, 49.35164, 60.5872, 75.75984, 97.54926, 131.85167, 194.85392, 354.50417,
+           1981.13283, -110.06334, -118.25144, -78.1298, -62.1553]
+    name: 'tmp'
+
+- description: test_arl_neg_ec50 function testing case 11
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, -1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, -3.83256, -6.59081, -9.29637, -12.19278, -15.39372, -19.00099,
+           -23.13549, -27.95683, -33.68779, -40.65354, -49.35164, -60.5872, -75.75984,
+           -97.54926, -131.85167, -194.85392, -354.50417, -1981.13283, 110.06334,
+           118.25144, 78.1298, 62.1553]
+    name: 'tmp'
+
+- description: test_arl_neg_a function testing case 12
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, -0.1, -0.85, 0.4, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 4.67585, 3.41162, 5.37382, 4.43123, 5.79398, 5.10047, 6.08613,
+           5.59366, 6.3183, 5.97709, 6.51629, 6.28586, 6.69163, 6.54122, 6.85021, 6.75702,
+           6.99537, 6.94276, 7.12926, 7.10513, 7.25337, 7.24902]
+    name: 'tmp'
+
+- description: test_arl_neg_n_lag function testing case 13
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, -2, 1.7]
+  index_vars:
+  exp_err: FermatricaError
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 0.27, 0.7035, 1.24628, 1.86857, 2.55244, 3.28594, 4.06042, 4.86917,
+           5.70681, 6.5689, 7.45171, 8.35212, 9.26748, 10.19554, 11.13439, 12.08241, 13.03823,
+           14.00068, 14.96876, 15.94162, 16.91856, 17.89896]
+    name: 'tmp'
+
+- description: test_arl_neg_cval function testing case 14
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, -1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [-1.7, -1.7, 0.0, 2.00394, 2.80763, 3.34081, 3.77027, 4.13827, 4.46163, 4.74955,
+           5.0081, 5.24168, 5.4537, 5.64692, 5.82364, 5.98578, 6.13501, 6.27276, 6.40028,
+           6.51864, 6.6288, 6.7316, 6.82778, 6.91799, 7.0028]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars function testing case 15
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+  index_vars: '"bs_key"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 2.00394, 2.80763, 1.7, 1.7, 3.13826, 3.83209, 4.23649,
+           1.7, 1.7, 3.69937, 4.42585, 4.81274, 1.7, 1.7, 4.03765, 4.79839, 5.18683,
+           1.7, 1.7, 4.27921, 5.06903, 5.46292]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars_date_max function testing case 16
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['max','max','max','max','max','max','max','max']
+  index_vars: '"date"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 4.27921, 5.06903, 5.46292, 1.7, 1.7, 4.27921, 5.06903, 5.46292,
+           1.7, 1.7, 4.27921, 5.06903, 5.46292, 1.7, 1.7, 4.27921, 5.06903, 5.46292,
+           1.7, 1.7, 4.27921, 5.06903, 5.46292]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars_date_mfreq function testing case 17
+  data: duppl_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['mfreq','mfreq','mfreq','mfreq','mfreq','mfreq','mfreq','mfreq']
+  index_vars: '"date"'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_arl_with_index_vars_date_sum_kpi_coef function testing case 18
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef']
+  index_vars: '"date"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.75772, 3.76066, 9.29981, 1.7, 1.7, 0.75772, 3.76066, 9.29981,
+           1.7, 1.7, 0.75772, 3.76066, 9.29981, 1.7, 1.7, 0.75772, 3.76066, 9.29981,
+           1.7, 1.7, 0.75772, 3.76066, 9.29981]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars_date_sum_kpi_coef_master function testing case 19
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master']
+  index_vars: '"date"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 18.94311, 16.63385, 10.95614, 1.7, 1.7, 18.94311, 16.63385, 10.95614,
+           1.7, 1.7, 18.94311, 16.63385, 10.95614, 1.7, 1.7, 18.94311, 16.63385, 10.95614,
+           1.7, 1.7, 18.94311, 16.63385, 10.95614]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars_date_sum function testing case 20
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum','sum','sum','sum','sum','sum','sum','sum']
+  index_vars: '"date"'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_arl_with_index_vars_superbrand_max function testing case 21
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['max','max','max','max','max','max','max','max']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 3.69937, 4.42585, 4.81274, 1.7, 1.7, 3.69937, 4.42585, 4.81274,
+           1.7, 1.7, 3.69937, 4.42585, 4.81274, 1.7, 1.7, 4.27921, 5.06903, 5.46292,
+           1.7, 1.7, 4.27921, 5.06903, 5.46292]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars_superbrand_mfreq function testing case 22
+  data: duppl_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['mfreq','mfreq','mfreq','mfreq','mfreq','mfreq','mfreq','mfreq']
+  index_vars: '"superbrand"'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_arl_with_index_vars_superbrand_sum function testing case 23
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum','sum','sum','sum','sum','sum','sum','sum']
+  index_vars: '"superbrand"'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_arl_with_index_vars_superbrand_sum_kpi_coef function testing case 24
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef','sum_kpi_coef']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.20513, 1.15963, 2.95857, 1.7, 1.7, 0.20513, 1.15963, 2.95857,
+           1.7, 1.7, 0.20513, 1.15963, 2.95857, 1.7, 1.7, 0.16634, 0.73118, 1.74754,
+           1.7, 1.7, 0.16634, 0.73118, 1.74754]
+    name: 'tmp'
+
+- description: test_arl_with_index_vars_superbrand_sum_kpi_coef_master function testing case 25
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master','sum_kpi_coef_master']
+  index_vars: '"superbrand"'
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 5.12822, 5.06929, 3.44413, 1.7, 1.7, 5.12822, 5.06929, 3.44413,
+           1.7, 1.7, 5.12822, 5.06929, 3.44413, 1.7, 1.7, 4.15843, 3.27401, 2.08637,
+           1.7, 1.7, 4.15843, 3.27401, 2.08637]
+    name: 'tmp'
+
+- description: test_arl_with_multiple_index function testing case 26
+  data: sample_data
+  params_subset:
+    arg: ['steep', 'level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [0.4, 14, 1.3, 0.1, 0.85, 0.4, 2, 1.7]
+    index_aggr: ['sum','sum','sum','sum','sum','sum','sum','sum']
+  index_vars: '"superbrand", "bs_key"'
+  exp_err: FermatricaError
+  expected_type: array
+  expected_result: [0]
+
+- description: test_arld_missing_steep regression testing case 27
+  data: sample_data
+  params_subset:
+    arg: ['level', 'ec50', 'a1', 'a2', 'w2', 'n_lag', 'cval']
+    value: [14, 1.3, 0.85, 0.45, 0.3, 2, 1.7]
+  index_vars:
+  exp_err: False
+  expected_type: series
+  expected_result:
+    data: [1.7, 1.7, 0.0, 0.27, 0.7035, 1.24628, 1.86857, 2.55244, 3.28594, 4.06042, 4.86917,
+           5.70681, 6.5689, 7.45171, 8.35212, 9.26748, 10.19554, 11.13439, 12.08241, 13.03823,
+           14.00068, 14.96876, 15.94162, 16.91856, 17.89896]
+    name: 'tmp'

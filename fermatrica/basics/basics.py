@@ -3,6 +3,7 @@ Basic / non-specific objects and operations of the FERMATRICA framework core
 """
 
 
+import logging
 import pandas as pd
 import sys
 from line_profiler_pycharm import profile
