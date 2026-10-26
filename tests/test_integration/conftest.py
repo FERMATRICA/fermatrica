@@ -1,20 +1,56 @@
 import os
+import sys
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
 import fermatrica as fm
 
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--samples-path",
+        action="store",
+        default=None,
+        help="Path to a directory containing sample model projects "
+        "(overrides [paths].samples in config.toml)",
+    )
+
+
+def _repo_root() -> Path:
+    current_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+    for parent in (current_dir, *current_dir.parents):
+        if (parent / "config.toml").exists():
+            return parent
+    return current_dir
+
+
+def _samples_path(request) -> str:
+    samples_path = request.config.getoption("--samples-path")
+    if not samples_path:
+        config_path = _repo_root() / "config.toml"
+        if config_path.exists():
+            with open(config_path, "rb") as f:
+                config = tomllib.load(f)
+            samples_path = config.get("paths", {}).get("samples")
+    if not samples_path:
+        pytest.fail(
+            "Samples path not configured. Pass --samples-path or set [paths].samples in config.toml "
+            "(sample models are not shipped with this repository)."
+        )
+    return samples_path
+
 
 @pytest.fixture(scope="session")
-def sample_data_path():
+def sample_data_path(request):
     """Path to p00_sample data"""
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if os.path.basename(current_dir) == 'test_integration':
-        current_dir = os.path.join(current_dir, "..", "..")
-    if os.path.basename(current_dir) == 'tests':
-        current_dir = os.path.join(current_dir, "..")
-
-    return os.path.join(current_dir, "samples", "p00_sample")
+    return os.path.join(_samples_path(request), "p00_sample")
 
 
 @pytest.fixture(scope="session")

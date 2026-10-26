@@ -3,6 +3,7 @@ model_dict/
 .vscode/
 .pytest_cache/
 .git/
+.coverage
 venv/
 tmp/
 /build
@@ -16,7 +17,10 @@ tmp/
 /data.processed
 *log.txt
 *~$*xlsx
+*~$*pptx
+*~$*docx
 *.pclprof
+*.lprof
 *__pycache__
 *.egg-info/
 *.py~

@@ -127,6 +127,30 @@ def mape(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
     return rtrn
 
 
+def mae(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
+        , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list) -> float:
+    """
+    Mean absolute error (MAE) between observed `obs` and predicted `pred` vectors:
+    MAE = SUM( ABS(obs - pred) ) / LEN(obs)
+
+    :param obs: observed values (Y)
+    :param pred: predicted values (Y-hat)
+    :return:
+    """
+
+    if len(obs) != len(pred):
+        fermatrica_error("Error in calculation of MAE: length of observed vector is not equal to length of predicted")
+
+    if not isinstance(obs, np.ndarray):
+        obs = np.array(obs)
+    if not isinstance(pred, np.ndarray):
+        pred = np.array(pred)
+
+    rtrn = np.mean(np.abs(obs - pred))
+
+    return rtrn
+
+
 def mapef(obs: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list
           , pred: pd.Series | pd.api.extensions.ExtensionArray | np.ndarray | list) -> float:
     """

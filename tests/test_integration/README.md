@@ -57,12 +57,12 @@ pytest tests/test_integration/ -v --tb=short
 
 To run integration tests, you need:
 1. Installed FERMATRICA library
-2. Access to sample data in `samples/p00_sample/`
+2. Access to sample data in `p00_sample/` — sample models are not shipped with this repository; point `[paths].samples` in `config.toml` at the samples directory (or pass `--samples-path`)
 3. Dependencies from `requirements.txt`
 
 ## Test Data
 
-Tests use data from the `p00_sample` example:
+Tests use data from the `p00_sample` example (resolved from the samples directory via `[paths].samples`):
 - `data/data_processed/data_for_sample_p00_w.xlsx` - source data
 - `code_py/model_data/model_conf.xlsx` - model configuration
 - `code_py/adhoc/model.py` - additional model functions (if available)
@@ -86,7 +86,7 @@ Tests use data from the `p00_sample` example:
 ## Debugging
 
 If tests fail:
-1. Check data availability in `samples/p00_sample/`
+1. Check data availability in the configured samples directory (`p00_sample/`)
 2. Ensure all dependencies are installed
 3. Verify model configuration in `model_conf.xlsx`
 4. Run tests with `-v` flag for detailed output

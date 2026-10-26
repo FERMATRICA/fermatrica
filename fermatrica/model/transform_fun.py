@@ -10,7 +10,7 @@ import logging
 import math
 import re
 
-from line_profiler_pycharm import profile
+from line_profiler import profile
 import numpy as np
 import pandas as pd
 

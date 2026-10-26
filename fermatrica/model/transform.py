@@ -27,7 +27,7 @@ import pandas as pd
 import re
 import warnings
 
-from line_profiler_pycharm import profile
+from line_profiler import profile
 
 from fermatrica_utils import groupby_eff, select_eff, weighted_mean_group, mar_eff, exec_execute, import_module_from_string
 
@@ -360,21 +360,26 @@ def _transform_all(ds: pd.DataFrame
             var_vals = params_subset.loc[(params_subset['type'] == 'str') & (params_subset['value'].notna()), 'value']
             if len(var_vals) > 0:
                 for x in var_vals:
-                    if isinstance(x, str):
+                    if isinstance(x, str) and x in ds.columns.tolist():
                         cols = cols + [x]
 
             cols = list(set(cols))
 
             cols = [x for x in cols if x != index_free_var]
 
-            grp = groupby_eff(ds, [index_free_var], cols)
+            # pandas >= 3 excludes grouping columns from frames passed to apply unless
+            # they are explicitly selected; index_free_var is read inside the lambda
+            # to pick the per-key parameter rows below
+            grp = ds.groupby([index_free_var], sort=True, as_index=True)[[index_free_var] + cols]
 
             rtrn = grp.apply(lambda x: pd.Series(eval(fun_name)(x, var, params_subset[
                 params_subset['index_free_var_work'] == x[index_free_var].iloc[0]
                 ], index_vars=params_subset['index_vars'].iloc[0])))
 
             if len(rtrn) < ds.shape[0]:
-                rtrn = rtrn.stack(dropna=False)  # important to keep NaNs in place
+                # new stack implementation (future_stack=True, default in pandas >= 3)
+                # keeps NaN cells in place; dropna=False is rejected under pandas >= 3
+                rtrn = rtrn.stack(future_stack=True)
 
             # main now
 
@@ -976,9 +981,9 @@ def mar(ds: pd.DataFrame
                 'wrk_index')[var]
 
     else:
-        if 'index_aggr' in params_subset and params_subset['index_aggr'][0] == 'sum_kpi_coef':
+        if 'index_aggr' in params_subset and params_subset['index_aggr'].iloc[0] == 'sum_kpi_coef':
             ds_tmp = select_eff(ds, cols + ['wrk_index', 'kpi_coef'])
-        elif 'index_aggr' in params_subset and params_subset['index_aggr'][0] == 'sum_kpi_coef_master':
+        elif 'index_aggr' in params_subset and params_subset['index_aggr'].iloc[0] == 'sum_kpi_coef_master':
             ds_tmp = select_eff(ds, cols + ['wrk_index', 'kpi_coef_master'])
         else:
             ds_tmp = select_eff(ds, cols + ['wrk_index'])

@@ -167,3 +167,46 @@ class TestMCChecks:
         result = mc.ModelConf(path=self._path_opt_bounds_lower, if_stable=False)
         mask = (result.params['if_active'] == 1) & (result.params['fixed'] == 0)
         assert float(result.params.loc[mask, 'lower'].values[0]) == pytest.approx(0.5)
+
+
+class TestMCFactsDefaults:
+
+    _MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              'test_cases', 'model_conf', 'models')
+
+    _PARAMS_COLS = ['variable', 'fun', 'arg', 'type', 'fixed', 'if_active',
+                    'lower', 'upper', 'value', 'index_vars', 'index_aggr',
+                    'index_free_var', 'set_start']
+
+    @classmethod
+    def _write(cls, filename, setup_rows):
+        path = os.path.join(cls._MODEL_DIR, filename)
+        params_df = pd.DataFrame([], columns=cls._PARAMS_COLS)
+        setup_df = pd.DataFrame(setup_rows, columns=['key', 'value'])
+        rhs_df = pd.DataFrame({'token': ['feature_x'], 'fixed': [1], 'if_active': [1]})
+        with pd.ExcelWriter(path, engine='openpyxl') as w:
+            params_df.to_excel(w, sheet_name='params', index=False)
+            rhs_df.to_excel(w, sheet_name='RHS', index=False)
+            setup_df.to_excel(w, sheet_name='setup', index=False)
+        return path
+
+    def test_defaults(self):
+        path = self._write('kpi_facts_defaults.xlsx', [])
+        conf = mc.ModelConf(path=path, if_stable=False)
+        assert conf.kpi_name == 'sales'
+        assert conf.currency == 'RUB'
+        assert conf.if_value_applicable is True
+        assert conf.display_units == 'packs'
+
+    def test_keys_read_and_parsed(self):
+        path = self._write('kpi_facts_set.xlsx', [
+            ('kpi_name', 'brand_awareness'),
+            ('currency', 'EUR'),
+            ('if_value_applicable', 'False'),
+            ('display_units', 'pct'),
+        ])
+        conf = mc.ModelConf(path=path, if_stable=False)
+        assert conf.kpi_name == 'brand_awareness'
+        assert conf.currency == 'EUR'
+        assert conf.if_value_applicable is False
+        assert conf.display_units == 'pct'

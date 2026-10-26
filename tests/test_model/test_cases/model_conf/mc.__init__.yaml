@@ -123,12 +123,14 @@
         upper: !pd.Series
           data: [null, null, 1.0e+20, 1.0e+20, null, null, null, null, null]
           dtype: 'float64'
-        value: [null, True, 5.0, 5.0, True, True, 'stroka', False, True]
+        value: [.nan, True, 5.0, 5.0, True, True, 'stroka', False, True]
         type: ['str', 'bool', 'float64', 'float64', 'bool', 'bool', 'str', 'bool', 'int']
         fixed: [1, 1, 0, 0, 1, 1, 1, 1, 1]
         if_active: [1, 1, 1, 1, 1, 1, 1, 1, 1]
         index_vars: ['"market","date","listed"', '"market","date","listed"',  null, null, null, null, null, null, null]
-        index_aggr: [null, null, null, null, null, null, null, null, null]
+        index_aggr: !pd.Series
+          data: [null, null, null, null, null, null, null, null, null]
+          dtype: 'str'
         index_free_var: [null, null, 'superbrand___brand', 'superbrand___super', 'superbrand___brand', 'superbrand___super', 'bs_key___3', 'bs_key___3', null]
         set_start: [0, 0, 0, 0, 0, 0, 0, 0, 0]
         formula: !pd.Series
@@ -213,11 +215,13 @@
         variable: ['brnd_ots_all_25_45_rolik_nat', 'brnd_ots_all_25_45_rolik_nat', 'kpi_coef', 'kpi_coef', 'kpi_coef', 'kpi_coef', 'brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_all_25_45_rolik_nat', 'brnd_clipl_all_25_45_rolik_nat']
         fun: ['share', 'share', 'mar', 'mar', 'mar', 'mar', 'olololol', 'olololol', 'olololol']
         arg: ['coef_var', 'include_coef_var', 'n', 'n', 'if_scale', 'if_scale', 'olo', 'lol', 'dummy']
-        lower: [null, null, -1, -1, null, null, null, null, null]
+        lower: !pd.Series
+          data: [null, null, -1.0, -1.0, null, null, null, null, null]
+          dtype: 'float64'
         upper: !pd.Series
           data: [null, null, 5.0, 5.0, null, null, null, null, null]
-          dtype: 'object'
-        value: [null, True, 5.0, 5.0, True, True, 'stroka', False, True]
+          dtype: 'float64'
+        value: [.nan, True, 5.0, 5.0, True, True, 'stroka', False, True]
         type: ['str', 'bool', 'float64', 'float64', 'bool', 'bool', 'str', 'bool', 'int']
         fixed: [1, 1, 0, 0, 1, 1, 1, 1, 1]
         if_active: [1, 1, 1, 1, 1, 1, 1, 1, 1]

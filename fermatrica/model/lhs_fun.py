@@ -7,7 +7,7 @@ is multiplication, all other transformations to be declared here.
 import numpy as np
 import pandas as pd
 
-from line_profiler_pycharm import profile
+from line_profiler import profile
 
 from fermatrica_utils import DotDict, select_eff
 

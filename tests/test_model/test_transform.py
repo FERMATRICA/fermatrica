@@ -1037,3 +1037,39 @@ class TestFollowMe:
                 breakpoint()
         else:
             assert result == 0.5
+
+
+class TestTransformAllPerIndexFreeVar:
+
+    def test_lag_per_index_free_var(self, if_debug):
+        # per-index_free_var params run through the groupby.apply branch; pandas >= 3
+        # excludes grouping columns from frames passed to apply unless explicitly selected
+        params = pd.DataFrame([
+            {'variable': 'media', 'fun': 'lag', 'arg': 'n', 'value': 1.0, 'type': 'int',
+             'if_active': 1, 'lower': np.nan, 'upper': np.nan,
+             'index_vars': np.nan, 'index_free_var': 'bs_key___a',
+             'formula': np.nan, 'set_start': 0},
+            {'variable': 'media', 'fun': 'lag', 'arg': 'n', 'value': 2.0, 'type': 'int',
+             'if_active': 1, 'lower': np.nan, 'upper': np.nan,
+             'index_vars': np.nan, 'index_free_var': 'bs_key___b',
+             'formula': np.nan, 'set_start': 0},
+        ])
+        ds = pd.DataFrame({
+            'bs_key': ['a', 'a', 'a', 'b', 'b', 'b'],
+            'media': [10.0, 20.0, 30.0, 40.0, 50.0, 60.0],
+            'date': pd.to_datetime(['2020-01-01', '2020-01-08', '2020-01-15',
+                                    '2020-01-01', '2020-01-08', '2020-01-15']),
+            'listed': 2,
+        })
+
+        tr._transform_all(ds, params, model_obj=None, set_start=False)
+
+        # bs_key 'a' lag n=1, bs_key 'b' lag n=2; leading n rows filled with lag's default cval=0
+        expected = np.array([0.0, 10.0, 20.0, 0.0, 0.0, 40.0])
+        if if_debug:
+            try:
+                np.testing.assert_allclose(ds['media_lag'].to_numpy(), expected)
+            except:
+                breakpoint()
+        else:
+            np.testing.assert_allclose(ds['media_lag'].to_numpy(), expected)

@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 import warnings
 
-from line_profiler_pycharm import profile
+from line_profiler import profile
 
 import statsmodels.formula.api as smf
 from statsmodels.tools.sm_exceptions import ConvergenceWarning

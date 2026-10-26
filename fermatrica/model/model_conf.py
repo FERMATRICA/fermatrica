@@ -12,7 +12,7 @@ import pandas as pd
 import re
 import sys
 
-from line_profiler_pycharm import profile
+from line_profiler import profile
 
 from fermatrica_utils import pandas_tree_final_child, StableClass, sr_na, fermatrica_warner
 from fermatrica.basics.basics import fermatrica_error
@@ -34,6 +34,10 @@ class ModelConf(StableClass):
     model_type: str | None
     conversion_var: str | None
     summary_type: str
+    kpi_name: str
+    currency: str
+    if_value_applicable: bool
+    display_units: str
     _model_setup: pd.DataFrame
 
     def __init__(
@@ -69,15 +73,15 @@ class ModelConf(StableClass):
 
         if self.params['index_vars'].dtype != "object":
             self.params['index_vars'] = self.params['index_vars'].astype(str)
-            self.params.loc[self.params['index_vars'] == 'nan', 'index_vars'] = np.nan
+            self.params.loc[self.params['index_vars'] == 'nan', 'index_vars'] = None
 
         if self.params['index_aggr'].dtype != "object":
             self.params['index_aggr'] = self.params['index_aggr'].astype(str)
-            self.params.loc[self.params['index_aggr'] == 'nan', 'index_aggr'] = np.nan
+            self.params.loc[self.params['index_aggr'] == 'nan', 'index_aggr'] = None
 
         if self.params['index_free_var'].dtype != "object":
             self.params['index_free_var'] = self.params['index_free_var'].astype(str)
-            self.params.loc[self.params['index_free_var'] == 'nan', 'index_free_var'] = np.nan
+            self.params.loc[self.params['index_free_var'] == 'nan', 'index_free_var'] = None
 
         if 'level_0' in self.params.columns:
             del self.params['level_0']
@@ -173,6 +177,8 @@ class ModelConf(StableClass):
 
             self.scoring = pd.read_excel(self._path, sheet_name='scoring')
 
+            self.scoring['weight'] = pd.to_numeric(self.scoring['weight'], errors='coerce').astype(float)
+
             tmp = self.scoring[self.scoring['if_active'] == 1]['weight']
             tmp = tmp.div(tmp.sum())
             self.scoring.loc[self.scoring['if_active'] == 1, 'weight'] = tmp
@@ -239,6 +245,25 @@ class ModelConf(StableClass):
             self.display_var_base = 'base'
             fermatrica_warner.warning("Model definition : Setup : `display_var_base` value missed, set to default `base`")
 
+        if not hasattr(self, 'kpi_name') or self.kpi_name is None or self.kpi_name == '':
+            self.kpi_name = 'sales'
+            fermatrica_warner.warning("Model definition : Setup : `kpi_name` value missed, set to default `sales`")
+
+        if not hasattr(self, 'currency') or self.currency is None or self.currency == '':
+            self.currency = 'RUB'
+            fermatrica_warner.warning("Model definition : Setup : `currency` value missed, set to default `RUB`")
+
+        if not hasattr(self, 'if_value_applicable') or self.if_value_applicable is None or self.if_value_applicable == '':
+            self.if_value_applicable = True
+            fermatrica_warner.warning("Model definition : Setup : `if_value_applicable` value missed, set to default `True`")
+        elif isinstance(self.if_value_applicable, str):
+            self.if_value_applicable = self.if_value_applicable.strip().lower() not in \
+                {'', '0', 'false', 'no', 'off', 'f', 'none'}
+
+        if not hasattr(self, 'display_units') or self.display_units is None or self.display_units == '':
+            self.display_units = 'packs'
+            fermatrica_warner.warning("Model definition : Setup : `display_units` value missed, set to default `packs`")
+
         model_type_allowed = ['OLS', 'LME', 'LMEA', 'FE']
         if self.model_type not in model_type_allowed:
             fermatrica_error("Model type `" + self.model_type + "` not recognized. Please select one of " + str(model_type_allowed))
@@ -255,6 +280,12 @@ class ModelConf(StableClass):
 
         """
 
+        # ensure target columns are float64 so cross-dtype assignment doesn't fail
+        # (pandas >= 3.0 raises TypeError on cross-dtype assignment)
+
+        self.params['lower'] = pd.to_numeric(self.params['lower'], errors='coerce').astype(float)
+        self.params['upper'] = pd.to_numeric(self.params['upper'], errors='coerce').astype(float)
+
         mask_main = (self.params['if_active'] == 1) & (self.params['fixed'] == 0)
         params_subset = self.params[mask_main].copy()
 
@@ -262,6 +293,10 @@ class ModelConf(StableClass):
 
         params_subset['lower'] = params_subset['lower'].replace('', pd.NA)
         params_subset['upper'] = params_subset['upper'].replace('', pd.NA)
+
+        # also coerce value to numeric for comparison safety
+
+        params_subset['value'] = pd.to_numeric(params_subset['value'], errors='coerce').astype(float)
 
         # set missing bounds to large finite values
 
@@ -569,6 +604,8 @@ def params_expand(ds: pd.DataFrame
         params.loc[params['type'] == 'float64', 'value'] = np.float64(params.loc[params['type'] == 'float64', 'value'])
 
     if 'bool' in params['type'].tolist():
+        if params['value'].dtype != 'object':
+            params['value'] = params['value'].astype(object)
         params.loc[params['type'] == 'bool', 'value'] = params.loc[params['type'] == 'bool', 'value'] \
             .replace({'True': True, '1': True, 1: True, 'False': False, '0': False, 0: False})
 
