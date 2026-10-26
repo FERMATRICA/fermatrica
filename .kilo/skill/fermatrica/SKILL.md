@@ -13,15 +13,13 @@ FERMATRICA is an econometrics framework for building time series and panel model
 
 ## Multi-Repo Architecture
 
-FERMATRICA spans 5 GitLab repositories. This repo (`fermatrica`) is the **core**.
+FERMATRICA is developed across three repositories. This repo (`fermatrica`) is the **core**.
 
 | Repo | Purpose | Python package |
 |------|---------|---------------|
 | `fermatrica` (this repo) | Core: model definition, transformation, optimization, evaluation | `fermatrica` |
 | `fermatrica_utils` | Utility functions (`StableClass`, `DotDict`, `groupby_eff`, `select_eff`) | `fermatrica_utils` |
 | `fermatrica_rep` | Reporting: decomposition, waterfall charts, PPTX export | `fermatrica_rep` |
-| `fermatrica_dash` | Interactive dashboard (web UI) | not a pip package |
-| `fermatrica_data` | Data preprocessing and sample generation | `fermatrica_data` |
 
 ## Code Organization (This Repo)
 
@@ -45,9 +43,8 @@ fermatrica/
 │   ├── locals.py           # COBYLA, BOBYQA, Subplex, RBF, CMA-ES
 │   ├── globals.py          # PyGad GA, Optuna TPE
 │   └── globals_deap.py     # DEAP differential evolution
-├── samples/         # Working example models (p00 through p05)
 ├── tests/           # Unit + integration tests
-├── docs/            # User guides (EN/RU) and API reference
+├── docs/            # API reference (pdoc)
 └── build/           # Build artifacts
 ```
 
@@ -58,7 +55,7 @@ fermatrica/
 Machine-specific settings are stored in `config.toml` (repo root, gitignored, created by each developer):
 
 1. Copy `config_example.toml` to `config.toml`
-2. Set `[paths].samples` to your local fermatrica samples directory
+2. Optionally set `[paths].samples` to a directory containing sample model projects used by integration tests
 3. Set `[paths].python` to the Python executable path in your Conda environment
 4. Set `[python].env_name` to your Conda environment name
 
@@ -70,7 +67,7 @@ C:\Users\...\anaconda3\envs\<env_name>\python.exe -m pytest tests/
 
 The `[python].env_name` field is informational — the environment name corresponding to the interpreter.
 
-Resolution order for the samples path (highest to lowest):
+Integration tests resolve the samples path from (highest to lowest):
 - `--samples-path` pytest CLI flag
 - `config.toml` `[paths].samples`
 
@@ -196,7 +193,7 @@ import copy, logging, os, sys
 # Third-party
 import numpy as np
 import pandas as pd
-from line_profiler_pycharm import profile
+from line_profiler import profile
 
 # fermatrica_utils
 from fermatrica_utils import StableClass, DotDict
